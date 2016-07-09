@@ -1,6 +1,8 @@
 
 #include "Packet.hpp"
 
+using namespace BCL;
+
 Packet::Packet(void)
 {   
 }
