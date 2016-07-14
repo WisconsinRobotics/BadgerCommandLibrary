@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include "Messages.hpp"
 
 
 #define BCL_PACKET_START_HIGHER         0xBA

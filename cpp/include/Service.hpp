@@ -11,16 +11,18 @@ namespace BCL
     class Service
     {
     public:
-        Service(int serviceID);
+        Service(int subsystemID, int serviceID);
         ~Service(void);
-        BclPacket& Run(void);
+        Packet& Run(void);
         virtual bool HandlePacket(const BclPacket& packet) = 0;
         void GetFriendlyName(const char *name, int length);
         int GetSubsystemID(void);
         int GetServiceID(void);
+        bool GetLiveness(void);
+        void SetLiveness(bool active);
 
     protected:
-        BclPacket& Execute(void) = 0;
+        Packet& Execute(void) = 0;
 
         int subsystemID;
         int serviceID;
