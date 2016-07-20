@@ -8,7 +8,7 @@
 #define BCL_PACKET_END                  0xFE
 
 #define PACKET_MIN_SIZE                 10
-#define PACKET_METATDATA_SIZE           10
+#define PACKET_METADATA_SIZE            10
 #define START_HIGHER_INDEX              0
 #define START_LOWER_INDEX               1
 #define OPCODE_INDEX                    2
@@ -21,10 +21,11 @@
 
 typedef struct BclPacket BclPacket;
 
-/* Core BclPacket functions */
-uint8_t SerializeBclPacket(BclPacket *pkt, char *buffer, int length);
-uint8_t DeserializeBclPacket(BclPacket *pkt, const char *buffer, int length);
-uint8_t ComputeChecksum(char *buffer, int length);
+/* Base packet functions */
+void InitializeBclPacket(BclPacket* pkt, int opcode, int packetSize);
+uint8_t SerializeBclPacket(BclPacket* pkt, uint8_t* buffer, int length);
+uint8_t DeserializeBclPacket(BclPacket* pkt, const uint8_t* buffer, int length);
+uint8_t ComputeChecksum(uint8_t* buffer, int length);
 
 struct BclPacket
 {
@@ -35,14 +36,6 @@ struct BclPacket
     uint8_t DestinationService;
     uint8_t PacketSize;
     uint8_t Checksum;
-    
-    void *Payload;
-    
-    const uint8_t (*Serialize)(char *buffer, int length) = SerializeBclPacket;
-    const uint8_t (*Deserialize)(char *buffer, int length) = DeserializeBclPacket;
-    
-    uint8_t (*SerializePayload)(char *payload, int payloadLength);
-    uint8_t (*DeserializePayload)(char *payload, int payloadLength);
 };
 
 #endif
