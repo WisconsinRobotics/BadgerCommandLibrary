@@ -19,6 +19,8 @@
 #define TOTAL_SIZE_INDEX                7
 #define PAYLOAD_INDEX                   8
 
+// #define PACKET_METADATA_FMT_STR  "" 
+
 typedef struct BclPacket BclPacket;
 
 /* Base packet functions */

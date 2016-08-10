@@ -16,6 +16,7 @@ uint8_t DeserializeBclPacket(BclPacket* pkt, const uint8_t* buffer, int length)
     return 1;
 }
 
-uint8_t ComputeChecksum(char *buffer, int length)
+uint8_t ComputeChecksum(char* buffer, int length)
 {
+    return 0;
 }
