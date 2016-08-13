@@ -1,22 +1,38 @@
 #include "Packet.h"
+#include "bprintf.h"
+#include "crc8.h"
 
-uint8_t SerializeBclPacket(BclPacket* pkt, uint8_t* buffer, int length)
+
+BCL_STATUS InitializeBclPacket (
+    BclPacket *             pkt,
+    uint8_t                 opcode,
+    uint8_t                 packet_size,
+    BclPayloadPtr           payload
+    BclPayloadSerializer    serialize_func,
+    BclPayloadDeserializer  deserialize_func
+)
 {
-    if (!pkt || !buffer || length <= PACKET_MIN_SIZE)
-        return 0;
-    
-    return 1;
+    // TODO
+    return BCL_OK;
 }
 
-uint8_t DeserializeBclPacket(BclPacket* pkt, const uint8_t* buffer, int length)
+BCL_STATUS SerializeBclPacket (
+    BclPacket *         pkt,
+    uint8_t *           buffer,
+    uint8_t             length,
+    uint8_t *           bytes_written,
+    )
 {
-    if (!pkt || !buffer || length <= PACKET_MIN_SIZE)
-        return 0;
-    
-    return 1;
+    // TODO
+    return BCL_OK;
 }
 
-uint8_t ComputeChecksum(char* buffer, int length)
+BCL_STATUS DeserializeBclPacket (
+    BclPacket*          pkt, 
+    const uint8_t *     buffer, 
+    uint8_t             length
+    )
 {
-    return 0;
+    // TODO
+    return BCL_OK;
 }

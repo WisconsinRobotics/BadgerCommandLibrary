@@ -8,36 +8,72 @@
 #define BCL_PACKET_END                  0xFE
 
 #define PACKET_MIN_SIZE                 10
-#define PACKET_METADATA_SIZE            10
-#define START_HIGHER_INDEX              0
-#define START_LOWER_INDEX               1
-#define OPCODE_INDEX                    2
-#define SOURCE_SUBSYSTEM_INDEX          3
-#define SOURCE_SERVICE_INDEX            4
-#define DESTINATION_SUBSYSTEM_INDEX     5
-#define DESTINATION_SERVICE_INDEX       6
-#define TOTAL_SIZE_INDEX                7
-#define PAYLOAD_INDEX                   8
+#define PACKET_HEADER_SIZE              PACKET_MIN_SIZE
 
 // #define PACKET_METADATA_FMT_STR  "" 
+// TODO: fix the alignment
 
-typedef struct BclPacket BclPacket;
+
+typedef void * BclPayloadPtr;
+
+typedef BCL_STATUS (*BclPayloadSerializer) (
+    const BclPayloadPtr     payload,
+    uint8_t *               buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_written
+);
+
+typedef BCL_STATUS (*BclPayloadDeserializer) (
+    BclPayloadPtr           payload,
+    const uint8_t *         buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_read 
+);
+
+typedef struct
+{
+    uint8_t Subsystem;
+    uint8_t Service;
+} BclAddress;
+
+typedef struct
+{
+    uint8_t             Opcode;
+    BclAddress          Source;
+    BclAddress          Destination;
+    uint8_t             PacketSize;
+    uint8_t             Checksum;
+} BclPacketHeader;
+
+typedef struct
+{
+    BclPacketHeader         Header;
+    BclPayloadPtr           Payload;
+    BclPayloadSerializer    Serialize;
+    BclPayloadDeserializer  Deserialize;
+} BclPacket;
 
 /* Base packet functions */
-void InitializeBclPacket(BclPacket* pkt, int opcode, int packetSize);
-uint8_t SerializeBclPacket(BclPacket* pkt, uint8_t* buffer, int length);
-uint8_t DeserializeBclPacket(BclPacket* pkt, const uint8_t* buffer, int length);
-uint8_t ComputeChecksum(uint8_t* buffer, int length);
+BCL_STATUS InitializeBclPacket (
+    BclPacket *             pkt,
+    uint8_t                 opcode,
+    uint8_t                 packet_size,
+    BclPayloadPtr           payload,
+    BclPayloadSerializer    serialize_func,
+    BclPayloadDeserializer  deserialize_func
+);
 
-struct BclPacket
-{
-    uint8_t Opcode;
-    uint8_t SourceSubsytem;
-    uint8_t SourceService;
-    uint8_t DestinationSubsystem;
-    uint8_t DestinationService;
-    uint8_t PacketSize;
-    uint8_t Checksum;
-};
+BCL_STATUS SerializeBclPacket (
+    BclPacket *         pkt,
+    uint8_t *           buffer,
+    uint8_t             length,
+    uint8_t *           bytes_written
+);
+
+BCL_STATUS DeserializeBclPacket (
+    BclPacket *         pkt, 
+    const uint8_t *     buffer,
+    uint8_t             length
+);
 
 #endif
