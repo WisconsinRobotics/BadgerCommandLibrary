@@ -3,16 +3,13 @@
 
 #include <stdint.h>
 
-#define BCL_PACKET_START_HIGHER         0xBA
-#define BCL_PACKET_START_LOWER          0xAD
-#define BCL_PACKET_END                  0xFE
+#define BCL_PACKET_START                ((uint16_t)(0xBAAD))
+#define BCL_PACKET_END                  ((uint8_t)(0xFE))
 
 #define PACKET_MIN_SIZE                 10
 #define PACKET_HEADER_SIZE              PACKET_MIN_SIZE
 
-// #define PACKET_METADATA_FMT_STR  "" 
 // TODO: fix the alignment
-
 
 typedef void * BclPayloadPtr;
 

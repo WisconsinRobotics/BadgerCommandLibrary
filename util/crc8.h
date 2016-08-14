@@ -3,7 +3,7 @@
 
 
 uint8_t compute_crc8 (
-    const void *    vptr,
+    const void *    buffer,
     int             len, 
 );
 

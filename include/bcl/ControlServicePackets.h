@@ -10,58 +10,78 @@
 #define REPORT_SERVICE_STATUS_OPCODE    0x74
 #define REPORT_HEARTBEAT_OPCODE         0x91
 
-typedef struct ActivateService      BclPacket;
-typedef struct DeactivateService    BclPacket;
-typedef struct QueryServiceList	    BclPacket;
-typedef struct QueryServiceStatus   BclPacket;
-typedef struct QueryHeartbeat       BclPacket;
-typedef struct ReportServiceList    ReportServiceList;
-typedef struct ReportServiceStatus  ReportServiceStatus;
-typedef struct ReportHeartbeat      BclPacket;
-
-struct ReportServiceList
+struct ReportServiceListPayload
 {
-    BclPacket;
     char** ServiceNameList;
 };
 
-struct ReportServiceStatus
+struct ReportServiceStatusPayload
 {
-    BclPacket;
     uint8_t Active;
 };
 
 /* Initialization functions */
-#define InitializeActivateServicePacket(pkt)    InitializeBclPacket(pkt, ACTIVATE_SERVICE_OPCODE, PACKET_MIN_SIZE)
-#define InitializeDeactivateServicePacket(pkt)  InitializeBclPacket(pkt, DEACTIVATE_SERVICE_OPCODE, PACKET_MIN_SIZE)
-#define InitializeQueryServiceListPacket(pkt)   InitializeBclPacket(pkt, QUERY_SERVICE_LIST_OPCODE, PACKET_MIN_SIZE)
-#define InitializeQueryServiceStatusPacket(pkt) InitializeBclPacket(pkt, QUERY_SERVICE_STATUS_OPCODE, PACKET_MIN_SIZE)
-#define InitializeQueryHeartbeatPacket(pkt)     InitializeBclPacket(pkt, QUERY_HEARTBEAT_OPCODE, PACKET_MIN_SIZE)
-#define InitializeReportHeartbeatPacket(pkt)    InitializeBclPacket(pkt, REPORT_HEARTBEAT_OPCODE, PACKET_MIN_SIZE)
+BCL_STATUS InitializeActivateServicePacket (
+    BclPacket *pkt 
+);
 
-void InitializeReportServiceListPacket(ReportServiceList *pkt);
-void InitializeReportServiceStatusPacket(ReportServiceStatus *pkt);
+BCL_STATUS InitializeDeactivateServicePacket (
+    BclPacket *pkt 
+);
+
+BCL_STATUS InitializeQueryServiceListPacket (
+    BclPacket *pkt 
+);
+
+BCL_STATUS InitializeQueryServiceStatusPacket (
+    BclPacket *pkt 
+);
+
+BCL_STATUS InitializeQueryHeartbeatPacket (
+    BclPacket *pkt 
+);
+
+BCL_STATUS InitializeReportHeartbeatPacket (
+    BclPacket *pkt 
+);
+
+BCL_STATUS InitializeReportServiceListPacket (
+    BclPacket *pkt,
+    ReportServiceListPayload *payload
+);
+
+BCL_STATUS InitializeReportServiceStatusPacket (
+    BclPacket *pkt,
+    ReportServiceStatusPayload *payload
+);
 
 /* Serialization functions */
-#define SerializeActivateServicePacket      SerializeBclPacket
-#define SerializeDeactivateServicePacket    SerializeBclPacket
-#define SerializeQueryServiceListPacket     SerializeBclPacket
-#define SerializeQueryServiceStatusPacket   SerializeBclPacket
-#define SerializeQueryHeartbeatPacket       SerializeBclPacket
-#define SerializeReportHeartbeatPacket      SerializeBclPacket
+BCL_STATUS SerializeReportServiceListPayload (
+    const BclPayloadPtr     payload,
+    uint8_t *               buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_written
+);
 
-uint8_t SerializeReportServiceListPacket(ReportServiceList *pkt, uint8_t *payload, int payloadLength);
-uint8_t SerializeReportServiceStatusPacket(ReportServiceStatus *pkt, uint8_t *payload, int payloadLength);
+BCL_STATUS SerializeReportServiceStatusPayload (
+    const BclPayloadPtr     payload,
+    uint8_t *               buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_written
+);
 
 /* Deserialization functions */
-#define DeserializeActivateServicePacket    DeserializeBclPacket
-#define DeserializeDeactivateServicePacket  DeserializeBclPacket
-#define DeserializeQueryServiceListPacket   DeserializeBclPacket
-#define DeserializeQueryServiceStatusPacket DeserializeBclPacket
-#define DeserializeQueryHeartbeatPacket     DeserializeBclPacket
-#define DeserializeReportHeartbeatPacket    DeserializeBclPacket
+BCL_STATUS DeserializeReportServiceListPayload (
+    BclPayloadPtr           payload,
+    const uint8_t *         buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_read 
+);
 
-uint8_t DeserializeReportServiceListPacket(ReportServiceList *pkt, uint8_t *payload, int payloadLength);
-uint8_t DeserializeReportServiceStatusPacket(ReportServiceStatus *pkt, uint8_t *payload, int payloadLength);
-
+BCL_STATUS DeserializeReportServiceStatusPayload (
+    BclPayloadPtr           payload,
+    const uint8_t *         buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_read 
+);
 #endif

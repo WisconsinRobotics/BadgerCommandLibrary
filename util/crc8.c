@@ -26,9 +26,9 @@
 // DARC-8
 // poly: x^8 +x^5 +x^4 +x^3 +1  (0x139)
 
-uint8_t compute_crc8(const void *vptr, int len)
+uint8_t compute_crc8(const void *buffer, int len)
 {
-    const uint8_t *data = vptr;
+    const uint8_t *data = buffer;
     uint16_t crc = 0;
     uint8_t i, j;
 
