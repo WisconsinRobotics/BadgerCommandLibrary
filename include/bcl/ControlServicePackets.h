@@ -1,6 +1,9 @@
 #ifndef _CONTROL_SERVICE_PACKETS_H
 #define _CONTROL_SERVICE_PACKETS_H
 
+#include "BclStatus.h"
+#include "Packet.h"
+
 #define ACTIVATE_SERVICE_OPCODE         0xAC
 #define DEACTIVATE_SERVICE_OPCODE       0xDC
 #define QUERY_SERVICE_LIST_OPCODE       0x70
@@ -10,19 +13,21 @@
 #define REPORT_SERVICE_STATUS_OPCODE    0x74
 #define REPORT_HEARTBEAT_OPCODE         0x91
 
-struct ReportServiceListPayload
-{
-    char** ServiceNameList;
-};
+#define MAX_SERVICE_NAME_LENGTH         10
 
-struct ReportServiceStatusPayload
+typedef struct
+{
+    char **ServiceNameList;
+} ReportServiceListPayload;
+
+typedef struct
 {
     uint8_t Active;
-};
+} ReportServiceStatusPayload;
 
 /* Initialization functions */
 BCL_STATUS InitializeActivateServicePacket (
-    BclPacket *pkt 
+    BclPacket *pkt
 );
 
 BCL_STATUS InitializeDeactivateServicePacket (
@@ -47,7 +52,8 @@ BCL_STATUS InitializeReportHeartbeatPacket (
 
 BCL_STATUS InitializeReportServiceListPacket (
     BclPacket *pkt,
-    ReportServiceListPayload *payload
+    ReportServiceListPayload *payload,
+    uint8_t number_services
 );
 
 BCL_STATUS InitializeReportServiceStatusPacket (
@@ -84,4 +90,5 @@ BCL_STATUS DeserializeReportServiceStatusPayload (
     uint8_t                 length,
     uint8_t *               bytes_read 
 );
+
 #endif

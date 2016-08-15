@@ -7,8 +7,8 @@
 #define DEFAULT_SLEEP_INTERVAL 100
 #define RUN_ON_PACKET_RECEIVE 0
 
-typedef uint8_t (*ServiceExecutor)(char *buffer, int length);
-typedef uint8_t (*ServicePacketHandler)(BclPacket *pkt);
+typedef BCL_STATUS (*ServiceExecutor)(char *buffer, int length);
+typedef BCL_STATUS (*ServicePacketHandler)(BclPacket *pkt);
 
 typedef struct
 {
