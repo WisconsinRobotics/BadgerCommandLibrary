@@ -1,6 +1,8 @@
 #include <string.h>
 
-#include "bcl/ServiceMaster.h"
+#include "ServiceMaster.h"
+#include "Serial.h"
+#include "Net.h"
 
 BCL_STATUS InitializeServiceMaster (
     ServiceMaster *     serviceMaster
@@ -58,7 +60,7 @@ BCL_STATUS RemoveSubsystem (
         if (((serviceMaster->_allocated_bitset >> i) & 1) == 0)
             continue;
 
-        if (serviceMaster[i] == subsystem)
+        if (serviceMaster->Subsystems[i] == subsystem)
         {
             serviceMaster->Subsystems[i] = NULL;
             serviceMaster->_allocated_bitset &= ~(1 << i);
@@ -76,7 +78,7 @@ BCL_STATUS RemoveSubsystemById (
 {
     uint8_t i;
 
-    if (serviceMaster == NULL || subsystem == NULL)
+    if (serviceMaster == NULL)
         return BCL_INVALID_PARAMETER;
 
     for (i = 0; i < MAX_SUBSYSTEMS; i++)
@@ -84,7 +86,7 @@ BCL_STATUS RemoveSubsystemById (
         if (((serviceMaster->_allocated_bitset >> i) & 1) == 0)
             continue;
 
-        if (serviceMaster[i]->Id == subsystem_id)
+        if (serviceMaster->Subsystems[i]->Id == subsystem_id)
         {
             serviceMaster->Subsystems[i] = NULL;
             serviceMaster->_allocated_bitset &= ~(1 << i);
@@ -109,7 +111,7 @@ BCL_STATUS RegisterSerialPort (
 
 BCL_STATUS RegisterUdpPort (
     ServiceMaster *     serviceMaster,
-    UdpPort             handle
+    UdpHandle             handle
     )
 {
     if (!serviceMaster || handle == INVALID_UDP_HANDLE)

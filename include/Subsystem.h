@@ -3,7 +3,7 @@
 
 #include "BclConfig.h"
 #include "Service.h"
-
+#include <stdint.h>
 
 typedef struct 
 {
@@ -15,8 +15,8 @@ typedef struct
 } Subsystem;
 
 BCL_STATUS InitializeSubsystem (
-    Subsystem *     subsystem
-    uint8_t         id,
+    Subsystem *     subsystem,
+    uint8_t         id
 );
 
 BCL_STATUS AddService (

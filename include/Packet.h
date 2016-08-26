@@ -2,6 +2,7 @@
 #define _PACKET_H
 
 #include <stdint.h>
+#include "BclStatus.h"
 
 #define BCL_PACKET_START                ((uint16_t)(0xBAAD))
 #define BCL_PACKET_END                  ((uint8_t)(0xFE))
@@ -12,19 +13,20 @@
 
 typedef void * BclPayloadPtr;
 
-typedef BCL_STATUS (*BclPayloadSerializer) (
+typedef BCL_STATUS (*BclPayloadSerializer)(
     const BclPayloadPtr     payload,
     uint8_t *               buffer,
     uint8_t                 length,
     uint8_t *               bytes_written
 );
 
-typedef BCL_STATUS (*BclPayloadDeserializer) (
+typedef BCL_STATUS (*BclPayloadDeserializer)(
     BclPayloadPtr           payload,
     const uint8_t *         buffer,
     uint8_t                 length,
     uint8_t *               bytes_read 
 );
+
 
 typedef struct
 {

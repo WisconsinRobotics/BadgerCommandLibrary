@@ -19,3 +19,5 @@
 #if defined(_WIN32) || defined(__linux__)
 #define NETWORK_SUPPORTED
 #endif
+
+#endif

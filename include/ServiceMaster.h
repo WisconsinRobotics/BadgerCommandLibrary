@@ -4,7 +4,8 @@
 #include "BclConfig.h"
 #include "Service.h"
 #include "Subsystem.h"
-
+#include "Net.h"
+#include "Serial.h"
 
 typedef struct
 {

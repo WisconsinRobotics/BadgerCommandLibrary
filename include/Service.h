@@ -3,6 +3,7 @@
 
 #include "BclConfig.h"
 #include "BclStatus.h"
+#include "Packet.h"
 
 #define RUN_ON_PACKET_RECEIVE 0
 
@@ -14,11 +15,11 @@ typedef struct
     uint8_t Id;
     uint8_t Active;
     uint16_t SleepInterval;
-    char Name[SERVICE_MAX_NAME_LENGTH];
+    char Name[MAX_SERVICE_NAME_LENGTH];
 
     // May be null - will be treated as nop by ServiceMaster
-    ServiceExecutor Execute; 
-    ServicePacketHandler HandlePacket;
+    ServiceExecutor *Execute; 
+    ServicePacketHandler *HandlePacket;
 } Service;
 
 BCL_STATUS InitializeService (

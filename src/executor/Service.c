@@ -1,5 +1,5 @@
 #include <string.h>
-#include "bcl/Service.h"
+#include "Service.h"
 
 
 BCL_STATUS InitializeService (
@@ -18,9 +18,9 @@ BCL_STATUS InitializeService (
     service->Id = id;
     service->Active = 0;
     service->SleepInterval = 0;
-    strncpy(service->Name, name, SERVICE_MAX_NAME_LENGTH - 1);
-    service->Execute = execute;
-    service->handler = handler;
+    strncpy(service->Name, name, MAX_SERVICE_NAME_LENGTH - 1);
+    service->Execute = &execute;
+    service->HandlePacket = &handler;
 
     return BCL_OK;
 }

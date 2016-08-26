@@ -52,7 +52,7 @@ BCL_STATUS InitializeReportHeartbeatPacket (
 
 BCL_STATUS InitializeReportServiceListPacket (
     BclPacket *pkt,
-    ReportServiceListPayload *payload,
+    ReportServiceListPayload *payload
 );
 
 BCL_STATUS InitializeReportServiceStatusPacket (

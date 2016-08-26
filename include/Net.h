@@ -3,6 +3,7 @@
 
 #include "BclConfig.h"
 #include "BclStatus.h"
+#include <stdint.h>
 
 
 #ifdef _WIN32
@@ -19,6 +20,7 @@ typedef struct sockaddr int;
 
 #define INVALID_UDP_HANDLE ((UdpHandle)(-1))
 
+
 UdpHandle OpenUdpPort (
     int port
 );
@@ -27,19 +29,19 @@ BCL_STATUS UdpPortWriteData (
     UdpHandle handle,
     struct sockaddr_in addr,
     const void *buffer,
-    uint8_t size,
+    uint8_t length,
     uint8_t *bytes_written
 );
 
 BCL_STATUS UdpPortReadData (
     UdpHandle handle,
     void *buffer,
-    uint8_t size,
+    uint8_t length,
     struct sockaddr *from,
     uint8_t *bytes_read
 );
 
-void CloseSerialPort (
+void CloseUdpPort (
     UdpHandle handle
 );
 

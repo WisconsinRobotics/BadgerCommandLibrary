@@ -1,5 +1,4 @@
 #include "Net.h"
-#include <WinSock2.h>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -9,14 +8,14 @@ UdpHandle OpenUdpPort (
     )
 {
     WSADATA wsaData;
-    SOCKET socket;
+    SOCKET sock;
     struct sockaddr_in socket_addr;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
         return INVALID_UDP_HANDLE;
 
-    socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (socket == INVALID_SOCKET)
+    sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (sock == INVALID_SOCKET)
     {
         WSACleanup();
         return INVALID_UDP_HANDLE;
@@ -27,20 +26,20 @@ UdpHandle OpenUdpPort (
     socket_addr.sin_family = AF_INET;
     socket_addr.sin_port = htons(port);
 
-    if (bind(socket, (struct sockaddr *) &socket_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
+    if (bind(sock, (struct sockaddr *) &socket_addr, sizeof(struct sockaddr)) == SOCKET_ERROR)
     {
         WSACleanup();
         return INVALID_UDP_HANDLE;
     }
 
-    return socket;
+    return sock;
 }
 
 BCL_STATUS UdpPortWriteData (
     UdpHandle handle,
     struct sockaddr_in addr,
     const void *buffer,
-    uint8_t size,
+    uint8_t length,
     uint8_t *bytes_written
     )
 {
@@ -49,7 +48,7 @@ BCL_STATUS UdpPortWriteData (
     if (!buffer || handle == INVALID_UDP_HANDLE)
         return BCL_INVALID_PARAMETER;
 
-    written = sendto(handle, buffer, size, 0, (struct sockaddr *) addr, sizeof(struct sockaddr));
+    written = sendto(handle, buffer, length, 0, (struct sockaddr *) &addr, sizeof(struct sockaddr));
     if (written < 0)
         return BCL_SOCKET_ERROR;
 
@@ -62,17 +61,19 @@ BCL_STATUS UdpPortWriteData (
 BCL_STATUS UdpPortReadData (
     UdpHandle handle,
     void *buffer,
-    uint8_t size,
+    uint8_t length,
     struct sockaddr *from,
     uint8_t *bytes_read
     )
 {
     uint8_t read;
+    int from_sz;
 
     if (!buffer || handle == INVALID_UDP_HANDLE || !from)
         return BCL_INVALID_PARAMETER;
 
-    read = recvfrom(socket, buffer, size, 0, from, sizeof(struct sockaddr));
+    from_sz = sizeof(struct sockaddr);
+    read = recvfrom(handle, buffer, length, 0, from, &from_sz);
     if (read < 0)
         return BCL_SOCKET_ERROR;
 
@@ -82,7 +83,7 @@ BCL_STATUS UdpPortReadData (
     return BCL_OK;
 }
 
-void CloseSerialPort (
+void CloseUdpPort (
     UdpHandle handle
     )
 {

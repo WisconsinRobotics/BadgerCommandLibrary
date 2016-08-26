@@ -89,10 +89,10 @@ BCL_STATUS InitializeReportHeartbeatPacket (
 
 BCL_STATUS InitializeReportServiceListPacket (
     BclPacket *pkt,
-    ReportServiceListPayload *payload,
+    ReportServiceListPayload *payload
     )
 {
-    if (number_services > (MAX_SERVICES_PER_SUBSYSTEM * MAX_SUBSYSTEMS))
+    if (payload->NumberServices > (MAX_SERVICES_PER_SUBSYSTEM * MAX_SUBSYSTEMS))
         return BCL_INVALID_PARAMETER;
 
     return InitializeBclPacket(
@@ -135,10 +135,11 @@ BCL_STATUS SerializeReportServiceListPayload (
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
+    payload_length = 0;
     rpt_payload = (const ReportServiceListPayload *)(payload);
 
     for (i = 0; i < rpt_payload->NumberServices; i++)
-        payload_length += strlen(payload->ServiceNameList[i]);
+        payload_length += strlen(rpt_payload->ServiceNameList[i]);
 
     if (payload_length > length)
         return BCL_BUFFER_TOO_SMALL;
@@ -147,7 +148,7 @@ BCL_STATUS SerializeReportServiceListPayload (
     // XXX: verify
     for (i = 0, buf_offset = 0; i < rpt_payload->NumberServices; i++)
     {
-        strncpy(buffer + buf_offset, payload->ServiceNameList[i], MAX_SERVICE_NAME_LENGTH);
+        strncpy(buffer + buf_offset, rpt_payload->ServiceNameList[i], MAX_SERVICE_NAME_LENGTH);
     }
 
     if (bytes_written)
@@ -196,7 +197,7 @@ BCL_STATUS DeserializeReportServiceListPayload (
         return BCL_INVALID_PARAMETER;
 
     rpt_payload = (ReportServiceListPayload *)(payload);
-    if (!payload->ServiceNameList)
+    if (!rpt_payload->ServiceNameList)
         return BCL_INVALID_PARAMETER;
     
     // parse strings
@@ -225,7 +226,7 @@ BCL_STATUS DeserializeReportServiceStatusPayload (
         return BCL_INVALID_PARAMETER;
 
     rpt_payload = (ReportServiceStatusPayload *)(payload);
-    payload->Status = buffer[0];
+    rpt_payload->Active = buffer[0];
 
     if (bytes_read)
         *bytes_read = 1;

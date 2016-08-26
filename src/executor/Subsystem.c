@@ -1,10 +1,11 @@
 #include <string.h>
-#include "bcl/Subsystem.h"
+#include "BclStatus.h"
+#include "Subsystem.h"
 
 
 BCL_STATUS InitializeSubsystem (
-    Subsystem *     subsystem
-    uint8_t         id,
+    Subsystem *     subsystem,
+    uint8_t         id
     )
 {
     if (subsystem == NULL)
@@ -28,7 +29,7 @@ BCL_STATUS AddService (
     {
         if (subsystem->_allocated_bitset >> service_index)
         {
-            if (subsystem->Services[i]->Id == service->Id)
+            if (subsystem->Services[service_index]->Id == service->Id)
                 return BCL_ALREADY_EXISTS;
 
             continue;
@@ -57,9 +58,9 @@ BCL_STATUS RemoveService (
         if (((subsystem->_allocated_bitset >> service_index) & 1) == 0)
             continue;
 
-        if (subsystem->Services[i] == service)
+        if (subsystem->Services[service_index] == service)
         {
-            subsystem->Service = NULL;
+            subsystem->Services[service_index] = NULL;
             subsystem->_allocated_bitset &= ~(1 << service_index);
             return BCL_OK;
         }
@@ -83,9 +84,9 @@ BCL_STATUS RemoveServiceById (
         if ((subsystem->_allocated_bitset >> service_index) == 0)
             continue;
 
-        if (subsystem->Services[i]->Id == service_id)
+        if (subsystem->Services[service_index]->Id == service_id)
         {
-            subsystem->Service = NULL;
+            subsystem->Services[service_index] = NULL;
             subsystem->_allocated_bitset &= ~(1 << service_index);
             return BCL_OK;
         }
