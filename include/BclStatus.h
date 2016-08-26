@@ -12,7 +12,8 @@ typedef enum
     BCL_SERVICE_MASTER_FULL     = 6,
     BCL_ALREADY_EXISTS          = 7,
     BCL_CHECKSUM_ERROR          = 8,
-    BCL_UNSUPPORTED             = 9
+    BCL_UNSUPPORTED             = 9,
+    BCL_SOCKET_ERROR            = 10,
     BCL_GENERIC_ERROR = 255
 } BCL_STATUS;
 
