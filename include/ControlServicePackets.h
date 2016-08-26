@@ -13,11 +13,11 @@
 #define REPORT_SERVICE_STATUS_OPCODE    0x74
 #define REPORT_HEARTBEAT_OPCODE         0x91
 
-#define MAX_SERVICE_NAME_LENGTH         10
 
 typedef struct
 {
     char **ServiceNameList;
+    uint8_t NumberServices;
 } ReportServiceListPayload;
 
 typedef struct
@@ -53,7 +53,6 @@ BCL_STATUS InitializeReportHeartbeatPacket (
 BCL_STATUS InitializeReportServiceListPacket (
     BclPacket *pkt,
     ReportServiceListPayload *payload,
-    uint8_t number_services
 );
 
 BCL_STATUS InitializeReportServiceStatusPacket (

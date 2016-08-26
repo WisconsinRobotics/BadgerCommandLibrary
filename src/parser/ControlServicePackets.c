@@ -90,7 +90,6 @@ BCL_STATUS InitializeReportHeartbeatPacket (
 BCL_STATUS InitializeReportServiceListPacket (
     BclPacket *pkt,
     ReportServiceListPayload *payload,
-    uint8_t number_services
     )
 {
     if (number_services > (MAX_SERVICES_PER_SUBSYSTEM * MAX_SUBSYSTEMS))
@@ -99,7 +98,7 @@ BCL_STATUS InitializeReportServiceListPacket (
     return InitializeBclPacket(
         pkt,
         REPORT_SERVICE_LIST_OPCODE,
-        PACKET_MIN_SIZE + SERVICE_MAX_NAME_LENGTH * number_services,
+        PACKET_MIN_SIZE + MAX_SERVICE_NAME_LENGTH * payload->NumberServices,
         payload,
         &SerializeReportServiceListPayload,
         &DeserializeReportServiceListPayload
@@ -129,18 +128,30 @@ BCL_STATUS SerializeReportServiceListPayload (
     )
 {
     const ReportServiceListPayload *rpt_payload;
+    uint8_t payload_length;
+    uint8_t i;
+    uint8_t buf_offset;
 
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
     rpt_payload = (const ReportServiceListPayload *)(payload);
 
-    // TODO:
+    for (i = 0; i < rpt_payload->NumberServices; i++)
+        payload_length += strlen(payload->ServiceNameList[i]);
+
+    if (payload_length > length)
+        return BCL_BUFFER_TOO_SMALL;
+
     // copy strings into buffer
+    // XXX: verify
+    for (i = 0, buf_offset = 0; i < rpt_payload->NumberServices; i++)
+    {
+        strncpy(buffer + buf_offset, payload->ServiceNameList[i], MAX_SERVICE_NAME_LENGTH);
+    }
 
-    // length checks
-
-    // update  bytes_written, if not null
+    if (bytes_written)
+        *bytes_written = payload_length;
 
     return BCL_OK;
 }
@@ -178,6 +189,8 @@ BCL_STATUS DeserializeReportServiceListPayload (
     )
 {
     ReportServiceListPayload *rpt_payload;
+    uint8_t i;
+    uint8_t buf_offset;
 
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
@@ -186,8 +199,15 @@ BCL_STATUS DeserializeReportServiceListPayload (
     if (!payload->ServiceNameList)
         return BCL_INVALID_PARAMETER;
     
-    // TODO: parse null terminated ascii strings
-    // updated bytes_read, if not null
+    // parse strings
+    // XXX: verify
+    for (i = 0, buf_offset = 0; i < rpt_payload->NumberServices; i++)
+    {
+        strncpy(rpt_payload->ServiceNameList[i], buffer + buf_offset, MAX_SERVICE_NAME_LENGTH);
+    }
+
+    if (bytes_read)
+        *bytes_read = buf_offset;
 
     return BCL_OK;
 }
