@@ -1,9 +1,9 @@
 #ifndef _SUBSYSTEM_H
 #define _SUBSYSTEM_H
 
+#include "BclConfig.h"
 #include "Service.h"
 
-#define MAX_SERVICES_PER_SUBSYSTEM 4
 
 typedef struct 
 {

@@ -1,10 +1,9 @@
 #ifndef _SERVICE_H
 #define _SERVICE_H
 
+#include "BclConfig.h"
 #include "BclStatus.h"
 
-#define SERVICE_MAX_NAME_LENGTH 10
-#define DEFAULT_SLEEP_INTERVAL 100
 #define RUN_ON_PACKET_RECEIVE 0
 
 typedef BCL_STATUS (*ServiceExecutor)(char *buffer, int length);

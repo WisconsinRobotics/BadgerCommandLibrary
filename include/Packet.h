@@ -9,7 +9,6 @@
 #define PACKET_MIN_SIZE                 10
 #define PACKET_HEADER_SIZE              PACKET_MIN_SIZE
 
-// TODO: fix the alignment
 
 typedef void * BclPayloadPtr;
 

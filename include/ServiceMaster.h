@@ -1,10 +1,10 @@
 #ifndef _SERVICE_MASTER_H
 #define _SERVICE_MASTER_H
 
+#include "BclConfig.h"
 #include "Service.h"
 #include "Subsystem.h"
 
-#define MAX_SUBSYSTEMS 8
 
 typedef struct
 {
