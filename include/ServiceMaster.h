@@ -10,9 +10,9 @@ typedef struct
 {
     Subsystem *     Subsystems[MAX_SUBSYSTEMS];
 
-    // serial interface handle
-    // network interface handle
-    // how many of each to support?
+    // for now, support only 1 serial and UDP port
+    SerialHandle    SerialPort;
+    UdpHandle       UdpPort;
 
     // private
     uint8_t         _allocated_bitset;
@@ -37,10 +37,18 @@ BCL_STATUS RemoveSubsystemById (
     uint8_t             subsystem_id
 );
 
-// TODO: opening serial and network ports - need transparent interface
+BCL_STATUS RegisterSerialPort (
+    ServiceMaster *     serviceMaster,
+    SerialHandle        handle
+);
+
+BCL_STATUS RegisterUdpPort (
+    ServiceMaster *     serviceMaster,
+    UdpHandle           handle
+);
 
 /**
-    Does not return. This function will likely be platform depedent.
+    Does not return. This function will likely be platform dependent.
     This function will need to be able to:
     (1) Listen for messages
     (2) Dispatch incoming messages to subsystems

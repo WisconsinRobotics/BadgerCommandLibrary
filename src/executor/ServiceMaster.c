@@ -10,6 +10,8 @@ BCL_STATUS InitializeServiceMaster (
         return BCL_INVALID_PARAMETER;
 
     memset(serviceMaster, 0, sizeof(ServiceMaster));
+    serviceMaster->SerialPort = INVALID_SERIAL_HANDLE;
+    serviceMaster->UdpPort = INVALID_UDP_HANDLE;
     return BCL_OK;
 }
 
@@ -91,4 +93,28 @@ BCL_STATUS RemoveSubsystemById (
     }
 
     return BCL_NOT_FOUND;
+}
+
+BCL_STATUS RegisterSerialPort (
+    ServiceMaster *     serviceMaster,
+    SerialHandle        handle
+    )
+{
+    if (!serviceMaster || handle == INVALID_SERIAL_HANDLE)
+        return BCL_INVALID_PARAMETER;
+
+    serviceMaster->SerialPort = handle;
+    return BCL_OK;
+}
+
+BCL_STATUS RegisterUdpPort (
+    ServiceMaster *     serviceMaster,
+    UdpPort             handle
+    )
+{
+    if (!serviceMaster || handle == INVALID_UDP_HANDLE)
+        return BCL_INVALID_PARAMETER;
+
+    serviceMaster->UdpPort = handle;
+    return BCL_OK;
 }
