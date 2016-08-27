@@ -8,9 +8,9 @@
 
 #ifdef _WIN32
     #include <windows.h>
-    #define UdpHandle SOCKET
+    typedef SOCKET UdpHandle;
 #else
-    #define UdpHandle int
+    typedef unsigned int UdpHandle;
 #endif
 
 #ifndef NETWORK_SUPPORTED

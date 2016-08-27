@@ -56,11 +56,13 @@ BCL_STATUS UdpPortReadData (
     )
 {
     uint8_t read;
+    socklen_t from_sz;
 
     if (!buffer || handle == INVALID_UDP_HANDLE || !from)
         return BCL_INVALID_PARAMETER;
 
-    read = recvfrom(socket, buffer, size, 0, from, sizeof(struct sockaddr));
+    from_sz = sizeof(struct sockaddr);
+    read = recvfrom(socket, buffer, size, 0, from, &from_sz);
     if (read < 0)
         return BCL_SOCKET_ERROR;
 
