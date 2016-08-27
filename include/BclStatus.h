@@ -14,6 +14,7 @@ typedef enum
     BCL_CHECKSUM_ERROR          = 8,
     BCL_UNSUPPORTED             = 9,
     BCL_SOCKET_ERROR            = 10,
+    BCL_SERIAL_ERROR            = 11,
     BCL_GENERIC_ERROR = 255
 } BCL_STATUS;
 

@@ -8,7 +8,7 @@ typedef enum
 } Endianness;
 
 int bprintf(
-    char *buffer,
+    void *buffer,
     int size, 
     const char *fmt, 
     Endianness endianness,
@@ -16,7 +16,7 @@ int bprintf(
 );
 
 int bscanf(
-    const char *buffer,
+    const void *buffer,
     int size,
     const char *fmt,
     Endianness endianness,

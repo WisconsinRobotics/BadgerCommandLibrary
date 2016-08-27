@@ -148,7 +148,7 @@ BCL_STATUS SerializeReportServiceListPayload (
     // XXX: verify
     for (i = 0, buf_offset = 0; i < rpt_payload->NumberServices; i++)
     {
-        strncpy(buffer + buf_offset, rpt_payload->ServiceNameList[i], MAX_SERVICE_NAME_LENGTH);
+        strncpy((char *)(buffer + buf_offset), rpt_payload->ServiceNameList[i], MAX_SERVICE_NAME_LENGTH);
     }
 
     if (bytes_written)
@@ -204,7 +204,7 @@ BCL_STATUS DeserializeReportServiceListPayload (
     // XXX: verify
     for (i = 0, buf_offset = 0; i < rpt_payload->NumberServices; i++)
     {
-        strncpy(rpt_payload->ServiceNameList[i], buffer + buf_offset, MAX_SERVICE_NAME_LENGTH);
+        strncpy(rpt_payload->ServiceNameList[i], (const char *)(buffer + buf_offset), MAX_SERVICE_NAME_LENGTH);
     }
 
     if (bytes_read)

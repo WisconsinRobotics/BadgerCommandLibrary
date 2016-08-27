@@ -1,6 +1,5 @@
 #include "Net.h"
-#include <arpa/inet.h>
-#include <sys/socket.h>
+
 
 UdpHandle OpenUdpPort (
     int port

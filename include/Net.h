@@ -10,6 +10,8 @@
     #include <windows.h>
     typedef SOCKET UdpHandle;
 #else
+    #include <arpa/inet.h>
+    #include <sys/socket.h>
     typedef unsigned int UdpHandle;
 #endif
 

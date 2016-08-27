@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -Wall -Wextra -pedantic -fPIC -g
+CFLAGS = -std=c99 -Wall -Wno-unused-parameter -Wextra -pedantic -fPIC -g
 INCLUDE_FLAGS = -I../../include
 LDFLAGS = -lpthread
 BUILD_DIR = $(shell pwd)
@@ -13,11 +13,11 @@ LIBBCL := libbcl.a
 all: $(LIBBCL)
 
 $(LIBBCL): $(BCL_OBJS)
-	@echo "[$@]"
+	@echo "Linking $@."
 	@$(AR) -cq $@ $(BUILD_DIR)/$(BCL_OBJS)
 
 %.o: %.c
-	@echo "CC   $@"
+	@echo "[CC]    $@"
 	@$(CC) $(CFLAGS) $(INCLUDE_FLAGS) $(LDFLAGS) -c $< -o $(BUILD_DIR)/$@
 
 .PHONY: clean

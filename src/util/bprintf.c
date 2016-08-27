@@ -13,17 +13,20 @@
 static int validate_fmt_str(const char *fmt);
 static int get_fmt_chr_size(char fmt_char);
 
-int bprintf(char *buffer, int size, const char *fmt, Endianness endianness,...)
+int bprintf(void *buffer, int size, const char *fmt, Endianness endianness,...)
 {
     int required_size;
     int num_args;
     int arg_index;
     int buffer_index;
+    char *data;
     const char *itr;
     va_list args;
 
     if (!buffer || !fmt || size <= 0)
         return -EINVAL;
+
+    data = (char *) buffer;
 
     /* format specifiers are one char long, hence # args = strlen of fmt*/
     num_args = strlen(fmt);
@@ -75,9 +78,9 @@ int bprintf(char *buffer, int size, const char *fmt, Endianness endianness,...)
         for (i = 0; i < fmt_chr_size; i++)
         {
             if (endianness == Little)
-                buffer[buffer_index + i] = GET_BYTE(val, i);
+                data[buffer_index + i] = GET_BYTE(val, i);
             else
-                buffer[buffer_index + i] = GET_BYTE(val, fmt_chr_size - i - 1);
+                data[buffer_index + i] = GET_BYTE(val, fmt_chr_size - i - 1);
         }
 
         buffer_index += fmt_chr_size;
@@ -93,7 +96,7 @@ int bprintf(char *buffer, int size, const char *fmt, Endianness endianness,...)
     return required_size;
 }
 
-int bscanf(const char *buffer, int size, const char *fmt, Endianness endianness,...)
+int bscanf(const void *buffer, int size, const char *fmt, Endianness endianness,...)
 {
     int fmt_size;
     int num_args;
@@ -101,9 +104,12 @@ int bscanf(const char *buffer, int size, const char *fmt, Endianness endianness,
     va_list args;
     const char *itr;
     int buffer_index;
+    const char *data;
 
     if (!buffer || size <= 0 || !fmt)
         return -EINVAL;
+
+    data = (const char *)buffer;
 
     num_args = strlen(fmt);
     fmt_size = validate_fmt_str(fmt);
@@ -126,9 +132,9 @@ int bscanf(const char *buffer, int size, const char *fmt, Endianness endianness,
         for (i = 0; i < size; i++)
         {
             if (endianness == Big)
-                ptr[size - i - 1] = buffer[buffer_index + i];
+                ptr[size - i - 1] = data[buffer_index + i];
             else
-                ptr[size - i - 1] = buffer[buffer_index + size - i - 1];
+                ptr[size - i - 1] = data[buffer_index + size - i - 1];
         }
 
         buffer_index += size;
