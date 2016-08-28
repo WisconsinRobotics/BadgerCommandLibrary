@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>7.0</ProjectVersion>
+    <ToolchainName>com.Atmel.AVRGCC8.C</ToolchainName>
+    <ProjectGuid>dce6c7e3-ee26-4d79-826b-08594b9ad897</ProjectGuid>
+    <avrdevice>ATmega640</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>StaticLibrary</OutputType>
+    <Language>C</Language>
+    <OutputFileName>lib$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.a</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AvrGccProjectExtensions>
+    </AvrGccProjectExtensions>
+    <AssemblyName>BadgerCommandLibrary</AssemblyName>
+    <Name>BadgerCommandLibrary</Name>
+    <RootNamespace>BadgerCommandLibrary</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <CacheFlash>true</CacheFlash>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress />
+    <UncachedRange />
+    <preserveEEPROM>true</preserveEEPROM>
+    <OverrideVtorValue />
+    <BootSegment>2</BootSegment>
+    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <AsfFrameworkConfig>
+      <framework-data xmlns="">
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.31.0" />
+        </dependencies>
+      </framework-data>
+    </AsfFrameworkConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ToolchainSettings>
+      <AvrGcc>
+        <avrgcc.common.Device>-mmcu=atmega640 -B "%24(PackRepoDir)\atmel\ATmega_DFP\1.0.106\gcc\dev\atmega640"</avrgcc.common.Device>
+        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>NDEBUG</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
+        <avrgcc.compiler.directories.IncludePaths>
+          <ListValues>
+            <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.0.106\include</Value>
+          </ListValues>
+        </avrgcc.compiler.directories.IncludePaths>
+        <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+        <avrgcc.linker.libraries.LibrarySearchPaths>
+        </avrgcc.linker.libraries.LibrarySearchPaths>
+        <avrgcc.assembler.general.IncludePaths>
+          <ListValues>
+            <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.0.106\include</Value>
+          </ListValues>
+        </avrgcc.assembler.general.IncludePaths>
+      </AvrGcc>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <ToolchainSettings>
+      <AvrGcc>
+  <avrgcc.common.Device>-mmcu=atmega640 -B "%24(PackRepoDir)\atmel\ATmega_DFP\1.0.106\gcc\dev\atmega640"</avrgcc.common.Device>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.0.106\include</Value>
+      <Value>../../../../include</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcc.compiler.warnings.ExtraWarnings>True</avrgcc.compiler.warnings.ExtraWarnings>
+  <avrgcc.compiler.warnings.Pedantic>True</avrgcc.compiler.warnings.Pedantic>
+  <avrgcc.compiler.miscellaneous.OtherFlags>-std=c99 -Wno-unused-parameter</avrgcc.compiler.miscellaneous.OtherFlags>
+  <avrgcc.linker.general.NoSharedLibraries>True</avrgcc.linker.general.NoSharedLibraries>
+  <avrgcc.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.0.106\include</Value>
+    </ListValues>
+  </avrgcc.assembler.general.IncludePaths>
+  <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
+</AvrGcc>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\include\BadgerCommandLibrary.h">
+      <SubType>compile</SubType>
+      <Link>BadgerCommandLibrary.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\BclConfig.h">
+      <SubType>compile</SubType>
+      <Link>BclConfig.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\BclStatus.h">
+      <SubType>compile</SubType>
+      <Link>BclStatus.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\bprintf.h">
+      <SubType>compile</SubType>
+      <Link>bprintf.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\ControlServicePackets.h">
+      <SubType>compile</SubType>
+      <Link>ControlServicePackets.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\crc8.h">
+      <SubType>compile</SubType>
+      <Link>crc8.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\Net.h">
+      <SubType>compile</SubType>
+      <Link>Net.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\Packet.h">
+      <SubType>compile</SubType>
+      <Link>Packet.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\Serial.h">
+      <SubType>compile</SubType>
+      <Link>Serial.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\Service.h">
+      <SubType>compile</SubType>
+      <Link>Service.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\ServiceMaster.h">
+      <SubType>compile</SubType>
+      <Link>ServiceMaster.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\include\Subsystem.h">
+      <SubType>compile</SubType>
+      <Link>Subsystem.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\executor\Service.c">
+      <SubType>compile</SubType>
+      <Link>Service.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\executor\ServiceMaster.c">
+      <SubType>compile</SubType>
+      <Link>ServiceMaster.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\executor\ServiceMaster_avr.c">
+      <SubType>compile</SubType>
+      <Link>ServiceMaster_avr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\executor\Subsystem.c">
+      <SubType>compile</SubType>
+      <Link>Subsystem.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\net\net_unsupported.c">
+      <SubType>compile</SubType>
+      <Link>net_unsupported.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\parser\ControlServicePackets.c">
+      <SubType>compile</SubType>
+      <Link>ControlServicePackets.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\parser\Packet.c">
+      <SubType>compile</SubType>
+      <Link>Packet.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\serial\serial_avr.c">
+      <SubType>compile</SubType>
+      <Link>serial_avr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\util\bprintf.c">
+      <SubType>compile</SubType>
+      <Link>bprintf.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\util\crc8.c">
+      <SubType>compile</SubType>
+      <Link>crc8.c</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+</Project>

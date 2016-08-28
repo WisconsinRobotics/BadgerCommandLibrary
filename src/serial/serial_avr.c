@@ -6,7 +6,8 @@ SerialHandle OpenSerialPort (
     int baudrate
     )
 {
-
+	// TODO
+	return INVALID_SERIAL_HANDLE;
 }
 
 BCL_STATUS SerialPortWriteData (
@@ -16,7 +17,7 @@ BCL_STATUS SerialPortWriteData (
     uint8_t *bytes_written
     )
 {
-    
+    return BCL_OK;
 }
 
 BCL_STATUS SerialPortReadData (
@@ -26,7 +27,7 @@ BCL_STATUS SerialPortReadData (
     uint8_t *bytes_read
     )
 {
-
+	return BCL_OK;
 }
 
 void CloseSerialPort (

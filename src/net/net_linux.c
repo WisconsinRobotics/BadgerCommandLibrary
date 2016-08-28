@@ -1,4 +1,6 @@
 #include "Net.h"
+#include <unistd.h>
+#include <string.h>
 
 
 UdpHandle OpenUdpPort (
@@ -17,7 +19,7 @@ UdpHandle OpenUdpPort (
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
 
-    if (bind(handle, (struct sockaddr *) &socket_addr, sizeof(struct sockaddr)) == -1)
+    if (bind(handle, (struct sockaddr *) &addr, sizeof(struct sockaddr)) == -1)
         return INVALID_UDP_HANDLE;
 
     return handle;
@@ -31,12 +33,12 @@ BCL_STATUS UdpPortWriteData (
     uint8_t *bytes_written
     )
 {
-    uint8_t written;
+    int written;
 
     if (!buffer || handle == INVALID_UDP_HANDLE)
         return BCL_INVALID_PARAMETER;
 
-    written = sendto(handle, buffer, size, 0, (struct sockaddr *) addr, sizeof(struct sockaddr));
+    written = sendto(handle, buffer, size, 0, (struct sockaddr *) &addr, sizeof(struct sockaddr));
     if (written < 0)
         return BCL_SOCKET_ERROR;
 
@@ -54,14 +56,14 @@ BCL_STATUS UdpPortReadData (
     uint8_t *bytes_read
     )
 {
-    uint8_t read;
+    int read;
     socklen_t from_sz;
 
     if (!buffer || handle == INVALID_UDP_HANDLE || !from)
         return BCL_INVALID_PARAMETER;
 
     from_sz = sizeof(struct sockaddr);
-    read = recvfrom(socket, buffer, size, 0, from, &from_sz);
+    read = recvfrom(handle, buffer, size, 0, from, &from_sz);
     if (read < 0)
         return BCL_SOCKET_ERROR;
 

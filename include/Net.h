@@ -22,8 +22,8 @@
  * Well, maybe later. For now - bogus definition!
  */
 #ifndef NETWORK_SUPPORTED
-struct sockaddr_in {};
-struct sockaddr {};
+struct sockaddr_in { int filler; };
+struct sockaddr { int filler; };
 #endif
 
 #define INVALID_UDP_HANDLE ((UdpHandle)(-1))
