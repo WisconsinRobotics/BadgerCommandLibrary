@@ -6,7 +6,53 @@ SerialHandle OpenSerialPort (
     int baudrate
     )
 {
-    return INVALID_SERIAL_HANDLE;
+    DCB dcb;
+    COMMTIMEOUTS commTO;
+    SerialHandle handle;
+    
+    if (!port)
+        return INVALID_SERIAL_HANDLE;
+    
+    handle = CreateFile(
+        port,
+        GENERIC_READ | GENERIC_WRITE,
+        0,
+        0,
+        OPEN_EXISTING,
+        FILE_FLAG_WRITE_THROUGH,
+        0
+    );
+        
+    if (handle == INVALID_HANDLE_VALUE)
+        return INVALID_SERIAL_HANDLE;
+    
+    memset(&dcb, 0, sizeof(DCB));
+    if (!GetCommState(handle, &dcb))
+    {
+        CloseHandle(handle);
+        return INVALID_SERIAL_HANDLE;
+    }
+
+    dcb.BaudRate = baudrate;
+    dcb.fParity = FALSE;
+    dcb.StopBits = ONESTOPBIT;
+    dcb.ByteSize = 8;
+    dcb.DCBlength = sizeof(dcb);
+    if (!SetCommState(handle, &dcb))
+    {
+        CloseHandle(handle);
+        return INVALID_SERIAL_HANDLE;
+    }
+    
+    ZeroMemory(&commTO, sizeof(COMMTIMEOUTS));
+    commTO.ReadIntervalTimeout = MAXDWORD;
+    if (!SetCommTimeouts(handle, &commTO))
+    {
+        CloseHandle(handle);
+        return INVALID_SERIAL_HANDLE;
+    }
+    
+    return handle;
 }
 
 BCL_STATUS SerialPortWriteData (
@@ -16,6 +62,17 @@ BCL_STATUS SerialPortWriteData (
     uint8_t *bytes_written
     )
 {
+    DWORD written;
+    
+    if (!buffer)
+        return BCL_INVALID_PARAMETER;
+
+    if (!WriteFile(handle, buffer, length, &written, NULL))
+        return BCL_SERIAL_ERROR;
+    
+    if (bytes_written)
+        *bytes_written = written;
+
     return BCL_OK;
 }
 
@@ -26,6 +83,17 @@ BCL_STATUS SerialPortReadData (
     uint8_t *bytes_read
     )
 {
+    DWORD read;
+    
+    if (!buffer)
+        return BCL_INVALID_PARAMETER;
+
+    if (!ReadFile(handle, buffer, length, &read, NULL))
+        return BCL_SERIAL_ERROR;
+    
+    if (bytes_read)
+        *bytes_read = read;
+
     return BCL_OK;
 }
 
@@ -33,5 +101,5 @@ void CloseSerialPort (
     SerialHandle handle
     )
 {
-
+    CloseHandle(handle);
 }

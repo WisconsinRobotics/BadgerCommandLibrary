@@ -9,15 +9,21 @@
 #ifdef _WIN32
     #include <windows.h>
     typedef SOCKET UdpHandle;
-#else
+#elif defined(__linux__)
     #include <arpa/inet.h>
     #include <sys/socket.h>
     typedef unsigned int UdpHandle;
+#else
+    typedef unsigned int UdpHandle;
 #endif
 
+/*
+ * The correct thing to do is to ifdef this entire file.
+ * Well, maybe later. For now - bogus definition!
+ */
 #ifndef NETWORK_SUPPORTED
-typedef struct sockaddr_in int;
-typedef struct sockaddr int;
+struct sockaddr_in {};
+struct sockaddr {};
 #endif
 
 #define INVALID_UDP_HANDLE ((UdpHandle)(-1))
