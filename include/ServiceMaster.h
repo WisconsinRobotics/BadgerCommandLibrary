@@ -48,6 +48,17 @@ BCL_STATUS RegisterUdpPort (
     UdpHandle           handle
 );
 
+BCL_STATUS SendPacketOverSerial (
+    ServiceMaster *        serviceMaster,
+    BclPacket *            pkt
+);
+
+BCL_STATUS SendPacketOverUdp (
+    ServiceMaster *        serviceMaster,
+    BclPacket *            pkt,
+    struct sockaddr_in     dest_addr
+);
+
 /**
     Does not return. This function will likely be platform dependent.
     This function will need to be able to:

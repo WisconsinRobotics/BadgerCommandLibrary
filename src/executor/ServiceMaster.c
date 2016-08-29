@@ -1,5 +1,5 @@
 #include <string.h>
-
+#include "BclConfig.h"
 #include "ServiceMaster.h"
 #include "Serial.h"
 #include "Net.h"
@@ -42,7 +42,7 @@ BCL_STATUS AddSubsystem (
         return BCL_OK;
     }
 
-    return BCL_SERVICE_MASTER_FULL;
+    return BCL_OUT_OF_RESOURCES;
 }
 
 BCL_STATUS RemoveSubsystem (
@@ -119,4 +119,56 @@ BCL_STATUS RegisterUdpPort (
 
     serviceMaster->UdpPort = handle;
     return BCL_OK;
+}
+
+BCL_STATUS SendPacketOverSerial (
+    ServiceMaster *     serviceMaster,
+    BclPacket *            pkt
+    )
+{
+    uint8_t buffer[MAX_PACKET_SIZE];
+    uint8_t pkt_size;
+    BCL_STATUS status;
+
+    status = SerializeBclPacket(pkt, buffer, MAX_PACKET_SIZE, &pkt_size);
+    if (status != BCL_OK)
+        return status;
+
+    // no valid handle found
+    if (serviceMaster->SerialPort == INVALID_SERIAL_HANDLE)
+        return BCL_NOT_FOUND;
+
+    return SerialPortWriteData (
+        serviceMaster->SerialPort,
+        buffer,
+        MAX_PACKET_SIZE, 
+        NULL
+    );
+}
+
+BCL_STATUS SendPacketOverUdp (
+    ServiceMaster *     serviceMaster,
+    BclPacket *            pkt,
+    struct sockaddr_in     dest_addr
+    )
+{
+    uint8_t buffer[MAX_PACKET_SIZE];
+    uint8_t pkt_size;
+    BCL_STATUS status;
+
+    status = SerializeBclPacket(pkt, buffer, MAX_PACKET_SIZE, &pkt_size);
+    if (status != BCL_OK)
+        return status;
+
+    // no valid handle found
+    if (serviceMaster->UdpPort == INVALID_UDP_HANDLE)
+        return BCL_NOT_FOUND;
+
+    return UdpPortWriteData (
+        serviceMaster->UdpPort,
+        dest_addr,
+        buffer,
+        MAX_PACKET_SIZE, 
+        NULL
+    );
 }

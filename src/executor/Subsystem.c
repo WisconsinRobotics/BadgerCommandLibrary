@@ -40,7 +40,7 @@ BCL_STATUS AddService (
         return BCL_OK;
     }
 
-    return BCL_SUBSYSTEM_FULL;
+    return BCL_OUT_OF_RESOURCES;
 }
 
 BCL_STATUS RemoveService (

@@ -8,13 +8,11 @@ typedef enum
     BCL_BUFFER_TOO_SMALL        = 2,
     BCL_OUT_OF_RESOURCES        = 3,
     BCL_NOT_FOUND               = 4,
-    BCL_SUBSYSTEM_FULL          = 5,
-    BCL_SERVICE_MASTER_FULL     = 6,
-    BCL_ALREADY_EXISTS          = 7,
-    BCL_CHECKSUM_ERROR          = 8,
-    BCL_UNSUPPORTED             = 9,
-    BCL_SOCKET_ERROR            = 10,
-    BCL_SERIAL_ERROR            = 11,
+    BCL_ALREADY_EXISTS          = 5,
+    BCL_CHECKSUM_ERROR          = 6,
+    BCL_UNSUPPORTED             = 7,
+    BCL_SOCKET_ERROR            = 8,
+    BCL_SERIAL_ERROR            = 9,
     BCL_GENERIC_ERROR = 255
 } BCL_STATUS;
 

@@ -7,9 +7,9 @@
 
 #ifdef _WIN32
     #include <windows.h>
-    #define SerialHandle HANDLE
+    typedef HANDLE SerialHandle;
 #else
-    #define SerialHandle int
+    typedef int SerialHandle;
 #endif
 
 #define INVALID_SERIAL_HANDLE ((SerialHandle)(-1))

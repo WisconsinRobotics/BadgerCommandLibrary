@@ -2,13 +2,14 @@
 #include "Service.h"
 
 
-BCL_STATUS InitializeService (
+BCL_STATUS InitializeService(
     Service *               service,
-    uint8_t                 id, 
+    ServiceData             data,
+    uint8_t                 id,
     const char *            name,
     ServiceExecutor         execute,
     ServicePacketHandler    handler
-    ) 
+    )
 {
     if (service == NULL || name == NULL)
         return BCL_INVALID_PARAMETER;
@@ -16,6 +17,7 @@ BCL_STATUS InitializeService (
     memset(service, 0, sizeof(Service));
 
     service->Id = id;
+    service->Data = data;
     service->Active = 0;
     service->SleepInterval = 0;
     strncpy(service->Name, name, MAX_SERVICE_NAME_LENGTH - 1);
