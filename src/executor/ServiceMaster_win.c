@@ -4,50 +4,16 @@
 #include "Net.h"
 #include <windows.h>
 
-char SerialIncomingBuffer[256];
-char UdpIncomingBuffer[256];
+char SerialIncomingBuffer[255];
+char UdpIncomingBuffer[255];
 
 static void PacketDispatcher(
     ServiceMaster *         serviceMaster,
     uint8_t *               buffer,
-    int                     length,
-    LastPacketInterface     lpinterface,
-    struct sockaddr_in *    addr
-)
+    int                     length
+    )
 {
-    for (int i = 0; i < MAX_SUBSYSTEMS; i++)
-    {
-        Subsystem *subsystem = serviceMaster->Subsystems[i];
-        if (!BIT_SET(subsystem->_allocated_bitset, i))
-            continue;
 
-        for (int j = 0; j < MAX_SERVICES_PER_SUBSYSTEM; j++)
-        {
-            Service *service = subsystem->Services[i];
-
-            // skip if not allocated
-            if (!BIT_SET(subsystem->_allocated_bitset, i))
-                continue;
-
-            // if service is not a run on packet
-            if (service->SleepInterval != RUN_ON_PACKET_RECEIVE)
-                continue;
-
-            // if the handler isn't defined
-            if (!service->HandlePacket)
-                continue;
-
-            // if parse ok - update origin interface info
-            BCL_STATUS status = (*(service->HandlePacket))(service, buffer, length);
-            if (status == BCL_OK)
-            {
-                service->LastPacketOrigin.Interface = lpinterface;
-                if (addr)
-                    service->LastPacketOrigin.SourceAddr = *addr;
-                return;
-            }
-        }
-    }
 }
 
 static DWORD WINAPI SerialReadThread (
@@ -60,14 +26,14 @@ static DWORD WINAPI SerialReadThread (
     while (TRUE)
     {
         BCL_STATUS status;
-        int bytes_read;
+        uint8_t bytes_read;
 
-        memset(SerialIncomingBuffer, 0, 256);
-        status = SerialPortReadData(handle, SerialIncomingBuffer, 256, &bytes_read);
+        memset(SerialIncomingBuffer, 0, 255);
+        status = SerialPortReadData(handle, SerialIncomingBuffer, 255, &bytes_read);
         if (status == BCL_SERIAL_ERROR)
             continue;
         
-        PacketDispatcher(serviceMaster, SerialIncomingBuffer, 256, LPI_SERIAL, NULL);
+        PacketDispatcher(serviceMaster, SerialIncomingBuffer, 255);
     }
 
     return 0;
@@ -79,21 +45,18 @@ static DWORD WINAPI UdpReadThread (
 {
     ServiceMaster *serviceMaster = (ServiceMaster *)param;
     UdpHandle handle = serviceMaster->UdpPort;
-    struct sockaddr_in rec_addr;
-
-    memset(&rec_addr, 0, sizeof(struct sockaddr_in));
 
     while (TRUE)
     {
         BCL_STATUS status;
-        int bytes_read;
+        uint8_t bytes_read;
 
-        memset(UdpIncomingBuffer, 0, 256);
-        status = UdpPortReadData(handle, UdpIncomingBuffer, 256, &rec_addr, &bytes_read);
+        memset(UdpIncomingBuffer, 0, 255);
+        status = UdpPortReadData(handle, UdpIncomingBuffer, 255, NULL, &bytes_read);
         if (status == BCL_SOCKET_ERROR)
             continue;
 
-        PacketDispatcher(serviceMaster, UdpIncomingBuffer, 256, LPI_UDP, &rec_addr);
+        PacketDispatcher(serviceMaster, UdpIncomingBuffer, 255);
     }
 
     return 0;

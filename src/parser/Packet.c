@@ -1,26 +1,31 @@
 #include "Packet.h"
 #include "crc8.h"
-#include "bprintf.h"
 #include <string.h>
 
-#define PACKET_HEADER_FMT_STR  "scccccc"
+#define BCL_HEADER_INDEX     0
+#define OPCODE_INDEX         2
+#define SRC_ADDR_INDEX       3
+#define DEST_ADDR_INDEX      5
+#define PAYLOAD_SIZE_INDEX   7
+#define PAYLOAD_CRC_INDEX    8
+#define PAYLOAD_INDEX        9
 
 
-BCL_STATUS InitializeBclPacket(
+BCL_STATUS InitializeBclPacket (
     BclPacket *             pkt,
     uint8_t                 opcode,
-    uint8_t                 packet_size,
     BclPayloadPtr           payload,
+    uint8_t                 payload_size,
     BclPayloadSerializer    serialize_func,
     BclPayloadDeserializer  deserialize_func
     )
 {
-    if (!pkt || packet_size < PACKET_MIN_SIZE)
+    if (!pkt)
         return BCL_INVALID_PARAMETER;
     
     // a null payload is acceptable only if
     // the packet size is the minimum packet size
-    if (packet_size != PACKET_MIN_SIZE)
+    if (payload_size != 0)
     {
         if (!payload || !serialize_func || !deserialize_func)
             return BCL_INVALID_PARAMETER;
@@ -29,7 +34,7 @@ BCL_STATUS InitializeBclPacket(
     pkt->Header.Opcode = opcode;
     memset(&pkt->Header.Source, 0, sizeof(BclAddress));
     memset(&pkt->Header.Destination, 0, sizeof(BclAddress));
-    pkt->Header.PacketSize = packet_size;
+    pkt->Header.PayloadSize = payload_size;
 
     pkt->Payload = payload;
     pkt->Serialize = serialize_func;
@@ -45,67 +50,104 @@ BCL_STATUS SerializeBclPacket (
     uint8_t *           bytes_written
     )
 {
-    uint8_t buf_index;
-    uint8_t checksum;
+    uint8_t payload_bytes_written;
 
-    if (!pkt || !buffer || pkt->Header.PacketSize < PACKET_MIN_SIZE)
+    if (!pkt || !buffer)
         return BCL_INVALID_PARAMETER;
 
-    if (length < pkt->Header.PacketSize)
+    if (length < PACKET_MIN_SIZE + pkt->Header.PayloadSize)
         return BCL_BUFFER_TOO_SMALL;
 
     // write the header
-    buf_index = bprintf(
-        buffer, 
-        length, 
-        PACKET_HEADER_FMT_STR, 
-        Big,
-        BCL_PACKET_START,
-        pkt->Header.Opcode,
-        pkt->Header.Source.Subsystem,
-        pkt->Header.Source.Service,
-        pkt->Header.Destination.Subsystem,
-        pkt->Header.Destination.Service,
-        pkt->Header.PacketSize
-    );
-
-    // TODO: Create proper error code
-    if (buf_index <= 0)
-        return BCL_GENERIC_ERROR;
+    buffer[BCL_HEADER_INDEX ] = (uint8_t) (BCL_PACKET_START >> 8);
+    buffer[BCL_HEADER_INDEX  + 1] = (uint8_t) (BCL_PACKET_START & 0xFF);
+    buffer[OPCODE_INDEX] = pkt->Header.Opcode;
+    buffer[SRC_ADDR_INDEX] = pkt->Header.Source.RobotID;
+    buffer[SRC_ADDR_INDEX + 1] = pkt->Header.Source.ServiceID;
+    buffer[DEST_ADDR_INDEX] = pkt->Header.Destination.RobotID;
+    buffer[DEST_ADDR_INDEX + 1] = pkt->Header.Destination.ServiceID;
+    buffer[PAYLOAD_SIZE_INDEX] = pkt->Header.PayloadSize;
 
     // write the payload
     if (pkt->Payload && pkt->Serialize)
     {
-        BCL_STATUS status;
-        uint8_t payload_bytes_written;
-
-        status = pkt->Serialize (
+        BCL_STATUS status = pkt->Serialize (
             pkt->Payload, 
-            buffer + buf_index, 
-            length - buf_index,
+            buffer + PAYLOAD_INDEX, 
+            length - PACKET_MIN_SIZE,
             &payload_bytes_written
         );
 
         if (status != BCL_OK)
             return status;
 
-        buf_index += payload_bytes_written;
+        // sanity check
+        if (payload_bytes_written != pkt->Header.PayloadSize)
+            return BCL_GENERIC_ERROR;
     }
 
     // compute checksum
-    checksum = compute_crc8(buffer, buf_index);
+    buffer[PAYLOAD_CRC_INDEX] = compute_crc8(buffer + PAYLOAD_INDEX, pkt->Header.PayloadSize);
 
-    // write checksum and end byte
-    buffer[buf_index] = checksum;
-    buffer[buf_index + 1] = BCL_PACKET_END;
-
-    // final sanity check - did we match PacketSize?
-    // TODO: replace with proper error
-    if (buf_index + 1 != pkt->Header.PacketSize)
-        return BCL_GENERIC_ERROR;
+    // write end byte
+    buffer[PAYLOAD_INDEX + pkt->Header.PayloadSize] = BCL_PACKET_END;
 
     if (bytes_written)
-        *bytes_written = buf_index + 1;
+        *bytes_written = PACKET_MIN_SIZE + pkt->Header.PayloadSize;
+
+    return BCL_OK;
+}
+
+BCL_STATUS ParseBclHeader (
+    BclPacketHeader *   header,
+    uint8_t *           buffer,
+    uint8_t             length,
+    uint8_t             robot_id
+    )
+{
+    if (!header || !buffer)
+        return BCL_INVALID_PARAMETER;
+    if (length < BCL_HEADER_SIZE)
+        return BCL_BUFFER_TOO_SMALL;
+
+    // parse buffer
+    uint16_t buf_hdr = buffer[BCL_HEADER_INDEX ] | buffer[BCL_HEADER_INDEX  + 1];
+    uint8_t opcode = buffer[OPCODE_INDEX];
+
+    BclAddress srcAddr;
+    srcAddr.RobotID = buffer[SRC_ADDR_INDEX];
+    srcAddr.ServiceID = buffer[SRC_ADDR_INDEX + 1];
+
+    BclAddress destAddr;
+    destAddr.RobotID = buffer[DEST_ADDR_INDEX];
+    destAddr.ServiceID = buffer[DEST_ADDR_INDEX + 1];
+
+    uint8_t payloadSize = buffer[PAYLOAD_SIZE_INDEX];
+    uint8_t payloadCrc = buffer[PAYLOAD_CRC_INDEX];
+
+    // basic header verification
+    if (buf_hdr != BCL_PACKET_START)
+        return BCL_BAD_PACKET_START;
+
+    if (destAddr.RobotID != robot_id)
+        return BCL_ROBOT_ID_MISMATCH;
+
+    if (PAYLOAD_INDEX + payloadSize >= length)
+        return BCL_CLIPPED_PACKET;
+
+    if (buffer[PAYLOAD_INDEX + payloadSize] != BCL_PACKET_END)
+        return BCL_BAD_PACKET_END;
+
+    uint8_t computed_crc = compute_crc8(buffer + PAYLOAD_INDEX, length - BCL_HEADER_SIZE);
+    if (computed_crc != payloadCrc)
+        return BCL_CHECKSUM_ERROR;
+
+    // header OK, copy
+    header->Opcode = opcode;
+    header->Source = srcAddr;
+    header->Destination = destAddr;
+    header->PayloadSize = payloadSize;
+    header->Checksum = payloadCrc;
 
     return BCL_OK;
 }
@@ -113,69 +155,38 @@ BCL_STATUS SerializeBclPacket (
 BCL_STATUS DeserializeBclPacket (
     BclPacket *         pkt, 
     const uint8_t *     buffer, 
-    uint8_t             length
+    uint8_t             length,
+    uint8_t             robot_id
     )
 {
-    uint16_t pkt_start_val;
-    uint8_t pkt_end_val;
-    uint8_t opcode;
-    uint8_t packet_size;
-    BclAddress source;
-    BclAddress dest;
-    uint8_t parsed_checksum;
-    uint8_t computed_checksum;
-    uint8_t bytes_scanned;
+    BclPacketHeader header;
 
-    if (!pkt || !buffer || pkt->Header.PacketSize < PACKET_MIN_SIZE)
+    if (!pkt || !buffer || length < PACKET_MIN_SIZE)
         return BCL_INVALID_PARAMETER;
     
-    if (pkt->Header.PacketSize > PACKET_MIN_SIZE)
+    // nonzero payload size must have a deserialze function
+    if (length > PACKET_MIN_SIZE)
     {
         if (!pkt->Deserialize || !pkt->Payload)
             return BCL_INVALID_PARAMETER;
     }
 
-    // scan header
-    bytes_scanned = bscanf(
-        (const char *) buffer,
+    // parse header with sanity checks
+    BCL_STATUS header_parse_status = ParseBclHeader (
+        &header,
+        buffer,
         length,
-        PACKET_HEADER_FMT_STR,
-        Big,
-        &pkt_start_val,
-        &pkt_end_val,
-        &opcode,
-        &packet_size,
-        &source.Subsystem,
-        &source.Service,
-        &dest.Subsystem,
-        &dest.Service
+        robot_id
     );
 
-    // TODO: Create proper error code
-    if (bytes_scanned <= 0)
-        return BCL_GENERIC_ERROR;
+    if (header_parse_status != BCL_OK)
+        return header_parse_status;
 
-    // verify header
-    if (pkt_start_val != BCL_PACKET_START)
-        return BCL_GENERIC_ERROR;
+    if (header.Opcode != pkt->Header.Opcode)
+        return BCL_OPCODE_MISMATCH;
 
-    if (pkt->Header.Opcode != opcode)
-        return BCL_GENERIC_ERROR;
-    
-    if (pkt->Header.PacketSize != packet_size)
-        return BCL_GENERIC_ERROR;
-
-    // verify end bytes
-    if (buffer[packet_size - 1] != BCL_PACKET_END)
-        return BCL_GENERIC_ERROR;
-
-    computed_checksum = compute_crc8(buffer, packet_size - 2);
-    parsed_checksum = buffer[packet_size - 2];
-    if (computed_checksum != parsed_checksum)
-        return BCL_CHECKSUM_ERROR;
-
-    pkt->Header.Source = source;
-    pkt->Header.Destination = dest;
+    // header OK, copy
+    pkt->Header = header;
 
     // parse payload
     if (!pkt->Deserialize)
@@ -183,7 +194,7 @@ BCL_STATUS DeserializeBclPacket (
 
     return pkt->Deserialize (
         pkt->Payload,
-        buffer + bytes_scanned,
+        buffer + PAYLOAD_INDEX,
         length - PACKET_MIN_SIZE,
         NULL
     );

@@ -7,9 +7,8 @@
 #define BCL_PACKET_START                ((uint16_t)(0xBAAD))
 #define BCL_PACKET_END                  ((uint8_t)(0xFE))
 
-#define PACKET_MIN_SIZE                 10
-#define PACKET_HEADER_SIZE              PACKET_MIN_SIZE
-
+#define BCL_HEADER_SIZE                 9 // rename to PACKET_HEADER_SIZE
+#define PACKET_MIN_SIZE                 (BCL_HEADER_SIZE + 1) // +1 for end byte
 
 typedef void * BclPayloadPtr;
 
@@ -27,11 +26,10 @@ typedef BCL_STATUS (*BclPayloadDeserializer)(
     uint8_t *               bytes_read 
 );
 
-
 typedef struct
 {
-    uint8_t Subsystem;
-    uint8_t Service;
+    uint8_t RobotID;
+    uint8_t ServiceID;
 } BclAddress;
 
 typedef struct
@@ -39,7 +37,7 @@ typedef struct
     uint8_t             Opcode;
     BclAddress          Source;
     BclAddress          Destination;
-    uint8_t             PacketSize;
+    uint8_t             PayloadSize;
     uint8_t             Checksum;
 } BclPacketHeader;
 
@@ -55,8 +53,8 @@ typedef struct
 BCL_STATUS InitializeBclPacket (
     BclPacket *             pkt,
     uint8_t                 opcode,
-    uint8_t                 packet_size,
     BclPayloadPtr           payload,
+    uint8_t                 payload_size,
     BclPayloadSerializer    serialize_func,
     BclPayloadDeserializer  deserialize_func
 );
@@ -68,10 +66,18 @@ BCL_STATUS SerializeBclPacket (
     uint8_t *           bytes_written
 );
 
+BCL_STATUS ParseBclHeader (
+    BclPacketHeader *   header,
+    uint8_t *           buffer,
+    uint8_t             length,
+    uint8_t             robot_id
+);
+
 BCL_STATUS DeserializeBclPacket (
     BclPacket *         pkt, 
     const uint8_t *     buffer,
-    uint8_t             length
+    uint8_t             length,
+    uint8_t             robot_id
 );
 
 #endif

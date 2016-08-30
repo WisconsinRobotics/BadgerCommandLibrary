@@ -10,8 +10,8 @@ BCL_STATUS InitializeActivateServicePacket (
     return InitializeBclPacket(
         pkt,
         ACTIVATE_SERVICE_OPCODE,
-        PACKET_MIN_SIZE,
         NULL,
+        0,
         NULL,
         NULL
     );
@@ -24,8 +24,8 @@ BCL_STATUS InitializeDeactivateServicePacket (
     return InitializeBclPacket(
         pkt,
         DEACTIVATE_SERVICE_OPCODE,
-        PACKET_MIN_SIZE,
         NULL,
+        0,
         NULL,
         NULL
     );
@@ -38,8 +38,8 @@ BCL_STATUS InitializeQueryServiceListPacket (
     return InitializeBclPacket(
         pkt,
         QUERY_SERVICE_LIST_OPCODE,
-        PACKET_MIN_SIZE,
         NULL,
+        0,
         NULL,
         NULL
     );
@@ -52,8 +52,8 @@ BCL_STATUS InitializeQueryServiceStatusPacket (
     return InitializeBclPacket(
         pkt,
         QUERY_SERVICE_STATUS_OPCODE,
-        PACKET_MIN_SIZE,
         NULL,
+        0,
         NULL,
         NULL
     );
@@ -66,8 +66,8 @@ BCL_STATUS InitializeQueryHeartbeatPacket (
     return InitializeBclPacket(
         pkt,
         QUERY_HEARTBEAT_OPCODE,
-        PACKET_MIN_SIZE,
         NULL,
+        0,
         NULL,
         NULL
     );
@@ -79,9 +79,9 @@ BCL_STATUS InitializeReportHeartbeatPacket (
 {
     return InitializeBclPacket(
         pkt,
-        ACTIVATE_SERVICE_OPCODE,
         REPORT_HEARTBEAT_OPCODE,
         NULL,
+        0,
         NULL,
         NULL
     );
@@ -92,14 +92,14 @@ BCL_STATUS InitializeReportServiceListPacket (
     ReportServiceListPayload *payload
     )
 {
-    if (payload->NumberServices > (MAX_SERVICES_PER_SUBSYSTEM * MAX_SUBSYSTEMS))
+    if (payload->NumberServices > MAX_SERVICES)
         return BCL_INVALID_PARAMETER;
 
     return InitializeBclPacket(
         pkt,
         REPORT_SERVICE_LIST_OPCODE,
-        PACKET_MIN_SIZE + MAX_SERVICE_NAME_LENGTH * payload->NumberServices,
         payload,
+        MAX_SERVICE_NAME_LENGTH * payload->NumberServices,
         &SerializeReportServiceListPayload,
         &DeserializeReportServiceListPayload
     );
@@ -113,8 +113,8 @@ BCL_STATUS InitializeReportServiceStatusPacket (
     return InitializeBclPacket(
         pkt,
         REPORT_SERVICE_STATUS_OPCODE,
-        PACKET_MIN_SIZE + sizeof(uint8_t),
         payload,
+        sizeof(uint8_t),
         &SerializeReportServiceStatusPayload,
         &DeserializeReportServiceStatusPayload
     );
@@ -139,7 +139,7 @@ BCL_STATUS SerializeReportServiceListPayload (
     rpt_payload = (const ReportServiceListPayload *)(payload);
 
     for (i = 0; i < rpt_payload->NumberServices; i++)
-        payload_length += strlen(rpt_payload->ServiceNameList[i]);
+        payload_length += (uint8_t)strlen(rpt_payload->ServiceNameList[i]);
 
     if (payload_length > length)
         return BCL_BUFFER_TOO_SMALL;

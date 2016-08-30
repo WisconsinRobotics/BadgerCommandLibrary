@@ -17,84 +17,25 @@ BCL_STATUS InitializeServiceMaster (
     return BCL_OK;
 }
 
-BCL_STATUS AddSubsystem (
+BCL_STATUS BclRegisterService(
     ServiceMaster *     serviceMaster,
-    Subsystem *         subsystem
-    )
+    Service *           service
+)
 {
-    uint8_t i;
-
-    if (serviceMaster == NULL || subsystem == NULL)
+    if (!serviceMaster || !service)
         return BCL_INVALID_PARAMETER;
 
-    for (i = 0; i < MAX_SUBSYSTEMS; i++)
+    // find a free spot, and assign
+    for (int i = 0; i < MAX_SERVICES; i++)
     {
-        if (BIT_SET(serviceMaster->_allocated_bitset, i))
+        if (serviceMaster->Services[i] == NULL)
         {
-            if (serviceMaster->Subsystems[i]->Id == subsystem->Id)
-                return BCL_ALREADY_EXISTS;
-
-            continue;
+            serviceMaster->Services[i] = service;
+            return BCL_OK;
         }
-
-        serviceMaster->_allocated_bitset |= (1 << i);
-        serviceMaster->Subsystems[i] = subsystem;
-        return BCL_OK;
     }
 
     return BCL_OUT_OF_RESOURCES;
-}
-
-BCL_STATUS RemoveSubsystem (
-    ServiceMaster *       serviceMaster,
-    Subsystem *           subsystem
-    )
-{
-    uint8_t i;
-
-    if (serviceMaster == NULL || subsystem == NULL)
-        return BCL_INVALID_PARAMETER;
-
-    for (i = 0; i < MAX_SUBSYSTEMS; i++)
-    {
-        if (!BIT_SET(serviceMaster->_allocated_bitset, i))
-            continue;
-
-        if (serviceMaster->Subsystems[i] == subsystem)
-        {
-            serviceMaster->Subsystems[i] = NULL;
-            serviceMaster->_allocated_bitset &= ~(1 << i);
-            return BCL_OK;
-        }
-    }
-
-    return BCL_NOT_FOUND;
-}
-
-BCL_STATUS RemoveSubsystemById (
-    ServiceMaster *  serviceMaster,
-    uint8_t          subsystem_id
-)
-{
-    uint8_t i;
-
-    if (serviceMaster == NULL)
-        return BCL_INVALID_PARAMETER;
-
-    for (i = 0; i < MAX_SUBSYSTEMS; i++)
-    {
-        if (!BIT_SET(serviceMaster->_allocated_bitset, i))
-            continue;
-
-        if (serviceMaster->Subsystems[i]->Id == subsystem_id)
-        {
-            serviceMaster->Subsystems[i] = NULL;
-            serviceMaster->_allocated_bitset &= ~(1 << i);
-            return BCL_OK;
-        }
-    }
-
-    return BCL_NOT_FOUND;
 }
 
 BCL_STATUS RegisterSerialPort (
@@ -109,15 +50,18 @@ BCL_STATUS RegisterSerialPort (
     return BCL_OK;
 }
 
-BCL_STATUS RegisterUdpPort (
+BCL_STATUS RegisterUdpEndpoint (
     ServiceMaster *     serviceMaster,
-    UdpHandle             handle
+    UdpHandle           handle,
+    struct sockaddr_in  dest_addr
     )
 {
     if (!serviceMaster || handle == INVALID_UDP_HANDLE)
         return BCL_INVALID_PARAMETER;
 
     serviceMaster->UdpPort = handle;
+    serviceMaster->UdpEndpoint = dest_addr;
+    
     return BCL_OK;
 }
 

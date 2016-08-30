@@ -1,6 +1,10 @@
 #ifndef _NET_H
 #define _NET_H
 
+#if defined(_WIN32) || defined(__linux__)
+#define NETWORK_SUPPORTED 1
+#endif
+
 #include "BclConfig.h"
 #include "BclStatus.h"
 #include <stdint.h>
@@ -15,15 +19,6 @@
     typedef unsigned int UdpHandle;
 #else
     typedef unsigned int UdpHandle;
-#endif
-
-/*
- * The correct thing to do is to ifdef this entire file.
- * Well, maybe later. For now - bogus definition!
- */
-#ifndef NETWORK_SUPPORTED
-struct sockaddr_in { int filler; };
-struct sockaddr { int filler; };
 #endif
 
 #define INVALID_UDP_HANDLE ((UdpHandle)(-1))
@@ -52,6 +47,5 @@ BCL_STATUS UdpPortReadData (
 void CloseUdpPort (
     UdpHandle handle
 );
-
 
 #endif

@@ -23,7 +23,6 @@ BCL_STATUS InitializeService(
     strncpy(service->Name, name, MAX_SERVICE_NAME_LENGTH - 1);
     service->Execute = &execute;
     service->HandlePacket = &handler;
-    service->LastPacketOrigin.Interface = LPI_NONE;
 
     return BCL_OK;
 }

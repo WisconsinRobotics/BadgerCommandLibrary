@@ -22,7 +22,6 @@
     <ClInclude Include="..\..\..\include\BadgerCommandLibrary.h" />
     <ClInclude Include="..\..\..\include\BclConfig.h" />
     <ClInclude Include="..\..\..\include\BclStatus.h" />
-    <ClInclude Include="..\..\..\include\bprintf.h" />
     <ClInclude Include="..\..\..\include\ControlServicePackets.h" />
     <ClInclude Include="..\..\..\include\crc8.h" />
     <ClInclude Include="..\..\..\include\Net.h" />
@@ -30,18 +29,15 @@
     <ClInclude Include="..\..\..\include\Serial.h" />
     <ClInclude Include="..\..\..\include\Service.h" />
     <ClInclude Include="..\..\..\include\ServiceMaster.h" />
-    <ClInclude Include="..\..\..\include\Subsystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\executor\Service.c" />
     <ClCompile Include="..\..\..\src\executor\ServiceMaster.c" />
     <ClCompile Include="..\..\..\src\executor\ServiceMaster_win.c" />
-    <ClCompile Include="..\..\..\src\executor\Subsystem.c" />
     <ClCompile Include="..\..\..\src\net\net_win.c" />
     <ClCompile Include="..\..\..\src\parser\ControlServicePackets.c" />
     <ClCompile Include="..\..\..\src\parser\Packet.c" />
     <ClCompile Include="..\..\..\src\serial\serial_win.c" />
-    <ClCompile Include="..\..\..\src\util\bprintf.c" />
     <ClCompile Include="..\..\..\src\util\crc8.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

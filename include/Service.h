@@ -7,21 +7,8 @@
 #include "Net.h"
 #include "time.h"
 
-
 #define RUN_ON_PACKET_RECEIVE 0
 
-typedef enum 
-{
-    LPI_NONE,
-    LPI_UDP,
-    LPI_SERIAL
-} LastPacketInterface;
-
-typedef struct 
-{
-    LastPacketInterface Interface;
-    struct sockaddr_in SourceAddr;
-} LPIINFO;
 
 typedef struct Service Service;
 
@@ -46,7 +33,6 @@ struct Service
     ServiceData Data;   // internal members are stored here
 
     clock_t LastTimeRun;
-    LPIINFO LastPacketOrigin;
 
     // May be null - will be treated as nop by ServiceMaster
     ServiceExecutor *Execute; 

@@ -11,14 +11,9 @@
  */
 
 
-#define MAX_SUBSYSTEMS                  8
-#define MAX_SERVICES_PER_SUBSYSTEM      4
+#define MAX_SERVICES                    32
 #define MAX_SERVICE_NAME_LENGTH         10
 #define DEFAULT_SLEEP_INTERVAL          100
 #define MAX_PACKET_SIZE                 64
-
-#if defined(_WIN32) || defined(__linux__)
-#define NETWORK_SUPPORTED 1
-#endif
 
 #endif
