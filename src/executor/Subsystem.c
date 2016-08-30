@@ -25,9 +25,9 @@ BCL_STATUS AddService (
     if (subsystem == NULL || service == NULL)
         return BCL_INVALID_PARAMETER;
 
-    for (service_index= 0; service_index < MAX_SERVICES_PER_SUBSYSTEM; service_index++)
+    for (service_index = 0; service_index < MAX_SERVICES_PER_SUBSYSTEM; service_index++)
     {
-        if (subsystem->_allocated_bitset >> service_index)
+        if (BIT_SET(subsystem->_allocated_bitset, service_index))
         {
             if (subsystem->Services[service_index]->Id == service->Id)
                 return BCL_ALREADY_EXISTS;
@@ -55,7 +55,7 @@ BCL_STATUS RemoveService (
 
     for (service_index = 0; service_index < MAX_SERVICES_PER_SUBSYSTEM; service_index++)
     {
-        if (((subsystem->_allocated_bitset >> service_index) & 1) == 0)
+        if (!BIT_SET(subsystem->_allocated_bitset, service_index))
             continue;
 
         if (subsystem->Services[service_index] == service)
@@ -81,7 +81,7 @@ BCL_STATUS RemoveServiceById (
 
     for (service_index = 0; service_index < MAX_SERVICES_PER_SUBSYSTEM; service_index++)
     {
-        if ((subsystem->_allocated_bitset >> service_index) == 0)
+        if (!BIT_SET(subsystem->_allocated_bitset, service_index))
             continue;
 
         if (subsystem->Services[service_index]->Id == service_id)

@@ -29,7 +29,7 @@ BCL_STATUS AddSubsystem (
 
     for (i = 0; i < MAX_SUBSYSTEMS; i++)
     {
-        if (serviceMaster->_allocated_bitset >> i)
+        if (BIT_SET(serviceMaster->_allocated_bitset, i))
         {
             if (serviceMaster->Subsystems[i]->Id == subsystem->Id)
                 return BCL_ALREADY_EXISTS;
@@ -57,7 +57,7 @@ BCL_STATUS RemoveSubsystem (
 
     for (i = 0; i < MAX_SUBSYSTEMS; i++)
     {
-        if (((serviceMaster->_allocated_bitset >> i) & 1) == 0)
+        if (!BIT_SET(serviceMaster->_allocated_bitset, i))
             continue;
 
         if (serviceMaster->Subsystems[i] == subsystem)
@@ -83,7 +83,7 @@ BCL_STATUS RemoveSubsystemById (
 
     for (i = 0; i < MAX_SUBSYSTEMS; i++)
     {
-        if (((serviceMaster->_allocated_bitset >> i) & 1) == 0)
+        if (!BIT_SET(serviceMaster->_allocated_bitset, i))
             continue;
 
         if (serviceMaster->Subsystems[i]->Id == subsystem_id)
@@ -152,6 +152,7 @@ BCL_STATUS SendPacketOverUdp (
     struct sockaddr_in     dest_addr
     )
 {
+#if NETWORK_SUPPORTED
     uint8_t buffer[MAX_PACKET_SIZE];
     uint8_t pkt_size;
     BCL_STATUS status;
@@ -171,4 +172,7 @@ BCL_STATUS SendPacketOverUdp (
         MAX_PACKET_SIZE, 
         NULL
     );
+#else
+    return BCL_UNSUPPORTED;
+#endif
 }

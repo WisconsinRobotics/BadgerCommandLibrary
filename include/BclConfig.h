@@ -18,7 +18,7 @@
 #define MAX_PACKET_SIZE                 64
 
 #if defined(_WIN32) || defined(__linux__)
-#define NETWORK_SUPPORTED
+#define NETWORK_SUPPORTED 1
 #endif
 
 #endif

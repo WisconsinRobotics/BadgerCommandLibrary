@@ -5,6 +5,8 @@
 #include "Service.h"
 #include <stdint.h>
 
+#define BIT_SET(val, b) ((val >> b) & 1)
+
 typedef struct 
 {
     uint8_t     Id;
