@@ -10,6 +10,14 @@
 #define BCL_HEADER_SIZE                 9 // rename to PACKET_HEADER_SIZE
 #define PACKET_MIN_SIZE                 (BCL_HEADER_SIZE + 1) // +1 for end byte
 
+#define BCL_HEADER_INDEX                0
+#define OPCODE_INDEX                    2
+#define SRC_ADDR_INDEX                  3
+#define DEST_ADDR_INDEX                 5
+#define PAYLOAD_SIZE_INDEX              7
+#define PAYLOAD_CRC_INDEX               8
+#define PAYLOAD_INDEX                   9
+
 typedef void * BclPayloadPtr;
 
 typedef BCL_STATUS (*BclPayloadSerializer)(

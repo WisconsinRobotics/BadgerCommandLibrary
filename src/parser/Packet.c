@@ -2,14 +2,6 @@
 #include "crc8.h"
 #include <string.h>
 
-#define BCL_HEADER_INDEX     0
-#define OPCODE_INDEX         2
-#define SRC_ADDR_INDEX       3
-#define DEST_ADDR_INDEX      5
-#define PAYLOAD_SIZE_INDEX   7
-#define PAYLOAD_CRC_INDEX    8
-#define PAYLOAD_INDEX        9
-
 
 BCL_STATUS InitializeBclPacket (
     BclPacket *             pkt,
