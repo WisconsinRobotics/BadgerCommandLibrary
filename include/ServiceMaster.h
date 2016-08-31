@@ -21,9 +21,9 @@ BCL_STATUS InitializeServiceMaster (
     ServiceMaster *     serviceMaster
 );
 
-BCL_STATUS BclRegisterService (
+BCL_STATUS RegisterService (
     ServiceMaster *     serviceMaster,
-    Service *         subsystem
+    Service *           service
 );
 
 BCL_STATUS RegisterSerialPort (

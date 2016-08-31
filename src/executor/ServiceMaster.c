@@ -17,7 +17,7 @@ BCL_STATUS InitializeServiceMaster (
     return BCL_OK;
 }
 
-BCL_STATUS BclRegisterService(
+BCL_STATUS RegisterService(
     ServiceMaster *     serviceMaster,
     Service *           service
 )
