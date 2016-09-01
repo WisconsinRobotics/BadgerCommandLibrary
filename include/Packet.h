@@ -76,7 +76,7 @@ BCL_STATUS SerializeBclPacket (
 
 BCL_STATUS ParseBclHeader (
     BclPacketHeader *   header,
-    uint8_t *           buffer,
+    const uint8_t *     buffer,
     uint8_t             length,
     uint8_t             robot_id
 );

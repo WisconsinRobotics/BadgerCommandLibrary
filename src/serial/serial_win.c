@@ -13,7 +13,7 @@ SerialHandle OpenSerialPort (
     if (!port)
         return INVALID_SERIAL_HANDLE;
     
-    handle = CreateFile(
+    handle = CreateFileA(
         port,
         GENERIC_READ | GENERIC_WRITE,
         0,
@@ -71,7 +71,7 @@ BCL_STATUS SerialPortWriteData (
         return BCL_SERIAL_ERROR;
     
     if (bytes_written)
-        *bytes_written = written;
+        *bytes_written = (uint8_t) written;
 
     return BCL_OK;
 }
@@ -92,7 +92,7 @@ BCL_STATUS SerialPortReadData (
         return BCL_SERIAL_ERROR;
     
     if (bytes_read)
-        *bytes_read = read;
+        *bytes_read = (uint8_t) read;
 
     return BCL_OK;
 }

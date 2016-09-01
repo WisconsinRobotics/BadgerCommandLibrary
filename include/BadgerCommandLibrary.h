@@ -11,6 +11,8 @@ extern "C" {
 #include "Net.h"
 #include "Service.h"
 #include "ServiceMaster.h"
+#include "Packet.h"
+#include "ControlServicePackets.h"
 
 #ifdef __cplusplus
 }

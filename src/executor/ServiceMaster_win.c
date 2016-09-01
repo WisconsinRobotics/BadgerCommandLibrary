@@ -57,10 +57,10 @@ static DWORD WINAPI SerialReadThread (
 
         memset(SerialIncomingBuffer, 0, 255);
         status = SerialPortReadData(handle, SerialIncomingBuffer, 255, &bytes_read);
-        if (status == BCL_SERIAL_ERROR)
+        if (status == BCL_SERIAL_ERROR || bytes_read <= 0)
             continue;
         
-        BOOL dispatchSuccess = PacketDispatcher(serviceMaster, SerialIncomingBuffer, 255);
+        BOOL dispatchSuccess = PacketDispatcher(serviceMaster, SerialIncomingBuffer, bytes_read);
         if (!dispatchSuccess)
             printf("Failed to dispatch serial packet with opcode 0x%x\n", SerialIncomingBuffer[OPCODE_INDEX]);
     }
@@ -82,7 +82,7 @@ static DWORD WINAPI UdpReadThread (
 
         memset(UdpIncomingBuffer, 0, 255);
         status = UdpPortReadData(handle, UdpIncomingBuffer, 255, NULL, &bytes_read);
-        if (status == BCL_SOCKET_ERROR)
+        if (status == BCL_SOCKET_ERROR || bytes_read <= 0)
             continue;
 
         BOOL dispatchSuccess = PacketDispatcher(serviceMaster, UdpIncomingBuffer, 255);
