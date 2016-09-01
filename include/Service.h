@@ -22,15 +22,13 @@ typedef BCL_STATUS (*ServicePacketHandler)(
     uint8_t                 length
 );
 
-typedef void * ServiceData;
-
 struct Service
 {
     uint8_t Id;
     uint8_t Active;
     uint16_t SleepInterval;
     char Name[MAX_SERVICE_NAME_LENGTH];
-    ServiceData Data;   // internal members are stored here
+    void * Data;   // internal members are stored here
 
     clock_t LastTimeRun;
 
@@ -41,9 +39,10 @@ struct Service
 
 BCL_STATUS InitializeService (
     Service *               service,
-    ServiceData             data,
+    void *                  data,
     uint8_t                 id, 
     const char *            name,
+    uint8_t                 sleep_interval,
     ServiceExecutor         execute,
     ServicePacketHandler    handler
 ); 
