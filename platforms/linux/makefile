@@ -5,8 +5,8 @@ LDFLAGS = -lpthread
 BUILD_DIR = $(shell pwd)
 SRC_DIR = ../../src
 BCL_OBJS =  $(SRC_DIR)/executor/Service.o $(SRC_DIR)/executor/ServiceMaster.o $(SRC_DIR)/executor/ServiceMaster_linux.o \
-			$(SRC_DIR)/executor/Subsystem.o $(SRC_DIR)/net/net_linux.o $(SRC_DIR)/serial/serial_linux.o $(SRC_DIR)/parser/Packet.o \
-			$(SRC_DIR)/parser/ControlServicePackets.o  $(SRC_DIR)/util/bprintf.o $(SRC_DIR)/util/crc8.o
+			$(SRC_DIR)/net/net_linux.o $(SRC_DIR)/serial/serial_linux.o $(SRC_DIR)/parser/Packet.o \
+			$(SRC_DIR)/parser/ControlServicePackets.o $(SRC_DIR)/util/crc8.o
 
 LIBBCL := libbcl.a
 
