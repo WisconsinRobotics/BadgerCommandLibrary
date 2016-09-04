@@ -100,7 +100,7 @@ BCL_STATUS ParseBclHeader (
     if (!header || !buffer)
         return BCL_INVALID_PARAMETER;
 
-    if (length < BCL_HEADER_SIZE)
+    if (length < PACKET_HEADER_SIZE)
         return BCL_BUFFER_TOO_SMALL;
 
     // parse buffer

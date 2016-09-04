@@ -23,11 +23,27 @@
 
 #define INVALID_UDP_HANDLE ((UdpHandle)(-1))
 
-
+/**
+ * @brief Opens and returns a handle to a bound socket on the specified port.
+ *
+ * @param port The port to open
+ * @return A UdpHandle to the bound socket, INVALID_UDP_HANDLE on failure.
+ */
 UdpHandle OpenUdpPort (
     int port
 );
 
+/**
+ * @brief Writes the specified data using the specified handle.
+ * 
+ * @param handle        A handle to a UDP socket.
+ * @param addr          The destination address.
+ * @param buffer        The buffer to write.
+ * @param length        The length of the buffer.
+ * @param bytes_written An optional pointer that reports how many bytes were actually written.
+ *
+ * @return BCL_OK on success.
+ */
 BCL_STATUS UdpPortWriteData (
     UdpHandle handle,
     struct sockaddr_in addr,
@@ -36,6 +52,17 @@ BCL_STATUS UdpPortWriteData (
     uint8_t *bytes_written
 );
 
+/**
+ * @brief Reads data from the UDP socket.
+ * 
+ * @param handle        A handle to a UDP socket.
+ * @param buffer        The buffer to write.
+ * @param length        The length of the buffer.
+ * @param from          An optional pointer that holds where the data originated.
+ * @param bytes_read    An optional pointer that reports how many bytes were actually read.
+ *
+ * @return BCL_OK on success.
+ */
 BCL_STATUS UdpPortReadData (
     UdpHandle handle,
     void *buffer,
@@ -44,6 +71,12 @@ BCL_STATUS UdpPortReadData (
     uint8_t *bytes_read
 );
 
+/**
+ * @brief Closes the specified UDP socket.
+ *
+ * @param handle        An open handle to a UDP socket.
+ * @return void
+ */
 void CloseUdpPort (
     UdpHandle handle
 );

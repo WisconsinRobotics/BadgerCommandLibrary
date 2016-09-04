@@ -37,6 +37,19 @@ struct Service
     ServicePacketHandler *HandlePacket;
 };
 
+/**
+ * @brief Initializes the Service.
+ *
+ * @param service           Pointer to a Service object.
+ * @param data              Pointer to any additional service information.
+ * @param id                The service ID.
+ * @param name              A friendly name describing the service, limited to MAX_SERVICE_NAME_LENGTH.
+ * @param sleep_interval    Specifies how often to run the service. Use RUN_ON_PACKET_RECEIVE to have
+                            the service run only when a packet is received.
+ * @param execute           A pointer to the function that gets executed periodically, may be NULL.
+ * @param handler           A pointer to the function that gets called when packets are received.
+ * @return BCL_OK on success.
+ */
 BCL_STATUS InitializeService (
     Service *               service,
     void *                  data,
