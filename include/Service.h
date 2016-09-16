@@ -8,7 +8,8 @@
 #include "time.h"
 
 #define RUN_ON_PACKET_RECEIVE 0
-
+#define BROADCAST_ROBOT_ID    0xFF
+#define BROADCAST_SERVICE_ID  0xFF
 
 typedef struct Service Service;
 

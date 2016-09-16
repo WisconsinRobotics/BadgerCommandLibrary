@@ -16,6 +16,13 @@ static BOOL PacketDispatcher(
     int                     length
     )
 {
+    BCL_STATUS status;
+    BclPacketHeader header;
+
+    status = ParseBclHeader(&header, buffer, length, serviceMaster->RobotID);
+    if (status != BCL_OK)
+        return status;
+
     for (int i = 0; i < MAX_SERVICES; i++)
     {
         Service *s = serviceMaster->Services[i];
@@ -28,7 +35,16 @@ static BOOL PacketDispatcher(
         if (!s->HandlePacket)
             continue;
 
-        BCL_STATUS status = (*s->HandlePacket)(s, buffer, length);
+        if (HandleControlServicePacket(serviceMaster, &header) == BCL_OK)
+            return TRUE;
+
+        if (header.Destination.RobotID != serviceMaster->RobotID && header.Destination.RobotID != BROADCAST_ROBOT_ID)
+            continue;
+
+        if (header.Destination.ServiceID != s->Id && header.Destination.ServiceID != BROADCAST_SERVICE_ID)
+            continue;
+
+        status = (*s->HandlePacket)(s, buffer, length);
         if (status != BCL_OK)
             continue;
 
@@ -155,6 +171,8 @@ void RunServiceMaster(
         return;
 
     // determine min period to run
+    // XXX technically incorrect - should use gcd
+    // but! since we usually do things in 100s of ms, probably OK
     clock_t min_period;
     BOOL min_period_initialized = FALSE;
     BOOL at_least_one_service_exists = FALSE;

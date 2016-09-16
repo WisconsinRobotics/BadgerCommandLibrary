@@ -9,6 +9,7 @@
 typedef struct
 {
     Service *           Services[MAX_SERVICES];
+    uint8_t             RobotID;
 
     // support only 1 serial and one UDP endpoint 
     SerialHandle        SerialPort;
@@ -24,7 +25,8 @@ typedef struct
  * @return BCL_OK on success.
  */
 BCL_STATUS InitializeServiceMaster (
-    ServiceMaster *     serviceMaster
+    ServiceMaster *     serviceMaster,
+    uint8_t             robot_id
 );
 
 /** 
@@ -92,6 +94,11 @@ BCL_STATUS SendPacketOverUdp (
     ServiceMaster *         serviceMaster,
     BclPacket *             pkt,
     struct sockaddr_in      dest_addr
+);
+
+BCL_STATUS HandleControlServicePacket (
+    ServiceMaster *         serviceMaster,
+    BclPacketHeader *       header
 );
 
 /**

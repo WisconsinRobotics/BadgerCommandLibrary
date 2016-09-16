@@ -1,17 +1,20 @@
 #include <string.h>
 #include "BclConfig.h"
 #include "ServiceMaster.h"
+#include "ControlServicePackets.h"
 #include "Serial.h"
 #include "Net.h"
 
 BCL_STATUS InitializeServiceMaster (
-    ServiceMaster *     serviceMaster
+    ServiceMaster *     serviceMaster,
+    uint8_t             robot_id
     )
 {
     if (serviceMaster == NULL)
         return BCL_INVALID_PARAMETER;
 
     memset(serviceMaster, 0, sizeof(ServiceMaster));
+    serviceMaster->RobotID = robot_id;
     serviceMaster->SerialPort = INVALID_SERIAL_HANDLE;
     serviceMaster->UdpPort = INVALID_UDP_HANDLE;
     return BCL_OK;
@@ -119,4 +122,41 @@ BCL_STATUS SendPacketOverUdp (
 #else
     return BCL_UNSUPPORTED;
 #endif
+}
+
+BCL_STATUS HandleControlServicePacket (
+    ServiceMaster *         serviceMaster,
+    BclPacketHeader *       header
+    )
+{
+    if (!serviceMaster || !header)
+        return BCL_INVALID_PARAMETER;
+
+    switch (header->Opcode)
+    {
+        case ACTIVATE_SERVICE_OPCODE:
+        case DEACTIVATE_SERVICE_OPCODE:
+            for (int i = 0; i < MAX_SERVICES; i++)
+            {
+                Service *s = serviceMaster->Services[i]; 
+                if (!s)
+                    continue;
+
+                if (s->Id != header->Destination.ServiceID && header->Destination.ServiceID != BROADCAST_SERVICE_ID)
+                    continue;
+
+                s->Active = (header->Opcode == ACTIVATE_SERVICE_OPCODE);
+            }
+
+            break;
+
+        // TODO: We should send a packet back with the appropriate report packet
+        case QUERY_SERVICE_STATUS_OPCODE:
+        case QUERY_HEARTBEAT_OPCODE:
+            break;
+        default:
+            return BCL_NOT_FOUND;
+    }
+
+    return BCL_OK;
 }
