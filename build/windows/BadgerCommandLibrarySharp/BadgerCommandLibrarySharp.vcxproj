@@ -133,15 +133,18 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\csharp\include\ControlServicePackets.hpp" />
     <ClInclude Include="..\..\..\csharp\include\Packet.hpp" />
+    <ClInclude Include="..\..\..\csharp\include\SerialPort.hpp" />
     <ClInclude Include="..\..\..\csharp\include\Service.hpp" />
     <ClInclude Include="..\..\..\csharp\include\ServiceMaster.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\csharp\src\ControlServicePackets.cpp" />
     <ClCompile Include="..\..\..\csharp\src\Packet.cpp" />
+    <ClCompile Include="..\..\..\csharp\src\SerialPort.cpp" />
     <ClCompile Include="..\..\..\csharp\src\Service.cpp" />
     <ClCompile Include="..\..\..\csharp\src\ServiceMaster.cpp" />
   </ItemGroup>

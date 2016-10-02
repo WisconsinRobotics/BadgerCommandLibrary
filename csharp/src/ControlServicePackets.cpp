@@ -10,3 +10,6 @@ ActivateServicePacket::ActivateServicePacket()
 ActivateServicePacket::~ActivateServicePacket()
 {
 }
+
+
+// TODO: finish me!

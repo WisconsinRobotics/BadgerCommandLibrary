@@ -11,4 +11,6 @@ namespace BclSharp
         ActivateServicePacket();
         ~ActivateServicePacket();
     };
+
+    // TODO: finish me!
 }
