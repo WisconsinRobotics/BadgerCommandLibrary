@@ -1,6 +1,0 @@
-== BadgerCommandLibrary ==
-
-=== Known Limitations ===
-* ReportServiceList is implemented incorrectly - it only contains the service names, but none of the other metadata.
-* The ServiceMaster partially handles the access control/built-in packets at all.
-* The ServiceMaster uses an incorrect algorithm for scheduling services, but it may be good enough.
