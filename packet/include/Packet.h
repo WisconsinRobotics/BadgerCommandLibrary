@@ -112,15 +112,13 @@ BCL_STATUS SerializeBclPacket (
  * @param header        The header in which to store the parsed data.
  * @param buffer        The buffer to parse.
  * @param length        The buffer length.
- * @param robot_id      This robot's ID. 
  *
  * @return BCL_OK on success.
  */
 BCL_STATUS ParseBclHeader (
     BclPacketHeader *   header,
     const uint8_t *     buffer,
-    uint8_t             length,
-    uint8_t             robot_id
+    uint8_t             length
 );
 
 /**
@@ -141,8 +139,7 @@ BCL_STATUS ParseBclHeader (
 BCL_STATUS DeserializeBclPacket (
     BclPacket *         pkt, 
     const uint8_t *     buffer,
-    uint8_t             length,
-    uint8_t             robot_id
+    uint8_t             length
 );
 
 #ifdef __cplusplus

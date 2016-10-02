@@ -6,8 +6,9 @@ using namespace BCL;
 
 constexpr int READ_BUFFER_SIZE = 256;
 
-ServiceMaster::ServiceMaster(int port) : socket(port)
+ServiceMaster::ServiceMaster(int robot_id, int port) : socket(port)
 {
+    this->robotID = robot_id;
     this->isRunning = false;
 }
 
@@ -15,9 +16,15 @@ ServiceMaster::~ServiceMaster()
 {
 }
 
+int ServiceMaster::GetRobotID()
+{
+    return this->robotID;
+}
+
 void ServiceMaster::AddService(Service *s)
 {
     this->services.push_back(s);
+    s->SetServiceMaster(this);
     if (this->isRunning)
         s->ExecuteOnTime();
 }
@@ -35,7 +42,7 @@ BCL_STATUS ServiceMaster::SendPacket(BclPacket *pkt)
 
     if (pkt == nullptr)
         return BCL_INVALID_PARAMETER;
-    
+
     status = SerializeBclPacket(pkt, buffer, 255, &bytes_written);
     if (status != BCL_OK)
         return status;
@@ -81,6 +88,8 @@ void ServiceMaster::Run()
             // compare addresses to see if found
             // if not, add it
         }
+
+        // TODO: handle access control packets here
 
         for (auto& s : this->services)
         {

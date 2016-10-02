@@ -12,11 +12,13 @@ namespace BCL
 {
     class Service;
 
+    // TODO: Support multiple interfaces
     class ServiceMaster
     {
     public:
-        ServiceMaster(int port);
+        ServiceMaster(int robot_id, int port);
         ~ServiceMaster();
+        int GetRobotID();
         void AddService(Service *s);
         void AddEndpoint(int robot_id, struct sockaddr_in addr);
         void Run();
@@ -24,6 +26,7 @@ namespace BCL
 
     private:
         UdpSocket socket;
+        int robotID;
         std::vector<Service *> services;
         std::map<int, struct sockaddr_in> robotEndpointMap;
         std::chrono::milliseconds timer_interval;

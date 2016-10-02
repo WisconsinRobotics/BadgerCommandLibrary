@@ -3,16 +3,16 @@
 
 using namespace BCL;
 
-Service::Service(ServiceMaster* master)
+Service::Service(int id)
 {
-    this->serviceMaster = master;
+    this->serviceAddr.ServiceID = id;
     this->sleepInterval = RUN_ON_PACKET_RECEIVE;
     this->isActive = false;
 }
 
-Service::Service(ServiceMaster* master, int interval, bool active)
+Service::Service(int id, int interval, bool active)
 {
-    this->serviceMaster = master;
+    this->serviceAddr.ServiceID = id;
     this->sleepInterval = interval;
     this->isActive = active;
 }
@@ -24,6 +24,12 @@ Service::~Service()
 
 void Service::Execute()
 {
+}
+
+void Service::SetServiceMaster(ServiceMaster *sm)
+{
+    this->serviceMaster = sm;
+    this->serviceAddr.RobotID = sm->GetRobotID();
 }
 
 bool Service::HandlePacket(const uint8_t *buffer, int length)

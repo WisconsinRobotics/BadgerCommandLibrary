@@ -93,8 +93,7 @@ BCL_STATUS SerializeBclPacket (
 BCL_STATUS ParseBclHeader (
     BclPacketHeader *   header,
     const uint8_t *     buffer,
-    uint8_t             length,
-    uint8_t             robot_id
+    uint8_t             length
     )
 {
     if (!header || !buffer)
@@ -122,9 +121,6 @@ BCL_STATUS ParseBclHeader (
     if (buf_hdr != BCL_PACKET_START)
         return BCL_BAD_PACKET_START;
 
-    if (destAddr.RobotID != robot_id)
-        return BCL_ROBOT_ID_MISMATCH;
-
     if (PAYLOAD_INDEX + payloadSize >= length)
         return BCL_CLIPPED_PACKET;
 
@@ -148,8 +144,7 @@ BCL_STATUS ParseBclHeader (
 BCL_STATUS DeserializeBclPacket (
     BclPacket *         pkt, 
     const uint8_t *     buffer, 
-    uint8_t             length,
-    uint8_t             robot_id
+    uint8_t             length
     )
 {
     BclPacketHeader header;
@@ -168,8 +163,7 @@ BCL_STATUS DeserializeBclPacket (
     BCL_STATUS header_parse_status = ParseBclHeader (
         &header,
         buffer,
-        length,
-        robot_id
+        length
     );
 
     if (header_parse_status != BCL_OK)

@@ -3,6 +3,7 @@
 #include "Timer.hpp"
 #include <chrono>
 #include "ServiceMaster.hpp"
+#include "Packet.h"
 
 namespace BCL
 {
@@ -13,10 +14,11 @@ namespace BCL
     public:
         const static int RUN_ON_PACKET_RECEIVE = -1;
 
-        Service(ServiceMaster* master);
-        Service(ServiceMaster* master, int interval, bool active);
+        Service(int id);
+        Service(int id, int interval, bool active);
         ~Service();
         
+        void SetServiceMaster(ServiceMaster *serviceMaster);
         void ExecuteOnTime();
         virtual bool HandlePacket(const uint8_t *buffer, int length);
         int GetSleepInterval() const;
@@ -29,6 +31,7 @@ namespace BCL
 
         ServiceMaster *serviceMaster;
         Timer execute_timer;
+        BclAddress serviceAddr;
         int sleepInterval;
         bool isActive;
     };
