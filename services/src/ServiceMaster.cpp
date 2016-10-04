@@ -129,7 +129,11 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, int length)
     {
         if (!s->IsActive())
             continue;
-
+        
+        // TODO: check robot and service id
+        // if robot id doesn't match, reject
+        // handle broadcast (robot id = 0xFF, service id = 0xFF)
+        
         if (!s->HandlePacket(buffer, length))
             continue;
 
