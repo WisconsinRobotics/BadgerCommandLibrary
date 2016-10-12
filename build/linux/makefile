@@ -1,12 +1,16 @@
 CC = gcc
+CCX = g++
 CFLAGS = -std=c99 -Wall -Wno-unused-parameter -Wextra -pedantic -fPIC -g
-INCLUDE_FLAGS = -I../../include
+CXXFLAGS = -std=c++11 -Wall -Wno-unused-parameter -Wextra -pedantic -fPIC -g
+INCLUDE_FLAGS = -I../../packet/include -I../../services/include
 LDFLAGS = -lpthread
-BUILD_DIR = $(shell pwd)
-SRC_DIR = ../../src
-BCL_OBJS =  $(SRC_DIR)/executor/Service.o $(SRC_DIR)/executor/ServiceMaster.o $(SRC_DIR)/executor/ServiceMaster_linux.o \
-			$(SRC_DIR)/net/net_linux.o $(SRC_DIR)/serial/serial_linux.o $(SRC_DIR)/parser/Packet.o \
-			$(SRC_DIR)/parser/ControlServicePackets.o $(SRC_DIR)/util/crc8.o
+PACKET_DIR = ../../packet/src
+SERVICE_DIR = ../../services/src
+
+
+BCL_OBJS = ${PACKET_DIR}/crc8.o ${PACKET_DIR}/Packet.o ${PACKET_DIR}/ControlServicePackets.o \
+		   ${SERVICE_DIR}/Serial.o ${SERVICE_DIR}/UdpSocket.o ${SERVICE_DIR}/Timer.o \
+		   ${SERVICE_DIR}/Service.o ${SERVICE_DIR}/ServiceMaster.o
 
 LIBBCL := libbcl.a
 
@@ -14,13 +18,18 @@ all: $(LIBBCL)
 
 $(LIBBCL): $(BCL_OBJS)
 	@echo "Linking $@."
-	@$(AR) -cq $@ $(BUILD_DIR)/$(BCL_OBJS)
+	@$(AR) -cq $@ $(BCL_OBJS)
 
-%.o: %.c
+%.o: %.c 
 	@echo "[CC]    $@"
-	@$(CC) $(CFLAGS) $(INCLUDE_FLAGS) $(LDFLAGS) -c $< -o $(BUILD_DIR)/$@
+	@$(CC) $(CFLAGS) $(INCLUDE_FLAGS) $(LDFLAGS) -c $< -o $@
+
+%.o: %.cpp 
+	@echo "[CXX]    $@"
+	@$(CC) $(CXXFLAGS) $(INCLUDE_FLAGS) $(LDFLAGS) -c $< -o $@
+
 
 .PHONY: clean
 clean:
-	@find $(SRC_DIR) -name "*.o" -print | xargs rm -f 
+	@find ../.. -name "*.o" -print | xargs rm -f 
 	@rm -f *.a
