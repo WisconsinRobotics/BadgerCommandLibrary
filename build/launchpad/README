@@ -1,1 +1,3 @@
-Code Composer Studio files go here!
+Build instructions:
+1. Open Code Composer Studio, and import the project using BadgerCommandLibrary/build/launchpad as the root directory.
+2. Build the projet (Click the hammer icon in the toolbar).
