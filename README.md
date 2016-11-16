@@ -58,4 +58,5 @@ The services framework is intended to allow for runtime selection of code snippe
 Go to the build/ folder and navigate to the appropriate platform folder. For Windows, build within Visual Studio, which will build both the native and C# libraries. Run `make` on Linux to build the static binary.
 
 ### Launchpad
-*Coming soon...or never, as it usually is in the software development world.*
+1. Open Code Composer Studio, and import the project using BadgerCommandLibrary/build/launchpad as the root directory.
+2. Build the project (Click the hammer icon in the toolbar).

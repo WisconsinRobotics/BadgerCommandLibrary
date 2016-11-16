@@ -12,7 +12,6 @@ BCL_OBJS = ${PACKET_DIR}/crc8.o ${PACKET_DIR}/Packet.o ${PACKET_DIR}/ControlServ
 		   ${SERVICE_DIR}/Serial.o ${SERVICE_DIR}/UdpSocket.o ${SERVICE_DIR}/Timer.o \
 		   ${SERVICE_DIR}/Service.o ${SERVICE_DIR}/ServiceMaster.o \
 		   ${PACKET_DIR}/MechanicalControlPackets.o
-		   
 
 LIBBCL := libbcl.a
 
