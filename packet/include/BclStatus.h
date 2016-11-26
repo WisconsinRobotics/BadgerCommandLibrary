@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-typedef enum 
+typedef enum BCL_STATUS
 {
     /** The operation succeeded. */
     BCL_OK                      = 0,
@@ -45,6 +45,9 @@ typedef enum
 
     /** The payload checksum does not match the provided checksum. */
     BCL_CHECKSUM_ERROR,
+
+    /** The payload contained invalid data. */
+    BCL_BAD_PAYLOAD,
 
     /** A socket error has occurred. */
     BCL_SOCKET_ERROR,

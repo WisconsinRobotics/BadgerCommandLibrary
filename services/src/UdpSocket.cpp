@@ -20,7 +20,7 @@ UdpSocket::~UdpSocket()
 bool UdpSocket::Open()
 {
     _socket_t sock_handle;
-    struct sockaddr_in socket_addr;
+    struct sockaddr_in addr;
 
 #ifdef _WIN32
     WSADATA wsaData;
@@ -38,12 +38,12 @@ bool UdpSocket::Open()
     if (sock_handle == INVALID_SOCKET_HANDLE)
         OPEN_FAIL();
 
-    std::memset(&socket_addr, 0, sizeof(struct sockaddr_in));
-    socket_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    socket_addr.sin_family = AF_INET;
-    socket_addr.sin_port = htons(port);
+    std::memset(&addr, 0, sizeof(struct sockaddr_in));
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(static_cast<u_short>(port));
 
-    if (bind(sock_handle, (struct sockaddr *) &socket_addr, sizeof(struct sockaddr)) != 0)
+    if (bind(sock_handle, (struct sockaddr *) &addr, sizeof(struct sockaddr)) != 0)
         OPEN_FAIL();
 
     this->handle = sock_handle;

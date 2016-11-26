@@ -5,14 +5,14 @@ using namespace BCL;
 
 Service::Service(int id)
 {
-    this->serviceAddr.ServiceID = id;
+    this->serviceAddr.ServiceID = static_cast<uint8_t>(id);
     this->sleepInterval = RUN_ON_PACKET_RECEIVE;
     this->isActive = false;
 }
 
 Service::Service(int id, int interval, bool active)
 {
-    this->serviceAddr.ServiceID = id;
+    this->serviceAddr.ServiceID = static_cast<uint8_t>(id);
     this->sleepInterval = interval;
     this->isActive = active;
 }
@@ -29,11 +29,12 @@ void Service::Execute()
 void Service::SetServiceMaster(ServiceMaster *sm)
 {
     this->serviceMaster = sm;
-    this->serviceAddr.RobotID = sm->GetRobotID();
+    this->serviceAddr.RobotID = static_cast<uint8_t>(sm->GetRobotID());
 }
 
 bool Service::HandlePacket(const uint8_t *buffer, int length)
 {
+    (void) buffer, length;
     return false;
 }
 

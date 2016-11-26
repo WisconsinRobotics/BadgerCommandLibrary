@@ -15,36 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\csharp\include\Packet.hpp">
+    <ClInclude Include="..\..\..\robot\ascent\include\MechanicalControlPackets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\csharp\include\ControlServicePackets.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\csharp\include\Service.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\csharp\include\ServiceMaster.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\csharp\include\SerialPort.hpp">
+    <ClInclude Include="..\..\..\robot\ascent\include\SensorControlPackets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\csharp\src\Packet.cpp">
+    <ClCompile Include="..\..\..\robot\ascent\src\MechanicalControlPackets.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\csharp\src\ControlServicePackets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\csharp\src\Service.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\csharp\src\ServiceMaster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\csharp\src\SerialPort.cpp">
+    <ClCompile Include="..\..\..\robot\ascent\src\SensorControlPackets.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

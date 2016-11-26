@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BadgerCommandLibrary", "BadgerCommandLibrary\BadgerCommandLibrary.vcxproj", "{F7091609-EC41-44F6-A9AF-500524DF0422}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BadgerCommandLibrarySharp", "BadgerCommandLibrarySharp\BadgerCommandLibrarySharp.vcxproj", "{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AscentCommandLibrary", "AscentCommandLibrary\AscentCommandLibrary.vcxproj", "{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +23,14 @@ Global
 		{F7091609-EC41-44F6-A9AF-500524DF0422}.Release|x64.Build.0 = Release|x64
 		{F7091609-EC41-44F6-A9AF-500524DF0422}.Release|x86.ActiveCfg = Release|Win32
 		{F7091609-EC41-44F6-A9AF-500524DF0422}.Release|x86.Build.0 = Release|Win32
-		{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}.Debug|x64.ActiveCfg = Debug|x64
-		{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}.Debug|x64.Build.0 = Debug|x64
-		{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}.Debug|x86.ActiveCfg = Debug|Win32
-		{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}.Debug|x86.Build.0 = Debug|Win32
-		{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}.Release|x64.ActiveCfg = Release|x64
-		{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}.Release|x64.Build.0 = Release|x64
-		{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}.Release|x86.ActiveCfg = Release|Win32
-		{E9ADB13A-073D-4782-9450-BE5D3E9F00FF}.Release|x86.Build.0 = Release|Win32
+		{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}.Debug|x64.ActiveCfg = Debug|x64
+		{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}.Debug|x64.Build.0 = Debug|x64
+		{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}.Debug|x86.ActiveCfg = Debug|Win32
+		{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}.Debug|x86.Build.0 = Debug|Win32
+		{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}.Release|x64.ActiveCfg = Release|x64
+		{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}.Release|x64.Build.0 = Release|x64
+		{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}.Release|x86.ActiveCfg = Release|Win32
+		{FEADFE57-C18B-40F0-875B-B1E094BAC8D5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

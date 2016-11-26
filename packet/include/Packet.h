@@ -38,13 +38,13 @@ typedef BCL_STATUS (*BclPayloadDeserializer)(
     uint8_t *               bytes_read 
 );
 
-typedef struct
+typedef struct BclAddress
 {
     uint8_t RobotID;
     uint8_t ServiceID;
 } BclAddress;
 
-typedef struct
+typedef struct BclPacketHeader
 {
     uint8_t             Opcode;
     BclAddress          Source;
@@ -53,7 +53,7 @@ typedef struct
     uint8_t             Checksum;
 } BclPacketHeader;
 
-typedef struct
+typedef struct BclPacket
 {
     BclPacketHeader         Header;
     BclPayloadPtr           Payload;

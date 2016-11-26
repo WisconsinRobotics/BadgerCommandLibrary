@@ -31,6 +31,7 @@ typedef struct
 } ReportServiceStatusPayload;
 
 /* Initialization functions */
+
 BCL_STATUS InitializeActivateServicePacket (
     BclPacket *pkt
 );
@@ -66,6 +67,7 @@ BCL_STATUS InitializeReportServiceStatusPacket (
 );
 
 /* Serialization functions */
+
 BCL_STATUS SerializeReportServiceListPayload (
     const BclPayloadPtr     payload,
     uint8_t *               buffer,
@@ -81,6 +83,7 @@ BCL_STATUS SerializeReportServiceStatusPayload (
 );
 
 /* Deserialization functions */
+
 BCL_STATUS DeserializeReportServiceListPayload (
     BclPayloadPtr           payload,
     const uint8_t *         buffer,

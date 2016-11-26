@@ -123,33 +123,8 @@ BCL_STATUS SerializeReportServiceListPayload (
     uint8_t *               bytes_written
     )
 {
-    const ReportServiceListPayload *rpt_payload;
-    uint8_t payload_length;
-    uint8_t i;
-    uint8_t buf_offset;
-
-    if (!buffer || !payload)
-        return BCL_INVALID_PARAMETER;
-
-    payload_length = 0;
-    rpt_payload = (const ReportServiceListPayload *)(payload);
-
-    for (i = 0; i < rpt_payload->NumberServices; i++)
-        payload_length += (uint8_t)strlen(rpt_payload->ServiceNameList[i]);
-
-    if (payload_length > length)
-        return BCL_BUFFER_TOO_SMALL;
-
-    // copy strings into buffer
-    // XXX: verify
-    for (i = 0, buf_offset = 0; i < rpt_payload->NumberServices; i++)
-    {
-        strncpy((char *)(buffer + buf_offset), rpt_payload->ServiceNameList[i], MAX_SERVICE_NAME_LENGTH);
-    }
-
-    if (bytes_written)
-        *bytes_written = payload_length;
-
+    (void) payload, buffer, length, bytes_written;
+    // TODO: implement 
     return BCL_OK;
 }
 
@@ -185,27 +160,8 @@ BCL_STATUS DeserializeReportServiceListPayload (
     uint8_t *               bytes_read 
     )
 {
-    ReportServiceListPayload *rpt_payload;
-    uint8_t i;
-    uint8_t buf_offset;
-
-    if (!buffer || !payload)
-        return BCL_INVALID_PARAMETER;
-
-    rpt_payload = (ReportServiceListPayload *)(payload);
-    if (!rpt_payload->ServiceNameList)
-        return BCL_INVALID_PARAMETER;
-    
-    // parse strings
-    // XXX: verify
-    for (i = 0, buf_offset = 0; i < rpt_payload->NumberServices; i++)
-    {
-        strncpy(rpt_payload->ServiceNameList[i], (const char *)(buffer + buf_offset), MAX_SERVICE_NAME_LENGTH);
-    }
-
-    if (bytes_read)
-        *bytes_read = buf_offset;
-
+    (void) payload, buffer, length, bytes_read;
+    // TODO: implement
     return BCL_OK;
 }
 
@@ -220,6 +176,9 @@ BCL_STATUS DeserializeReportServiceStatusPayload (
 
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
+
+    if (length < 1)
+        return BCL_BUFFER_TOO_SMALL;
 
     rpt_payload = (ReportServiceStatusPayload *)(payload);
     rpt_payload->Active = buffer[0];
