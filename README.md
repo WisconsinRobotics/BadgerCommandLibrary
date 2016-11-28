@@ -55,7 +55,12 @@ The services framework is intended to allow for runtime selection of code snippe
 
 ## Building
 ### Windows and Linux
-Go to the build/ folder and navigate to the appropriate platform folder. For Windows, build within Visual Studio, which will build both the native and C# libraries. Run `make` on Linux to build the static binary.
+Cmake 3.3 or greater is required to build for Windows and Linux. You can configure what robot you want to build for by specifying it on the command line.
+Note: if the robot flag is ommitted, only the core library will be built. 
+```
+cmake [-DROBOT=Ascent|NONE] ..
+cmake --build .
+```
 
 ### Launchpad
 1. Open Code Composer Studio, and import the project using BadgerCommandLibrary/build/launchpad as the root directory.

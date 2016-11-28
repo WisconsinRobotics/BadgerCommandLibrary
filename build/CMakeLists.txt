@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.3)
 
 set(ROBOT "NONE" CACHE STRING "Build BCL with the specified robot packets. By default, only core BCL messages will be built.")
 set(ROBOT_CONFIG Ascent Insomnia)
+set(CMAKE_BUILD_TYPE Debug)
 
 if (${ROBOT} STREQUAL "NONE")
     project(BadgerCommandLibrary C CXX)
