@@ -55,7 +55,7 @@ BCL_STATUS SerializeGPSPayload (
     uint8_t				 length,
     uint8_t * 			 bytes_written) {
     
-    const BclPayloadPtr *ptr;
+    const GpsPayload *ptr;
     
     //inputs good?
     if (!buffer || !payload)
@@ -65,9 +65,9 @@ BCL_STATUS SerializeGPSPayload (
     if (length < 2 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
-    ptr = (const BclPayloadPtr *)(payload);
-    buffer[0] = ptr->left;
-    buffer[1] = ptr->right;
+    ptr = (uint8_t *)(payload);
+    buffer[0] = ptr->lat_degrees;
+    buffer[1] = ptr->lat_degrees >> 8;
 
     if (bytes_written)
         *bytes_written = 2 * sizeof(int8_t);
