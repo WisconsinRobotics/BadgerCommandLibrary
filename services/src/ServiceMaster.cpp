@@ -28,7 +28,7 @@ void ServiceMaster::AddService(Service *s)
 {
     this->services.push_back(s);
     s->SetServiceMaster(this);
-    if (this->isRunning)
+    if (this->isRunning && s->IsActive())
         s->ExecuteOnTime();
 }
 
@@ -73,20 +73,23 @@ BCL_STATUS ServiceMaster::SendPacketUdp(BclPacket *pkt)
     if (status != BCL_OK)
         return status;
 
+    // TODO: handle broadcast UDP address
+
     int robot_id = pkt->Header.Destination.RobotID;
     if (this->robotEndpointMap.find(robot_id) == this->robotEndpointMap.end())
         return BCL_NOT_FOUND;
 
     struct sockaddr_in dest_addr = this->robotEndpointMap[robot_id];
 
-    this->socket->Write(buffer, bytes_written, (struct sockaddr *) &dest_addr);
+    if (this->socket->Write(buffer, bytes_written, (struct sockaddr *) &dest_addr) != bytes_written)
+        return BCL_SOCKET_ERROR;
+
     return BCL_OK;
 }
 
 void ServiceMaster::SerialReader()
 {
     uint8_t read_buffer[READ_BUFFER_SIZE];
-
     memset(read_buffer, 0, READ_BUFFER_SIZE);
 
     while (true)
@@ -103,18 +106,27 @@ void ServiceMaster::SerialReader()
 void ServiceMaster::UdpSocketReader()
 {
     uint8_t read_buffer[READ_BUFFER_SIZE];
-
     memset(read_buffer, 0, READ_BUFFER_SIZE);
 
     while (true)
     {
         struct sockaddr_in src_addr;
+        BclPacketHeader pkt_hdr;
+
         int bytes_read = socket->Read(read_buffer, READ_BUFFER_SIZE, (struct sockaddr *) &src_addr);
         if (bytes_read < 0)
             continue;
 
-        // TODO: if packet received is from unknown address, but is valid
+        memset(&pkt_hdr, 0, sizeof(BclPacketHeader));
+
+        // if a valid header is received from an unknown address
         // add to robotEndpointMap
+        if (ParseBclHeader(&pkt_hdr, read_buffer, static_cast<uint8_t>(bytes_read)) == BCL_OK)
+        {
+            uint8_t incoming_robot_id = pkt_hdr.Source.RobotID;
+            if (this->robotEndpointMap.find(incoming_robot_id) == this->robotEndpointMap.end())
+                this->robotEndpointMap[incoming_robot_id] = src_addr;
+        }
 
         this->PacketHandler(read_buffer, bytes_read);
         memset(read_buffer, 0, READ_BUFFER_SIZE);
@@ -155,7 +167,7 @@ void ServiceMaster::Run()
 
     // run the services
     for (auto& s : this->services)
-        if (s->GetSleepInterval() != Service::RUN_ON_PACKET_RECEIVE)
+        if (s->GetSleepInterval() != Service::RUN_ON_PACKET_RECEIVE && s->IsActive())
             s->ExecuteOnTime();
 
     if (this->serialPort)

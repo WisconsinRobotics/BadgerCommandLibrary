@@ -61,7 +61,10 @@ void Service::SetActive(bool active)
 void Service::ExecuteOnTime()
 {
     if (this->sleepInterval == RUN_ON_PACKET_RECEIVE)
+    {
+        this->Execute();
         return;
+    }
 
     execute_timer.SetCallback(std::bind(&Service::Execute, this));
     execute_timer.SetPeriod(std::chrono::milliseconds(this->sleepInterval));
