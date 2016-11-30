@@ -68,6 +68,16 @@ BCL_STATUS SerializeGPSPayload (
     ptr = (uint8_t *)(payload);
     buffer[0] = ptr->lat_degrees;
     buffer[1] = ptr->lat_degrees >> 8;
+    buffer[2] = ptr->lat_minutes;
+    buffer[3] = ptr->lat_minutes >> 8;
+    buffer[4] = ptr->lat_seconds;
+	buffer[5] = ptr->lat_seconds >> 8;
+	buffer[6] = ptr->long_degrees;
+	buffer[7] = ptr->long_degrees >> 8;
+	buffer[8] = ptr->long_minutes;
+	buffer[9] = ptr->long_minutes >> 8;
+	buffer[10] = ptr->long_seconds;
+	buffer[11] = ptr->long_seconds >> 8;
 
     if (bytes_written)
         *bytes_written = 2 * sizeof(int8_t);
@@ -91,9 +101,11 @@ BCL_STATUS SerializeSoilPayload (
     if (length < 2 * sizeof(int8_t))
     	return BCL_BUFFER_TOO_SMALL;
     	
-    ptr = (const BclPayloadPtr *)(payload);
-    buffer[0] = ptr->left;
-    buffer[1] = ptr->right;
+    ptr = (uint8_t *)(payload);
+    buffer[0] = ptr->temperature;
+    buffer[1] = ptr->temperature >> 8;
+    buffer[2] = ptr->humidity;
+    buffer[3] = ptr->humidity >> 8;
 
     if (bytes_written)
         *bytes_written = 2 * sizeof(int8_t);
@@ -120,9 +132,30 @@ BCL_STATUS DeserializeGPSPayload (
     if (length < 2 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
     
-    ptr = (BclPayloadPtr *) payload;
-    ptr->left = buffer[0];
-    ptr->right = buffer[1];
+    ptr = (uint8_t *) payload;
+    ptr->lat_degrees =  buffer[1];
+    ptr->lat_degrees = (ptr->lat_degrees << 8) + buffer[0];
+    ptr->lat_degrees = buffer[0];
+    
+    ptr->lat_minutes = buffer[3];
+    ptr->lat_minutes = (ptr->lat_minutes << 8) + buffer[2];
+    ptr->lat_minutes = buffer[2];
+    
+    ptr->lat_seconds = buffer[5];
+    ptr->lat_seconds = (ptr->lat_seconds << 8) + buffer[4];
+    ptr->lat_seconds = buffer[4];
+   
+    ptr->long_degrees = buffer[7];
+    ptr->long_degrees = (ptr->long_degrees << 8) + buffer[6];    
+	ptr->long_degrees = buffer[6];
+	
+	ptr->long_minutes = buffer[9];
+	ptr->long_minutes = (ptr->long_minutes << 8) + buffer[8];
+	ptr->long_degrees = buffer[8];
+	
+	ptr->long_seconds = buffer[11];
+	ptr->long_seconds = (ptr->long_seconds << 8) + buffer[10];
+	ptr->long_seconds = buffer[10];
 
     if (bytes_read)
         *bytes_read = 2 * sizeof(int8_t);
@@ -146,9 +179,14 @@ BCL_STATUS DeserializeSoilPayload(
     if (length < 2 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
     
-    ptr = (BclPayloadPtr *) payload;
-    ptr->left = buffer[0];
-    ptr->right = buffer[1];
+    ptr = (uint8_t *) payload;
+    ptr->temperature = buffer[1];
+    ptr->temperature = (ptr->temperature << 8) + buffer[0];
+    ptr->temperature = buffer[0];
+    
+    ptr->humidity = buffer[3];
+    ptr->humidity = (ptr->humidity << 8) + buffer[2];
+    ptr->humidity = buffer[2];
 
     if (bytes_read)
         *bytes_read = 2 * sizeof(int8_t);
