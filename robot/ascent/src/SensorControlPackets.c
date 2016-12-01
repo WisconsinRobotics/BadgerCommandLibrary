@@ -1,16 +1,20 @@
 #include "SensorControlPackets.h"
+#include <stddef.h>
+
 
 BCL_STATUS InitializeQueryGPSPacket (
-	BclPacket * pkt) {
-	
-	return InitializeBclPacket (
-		pkt,
-		QUERY_GPS,
-		NULL,
-		0,
-		NULL,
-		NULL);
-	}
+    BclPacket * pkt
+    ) 
+{
+    return InitializeBclPacket (
+        pkt,
+	    QUERY_GPS,
+        NULL,
+        0,
+        NULL,
+        NULL
+    );
+}
 	
 BCL_STATUS InitializeQuerySoilPacket (
 	BclPacket* pkt) {
@@ -65,7 +69,7 @@ BCL_STATUS SerializeGPSPayload (
     if (length < 2 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
-    ptr = (uint8_t *)(payload);
+    ptr = (const GpsPayload *)(payload);
     buffer[0] = ptr->lat_degrees;
     buffer[1] = ptr->lat_degrees >> 8;
     buffer[2] = ptr->lat_minutes;

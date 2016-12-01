@@ -58,6 +58,11 @@ void Service::SetActive(bool active)
     this->isActive = active;
 }
 
+int Service::GetID() const
+{
+    return this->serviceAddr.ServiceID;
+}
+
 void Service::ExecuteOnTime()
 {
     if (this->sleepInterval == RUN_ON_PACKET_RECEIVE)

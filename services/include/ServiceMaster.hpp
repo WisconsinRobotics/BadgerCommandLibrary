@@ -21,7 +21,7 @@ namespace BCL
     public:
         ServiceMaster(int robot_id, UdpSocket *udpSocket, SerialPort *serialPort);
         ~ServiceMaster();
-        int GetRobotID();
+        uint8_t GetRobotID() const;
         void AddService(Service *s);
         void AddEndpoint(int robot_id, struct sockaddr_in addr);
         void Run();
@@ -31,9 +31,9 @@ namespace BCL
     private:
         void SerialReader();
         void UdpSocketReader();
-        void PacketHandler(const uint8_t *buffer, int length);
+        void PacketHandler(const uint8_t *buffer, uint8_t length);
 
-        int robotID;
+        uint8_t robotID;
         UdpSocket *socket;
         SerialPort *serialPort;
         std::vector<Service *> services;

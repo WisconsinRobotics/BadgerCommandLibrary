@@ -1,5 +1,6 @@
 #include "ServiceMaster.hpp"
 #include "Service.hpp"
+#include "ControlServicePackets.h"
 #include <cstdint>
 #include <thread>
 
@@ -9,7 +10,7 @@ constexpr int READ_BUFFER_SIZE = 256;
 
 ServiceMaster::ServiceMaster(int robot_id, UdpSocket *udpSocket, SerialPort *serialPort)
 {
-    this->robotID = robot_id;
+    this->robotID = static_cast<uint8_t>(robot_id);
     this->isRunning = false;
     this->socket = udpSocket;
     this->serialPort = serialPort;
@@ -19,7 +20,7 @@ ServiceMaster::~ServiceMaster()
 {
 }
 
-int ServiceMaster::GetRobotID()
+uint8_t ServiceMaster::GetRobotID() const
 {
     return this->robotID;
 }
@@ -34,7 +35,7 @@ void ServiceMaster::AddService(Service *s)
 
 void ServiceMaster::AddEndpoint(int robot_id, struct sockaddr_in addr)
 {
-    this->robotEndpointMap[robot_id] = addr;
+    this->robotEndpointMap[static_cast<uint8_t>(robot_id)] = addr;
 }
 
 BCL_STATUS ServiceMaster::SendPacketSerial(BclPacket *pkt)
@@ -98,7 +99,7 @@ void ServiceMaster::SerialReader()
         if (bytes_read < 0)
             continue;
 
-        this->PacketHandler(read_buffer, bytes_read);
+        this->PacketHandler(read_buffer, static_cast<uint8_t>(bytes_read));
         memset(read_buffer, 0, READ_BUFFER_SIZE);
     }
 }
@@ -128,24 +129,62 @@ void ServiceMaster::UdpSocketReader()
                 this->robotEndpointMap[incoming_robot_id] = src_addr;
         }
 
-        this->PacketHandler(read_buffer, bytes_read);
+        this->PacketHandler(read_buffer, static_cast<uint8_t>(bytes_read));
         memset(read_buffer, 0, READ_BUFFER_SIZE);
     }
 }
 
-void ServiceMaster::PacketHandler(const uint8_t *buffer, int length)
+void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
 {
     // TODO: handle access control packets here
+    BclPacketHeader hdr;
+    memset(&hdr, 0, sizeof(BclPacketHeader));
+    if (ParseBclHeader(&hdr, buffer, length) != BCL_OK)
+        return;
+
+    // reject packet if ID doesn't match and is not broadcast
+    if (hdr.Destination.RobotID != this->robotID && this->robotID != BCL_BROADCAST_ROBOT_ID)
+        return;
+
+    BclPacket pkt;
+    switch (hdr.Opcode)
+    {
+        case ACTIVATE_SERVICE_OPCODE:
+        case DEACTIVATE_SERVICE_OPCODE:
+            for (size_t i = 0; i < this->services.size(); i++)
+            {
+                if (this->services[i]->GetID() == hdr.Destination.ServiceID)
+                {
+                    this->services[i]->SetActive(hdr.Opcode == ACTIVATE_SERVICE_OPCODE);
+                    return;
+                }
+            }
+                    
+            return;
+
+        case QUERY_HEARTBEAT_OPCODE:
+            InitializeReportHeartbeatPacket(&pkt);
+            pkt.Header.Destination = hdr.Source;
+            pkt.Header.Source.RobotID = static_cast<uint8_t>(this->robotID);
+
+            // HACK
+            // TODO: Don't just blindly send across both interfaces
+            this->SendPacketSerial(&pkt);
+            this->SendPacketUdp(&pkt);
+            return;
+
+        default:
+            break;
+    }
 
     for (auto& s : this->services)
     {
         if (!s->IsActive())
             continue;
         
-        // TODO: check robot and service id
-        // if robot id doesn't match, reject
-        // handle broadcast (robot id = 0xFF, service id = 0xFF)
-        
+        if (hdr.Destination.ServiceID != s->GetID())
+            continue;
+
         if (!s->HandlePacket(buffer, length))
             continue;
 

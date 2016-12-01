@@ -18,6 +18,9 @@
 #define PAYLOAD_CRC_INDEX               8
 #define PAYLOAD_INDEX                   9
 
+#define BCL_BROADCAST_ROBOT_ID          0xFF
+#define BCL_BROADCAST_SERVICE_ID        0xFF
+
 #ifdef __cplusplus
 extern "C" {
 #endif

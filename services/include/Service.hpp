@@ -25,6 +25,7 @@ namespace BCL
         void SetSleepInterval(int sleep_interval);
         bool IsActive() const;
         void SetActive(bool active);
+        int GetID() const;
 
     protected:
         virtual void Execute();
