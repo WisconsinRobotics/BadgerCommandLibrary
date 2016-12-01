@@ -58,6 +58,9 @@ bool SerialPort::Open()
     if (!this->port)
         return false;
 
+    if (this->opened)
+        return true;
+    
     handle = CreateFileA(
         port,
         GENERIC_READ | GENERIC_WRITE,
@@ -142,6 +145,9 @@ bool SerialPort::Open()
 
     if (!this->port)
         return false;
+    
+    if (this->opened)
+        return true;
 
     handle = open(port, O_RDWR | O_NOCTTY);
     if (handle < 0)

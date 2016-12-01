@@ -22,6 +22,9 @@ bool UdpSocket::Open()
     _socket_t sock_handle;
     struct sockaddr_in addr;
 
+    if (this->isOpen)
+        return true;
+    
 #ifdef _WIN32
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
