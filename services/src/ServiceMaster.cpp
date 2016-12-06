@@ -93,7 +93,7 @@ void ServiceMaster::SerialReader()
     uint8_t read_buffer[READ_BUFFER_SIZE];
     memset(read_buffer, 0, READ_BUFFER_SIZE);
 
-    while (true)
+    while (this->isRunning)
     {
         int bytes_read = this->serialPort->Read(read_buffer, READ_BUFFER_SIZE);
         if (bytes_read < 0)
@@ -109,7 +109,7 @@ void ServiceMaster::UdpSocketReader()
     uint8_t read_buffer[READ_BUFFER_SIZE];
     memset(read_buffer, 0, READ_BUFFER_SIZE);
 
-    while (true)
+    while (this->isRunning)
     {
         struct sockaddr_in src_addr;
         BclPacketHeader pkt_hdr;
@@ -196,24 +196,48 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
     }
 }
 
-void ServiceMaster::Run()
+bool ServiceMaster::Run()
 {
-    std::thread serialReadThread;
-    std::thread udpReadThread;
+    // if we're already running, done
+    if (this->isRunning)
+        return true;
 
-    if (!socket || !socket->Open())
-        return;
+    // at least one interface must be present
+    if (!socket && !serialPort)
+        return false;
+
+    // open the interfaces
+    bool udp_ok = socket && socket->Open();
+    bool serial_ok = serialPort && serialPort->Open();
+
+    // if both interfaces fail to come online, report failure
+    if (!udp_ok && !serial_ok)
+        return false;
+
+    this->isRunning = true;
+
+    if (udp_ok)
+        udpReadThread = std::thread(&ServiceMaster::UdpSocketReader, this);
+
+    if (serial_ok)
+        serialReadThread = std::thread(&ServiceMaster::SerialReader, this);
+
 
     // run the services
     for (auto& s : this->services)
         if (s->GetSleepInterval() != Service::RUN_ON_PACKET_RECEIVE && s->IsActive())
             s->ExecuteOnTime();
 
-    if (this->serialPort)
-        serialReadThread = std::thread(&ServiceMaster::SerialReader, this);
+    return this->isRunning;
+}
 
-    if (this->socket)
-        udpReadThread = std::thread(&ServiceMaster::UdpSocketReader, this);
+void ServiceMaster::Stop()
+{
+    this->isRunning = false;
 
-    while (true);
+    if (serialReadThread.joinable())
+        serialReadThread.join();
+
+    if (udpReadThread.joinable())
+        udpReadThread.join();
 }

@@ -7,6 +7,7 @@
 #include "Packet.h"
 #include <vector>
 #include <map>
+#include <memory>
 
 
 namespace BCL
@@ -24,7 +25,8 @@ namespace BCL
         uint8_t GetRobotID() const;
         void AddService(Service *s);
         void AddEndpoint(int robot_id, struct sockaddr_in addr);
-        void Run();
+        bool Run();
+        void Stop();
         BCL_STATUS SendPacketSerial(BclPacket *pkt);
         BCL_STATUS SendPacketUdp(BclPacket *pkt);
 
@@ -39,6 +41,8 @@ namespace BCL
         std::vector<Service *> services;
         std::map<int, struct sockaddr_in> robotEndpointMap;
         std::chrono::milliseconds timer_interval;
+        std::thread serialReadThread;
+        std::thread udpReadThread;
         bool isRunning;
     };
 }
