@@ -11,7 +11,7 @@ SerialPort::SerialPort()
     this->handle = INVALID_SERIAL_PORT_HANDLE;
 }
 
-SerialPort::SerialPort(const char *port, int baud)
+SerialPort::SerialPort(std::string port, int baud)
 {
     this->port = port;
     this->baud = baud;
@@ -29,7 +29,7 @@ bool SerialPort::IsOpen() const
     return this->opened;
 }
 
-const char * SerialPort::GetPort() const
+std::string SerialPort::GetPort() const
 {
     return this->port;
 }
@@ -39,7 +39,7 @@ int SerialPort::GetBaud() const
     return this->baud;
 }
 
-void SerialPort::SetPortName(const char *portname)
+void SerialPort::SetPortName(std::string& portname)
 {
     this->port = portname;
 }
@@ -55,14 +55,11 @@ bool SerialPort::Open()
     DCB dcb;
     COMMTIMEOUTS commTO;
     
-    if (!this->port)
-        return false;
-
     if (this->opened)
         return true;
     
     handle = CreateFileA(
-        port,
+        port.c_str(),
         GENERIC_READ | GENERIC_WRITE,
         0,
         0,
@@ -143,13 +140,10 @@ bool SerialPort::Open()
 {
     struct termios serialPortProperties;
 
-    if (!this->port)
-        return false;
-    
     if (this->opened)
         return true;
 
-    handle = open(port, O_RDWR | O_NOCTTY);
+    handle = open(port.c_str(), O_RDWR | O_NOCTTY);
     if (handle < 0)
         return false;
         

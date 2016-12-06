@@ -1,16 +1,18 @@
 #pragma once
 
+#include <string>
+#include <cstdlib>
+#include <cstring>
+
 #ifdef _WIN32
     #include <windows.h>
     typedef HANDLE SerialPortHandle;
 #else
-    #include <stdlib.h>
     #include <unistd.h>
     #include <fcntl.h>
     #include <termios.h>
     #include <sys/socket.h>
     #include <sys/types.h>
-    #include <string.h>
     typedef int SerialPortHandle;
 #endif
 
@@ -22,16 +24,16 @@ namespace BCL
     {
     public:
         SerialPort();
-        SerialPort(const char *port, int baud);
+        SerialPort(std::string port, int baud);
         ~SerialPort();
         bool Open();
         bool IsOpen() const;
         void Close();
 
-        const char * GetPort() const;
+        std::string GetPort() const;
         int GetBaud() const;
 
-        void SetPortName(const char *port);
+        void SetPortName(std::string& port);
         void SetBaud(int baud);
 
         int Write(const void *data, int size_bytes);
@@ -39,7 +41,7 @@ namespace BCL
     private:
         SerialPortHandle handle;
         bool opened;
-        const char *port;
+        std::string port;
         int baud;
     };
 }
