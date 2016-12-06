@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string>
 
 
 namespace BCL
@@ -20,8 +21,9 @@ namespace BCL
     class ServiceMaster
     {
     public:
-        ServiceMaster(int robot_id, UdpSocket *udpSocket, SerialPort *serialPort);
-        ~ServiceMaster();
+        ServiceMaster(int robot_id);
+        void InitUdpPort(int port = 0);
+        void InitSerialPort(std::string portname, int baud);
         uint8_t GetRobotID() const;
         void AddService(Service *s);
         void AddEndpoint(int robot_id, struct sockaddr_in addr);
@@ -36,8 +38,8 @@ namespace BCL
         void PacketHandler(const uint8_t *buffer, uint8_t length);
 
         uint8_t robotID;
-        UdpSocket *socket;
-        SerialPort *serialPort;
+        std::unique_ptr<UdpSocket> socket;
+        std::unique_ptr<SerialPort> serialPort;
         std::vector<Service *> services;
         std::map<int, struct sockaddr_in> robotEndpointMap;
         std::chrono::milliseconds timer_interval;

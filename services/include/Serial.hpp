@@ -38,6 +38,7 @@ namespace BCL
 
         int Write(const void *data, int size_bytes);
         int Read(void *data, int max_size_bytes);
+
     private:
         SerialPortHandle handle;
         bool opened;

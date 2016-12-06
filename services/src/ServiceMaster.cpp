@@ -3,21 +3,28 @@
 #include "ControlServicePackets.h"
 #include <cstdint>
 #include <thread>
+#include <stdexcept>
 
 using namespace BCL;
 
 constexpr int READ_BUFFER_SIZE = 256;
 
-ServiceMaster::ServiceMaster(int robot_id, UdpSocket *udpSocket, SerialPort *serialPort)
+ServiceMaster::ServiceMaster(int robot_id)
 {
     this->robotID = static_cast<uint8_t>(robot_id);
     this->isRunning = false;
-    this->socket = udpSocket;
-    this->serialPort = serialPort;
+    this->serialPort = nullptr;
+    this->socket = nullptr;
 }
 
-ServiceMaster::~ServiceMaster()
+void ServiceMaster::InitUdpPort(int port)
 {
+    this->socket = std::make_unique<UdpSocket>(UdpSocket(port));
+}
+
+void ServiceMaster::InitSerialPort(std::string portname, int baud)
+{
+    this->serialPort = std::make_unique<SerialPort>(SerialPort(portname, baud));
 }
 
 uint8_t ServiceMaster::GetRobotID() const
@@ -27,6 +34,9 @@ uint8_t ServiceMaster::GetRobotID() const
 
 void ServiceMaster::AddService(Service *s)
 {
+    if (!s)
+        throw std::invalid_argument("ServiceMaster::AddService was given a null service!");
+
     this->services.push_back(s);
     s->SetServiceMaster(this);
     if (this->isRunning && s->IsActive())
@@ -221,7 +231,6 @@ bool ServiceMaster::Run()
 
     if (serial_ok)
         serialReadThread = std::thread(&ServiceMaster::SerialReader, this);
-
 
     // run the services
     for (auto& s : this->services)
