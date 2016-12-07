@@ -10,7 +10,7 @@ packets.
 
 ### Using BclPacket
 Let's start off with a simple example.
-```
+```C
 BclPacket pkt;
 BCL_STATUS status;
 uint8_t buffer[16];
@@ -87,7 +87,7 @@ depending on if the service was configured to run periodically or not.
 
 In any case, it is probably easier to see a code example.
 
-```
+```C++
 #include <iostream>
 #include <Service.hpp>
 
