@@ -3,14 +3,12 @@
 
 using namespace BCL;
 
-Service::Service(int id)
+Service::Service(int id) : Service(id, RUN_ON_PACKET_RECEIVE, false)
 {
-    this->serviceAddr.ServiceID = static_cast<uint8_t>(id);
-    this->sleepInterval = RUN_ON_PACKET_RECEIVE;
-    this->isActive = false;
 }
 
-Service::Service(int id, int interval, bool active)
+Service::Service(int id, int interval, bool active) :
+    execute_timer(new Timer(Interval(0), nullptr, false))
 {
     this->serviceAddr.ServiceID = static_cast<uint8_t>(id);
     this->sleepInterval = interval;
@@ -19,7 +17,8 @@ Service::Service(int id, int interval, bool active)
 
 Service::~Service()
 {
-    this->execute_timer.Stop();
+    if (this->execute_timer)
+        this->execute_timer->Stop();
 }
 
 void Service::Execute()
@@ -71,10 +70,10 @@ void Service::ExecuteOnTime()
         return;
     }
 
-    execute_timer.SetCallback(std::bind(&Service::Execute, this));
-    execute_timer.SetPeriod(std::chrono::milliseconds(this->sleepInterval));
-    execute_timer.SetPeriodic(true);
-    execute_timer.Start();
+    execute_timer->SetCallback(std::bind(&Service::Execute, this));
+    execute_timer->SetPeriod(std::chrono::milliseconds(this->sleepInterval));
+    execute_timer->SetPeriodic(true);
+    execute_timer->Start();
 }
 
 

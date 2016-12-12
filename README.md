@@ -40,7 +40,7 @@ values in Linux - just descriptive return values.
 
 If there is a payload associated with the packet, it's also quite easy to use.
 Assume we have defined a tank drive packet that has a payload of two signed bytes, left and right speed.
-```
+```C
 BclPacket tank_drive_pkt;
 TankDrivePayload tank_drive_payload;
 BCL_STATUS status;

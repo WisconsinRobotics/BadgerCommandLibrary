@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Timer.hpp"
-#include <chrono>
 #include "ServiceMaster.hpp"
 #include "Packet.h"
+#include <chrono>
+#include <memory>
 
 namespace BCL
 {
@@ -31,7 +32,7 @@ namespace BCL
         virtual void Execute();
 
         ServiceMaster *serviceMaster;
-        Timer execute_timer;
+        std::unique_ptr<Timer> execute_timer;
         BclAddress serviceAddr;
         int sleepInterval;
         bool isActive;
