@@ -9,6 +9,13 @@ using namespace BCL;
 
 constexpr int READ_BUFFER_SIZE = 256;
 
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
+
 ServiceMaster::ServiceMaster(int robot_id)
 {
     this->robotID = static_cast<uint8_t>(robot_id);
@@ -19,12 +26,12 @@ ServiceMaster::ServiceMaster(int robot_id)
 
 void ServiceMaster::InitUdpPort(int port)
 {
-    this->socket = std::make_unique<UdpSocket>(UdpSocket(port));
+    this->socket = make_unique<UdpSocket>(UdpSocket(port));
 }
 
 void ServiceMaster::InitSerialPort(std::string portname, int baud)
 {
-    this->serialPort = std::make_unique<SerialPort>(SerialPort(portname, baud));
+    this->serialPort = make_unique<SerialPort>(SerialPort(portname, baud));
 }
 
 uint8_t ServiceMaster::GetRobotID() const
