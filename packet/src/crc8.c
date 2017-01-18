@@ -23,36 +23,36 @@
  * 
  */
 
-// DARC-8
-// poly: x^8 +x^5 +x^4 +x^3 +1  (0x139)
+// CRC-8
+// poly: 0x07
 
 uint8_t compute_crc8(const void *buffer, int len)
 {
     const uint8_t *data = (const uint8_t *)buffer;
-    uint16_t crc = 0;
+    uint8_t crc = 0;
     uint8_t i, j;
 
     for (i = 0; i < len; i++)
     {
         // set up the dividend
-        crc ^= *data << 8;
+        crc ^= data[i];
 
         for (j = 0; j < 8; j++)
         {
             // Does the divisor go into the dividend?
-            if (crc & 0x8000)
+            if (crc & 0x80)
             {
                 // dividend -= divisor
-                crc ^= (0x1390 << 3);
+                crc = (crc << 1) ^ 0x07;
             }
             else
             {
-                // if not, move to the next bit
+                // move to the next bit
                 crc <<= 1;
             }
         }
     }
-    
+
     // the remainder is in lower byte, so truncate
-    return (uint8_t) (crc);
+    return crc;
 }
