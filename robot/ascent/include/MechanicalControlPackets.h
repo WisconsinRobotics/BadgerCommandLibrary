@@ -3,18 +3,7 @@
 
 #include "BclStatus.h"
 #include "Packet.h"
-
-#define SET_TANK_DRIVE_SPEED            0x60
-#define SET_ALL_WHEEL_SPEED             0x61
-
-#define QUERY_ARM_POS                   0x62
-#define REPORT_ARM_POS                  0x63
-#define SET_ARM_POS                     0x64
-
-#define SET_TURRET_POS                  0x65
-
-#define NUMBER_WHEELS                   6
-#define NUMBER_ARM_MOTOR_POSITONS       5
+#include "AscentCommon.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,6 +59,15 @@ BCL_STATUS InitializeReportArmPositionPacket (
 BCL_STATUS InitializeSetArmPositionPacket(
     BclPacket *             pkt,
     ArmPositionPayload *    payload
+);
+
+BCL_STATUS InitializeQueryTurretPositionPacket (
+    BclPacket *             pkt
+);
+
+BCL_STATUS InitializeReportTurretPositionPacket (
+	BclPacket *             pkt,
+    TurretPositionPayload * payload
 );
 
 BCL_STATUS InitializeSetTurretPositionPacket (

@@ -1,19 +1,19 @@
 #include "MechanicalControlPackets.h"
 #include "Packet.h"
-#include "string.h"
+#include <string.h>
 
 BCL_STATUS InitializeSetTankDriveSpeedPacket (
     BclPacket *pkt,
     TankDrivePayload *payload
     )
 {
-	return InitializeBclPacket (
-		pkt,
-		SET_TANK_DRIVE_SPEED,
-		payload,
+    return InitializeBclPacket (
+        pkt,
+        SET_TANK_DRIVE_SPEED,
+        payload,
         2 * sizeof(int8_t),
-		&SerializeTankDriveSpeedPayload,
-		&DeserializeTankDriveSpeedPayload
+        &SerializeTankDriveSpeedPayload,
+        &DeserializeTankDriveSpeedPayload
     );
 }
 
@@ -47,8 +47,8 @@ BCL_STATUS InitializeQueryArmPositionPacket (
 }
 
 BCL_STATUS InitializeReportArmPositionPacket (
-    BclPacket *pkt,
-    ArmPositionPayload *payload
+    BclPacket               *pkt,
+    ArmPositionPayload      *payload
     )
 {
     return InitializeBclPacket (
@@ -73,6 +73,35 @@ BCL_STATUS InitializeSetArmPositionPacket (
         sizeof(uint8_t) + NUMBER_ARM_MOTOR_POSITONS * sizeof(uint8_t),
         &SerializeArmPositionPayload,
         &DeserializeArmPositionPayload
+    );
+}
+
+BCL_STATUS InitializeQueryTurretPositionPacket (
+    BclPacket *             pkt
+    )
+{
+    return InitializeBclPacket (
+        pkt,
+        QUERY_TURRET_POS,
+        NULL,
+        0,
+        NULL,
+        NULL
+    );
+}
+
+BCL_STATUS InitializeReportTurretPositionPacket (
+	BclPacket *             pkt,
+    TurretPositionPayload * payload
+    )
+{
+    return InitializeBclPacket(
+        pkt,
+        REPORT_TURRET_POS,
+        payload,
+        2 * sizeof(int8_t),
+        &SerializeTurretPositionPayload,
+        &DeserializeTurretPositionPayload
     );
 }
 

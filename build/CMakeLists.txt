@@ -25,14 +25,14 @@ set(BCL_BASE_DIR ${CMAKE_SOURCE_DIR}/..)
 include_directories(${BCL_BASE_DIR}/packet/include)
 include_directories(${BCL_BASE_DIR}/services/include)
 
-file(GLOB BCL_PACKET_SRC ${BCL_BASE_DIR}/packet/src/*.c)
-file(GLOB BCL_SERVICES_SRC ${BCL_BASE_DIR}/services/src/*.c*)
+file(GLOB BCL_PACKET_SRC ${BCL_BASE_DIR}/packet/**/*)
+file(GLOB BCL_SERVICES_SRC ${BCL_BASE_DIR}/services/**/*)
 
 # Robot specific dependencies
 if (${ROBOT} STREQUAL "Ascent")
     set(ASCENT_BASE_DIR ${BCL_BASE_DIR}/robot/ascent)
     include_directories(${ASCENT_BASE_DIR}/include)
-    file(GLOB ASCENT_SRC ${ASCENT_BASE_DIR}/src/*.c*)
+    file(GLOB ASCENT_SRC ${ASCENT_BASE_DIR}/**/*)
     add_library(${PROJECT_NAME} STATIC ${ASCENT_SRC} ${BCL_PACKET_SRC} ${BCL_SERVICES_SRC})
 else () 
     # default - just BCL only

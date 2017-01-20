@@ -92,6 +92,7 @@ bool Timer::IsRunning() const
 
 static void CALLBACK WinTimerCallback(PVOID lpParameter, BOOLEAN TimerOrWaitFired)
 {
+    (void) TimerOrWaitFired;
     if (!lpParameter)
         return;
 
@@ -117,7 +118,7 @@ void Timer::CleanupImpl()
 
 void Timer::Start()
 {
-    DWORD period = (this->isPeriodic) ? static_cast<DWORD>(this->GetPeriod().count()) : 0;
+    DWORD actual_period = (this->isPeriodic) ? static_cast<DWORD>(this->GetPeriod().count()) : 0;
 
     BOOL success = CreateTimerQueueTimer(
         &impl->timerQueueTimer,
@@ -125,7 +126,7 @@ void Timer::Start()
         &WinTimerCallback,
         this,
         0,
-        period,
+        actual_period,
         0
     );
 
