@@ -71,6 +71,10 @@ BCL_STATUS InitializeReportIMUPacket(
         BclPacket* packet,
         float* payload
 );
+BCL_STATUS InitializeQueryIMUPacker(
+        BclPacket* packet,
+        uint8_t* payload
+);
 BCL_STATUS InitializeByteDisplayPacket(
         BclPacket* packet,
         uint8_t* payload
@@ -92,18 +96,25 @@ BCL_STATUS SerializeSoilPayload (
     uint8_t *               bytes_written
 );
 
-BCL_STATUS SerializeIMUPayload(
+BCL_STATUS SerializeIMUReportPayload(
         const BclPayloadPtr payload,
         uint8_t * buffer,
         uint8_t length,
         uint8_t * bytes_written
 );
 
-extern BCL_STATUS SerializeByteDisplayPayload(
+BCL_STATUS SerializeIMUQueryPayload(
         const BclPayloadPtr payload,
         uint8_t* buffer,
         uint8_t length,
-        uint8_t* bytesWritten
+        uint8_t* bytes_written
+);
+
+BCL_STATUS SerializeByteDisplayPayload(
+        const BclPayloadPtr payload,
+        uint8_t* buffer,
+        uint8_t length,
+        uint8_t* bytes_written
 );
 
 /* Deserialization functions */
@@ -122,7 +133,14 @@ BCL_STATUS DeserializeSoilPayload(
     uint8_t *               bytes_read
 );
 
-BCL_STATUS DeserializeIMUPayload(
+BCL_STATUS DeserializeIMUReportPayload(
+        BclPayloadPtr payload,
+        const uint8_t* buffer,
+        uint8_t length,
+        uint8_t* bytes_read
+);
+
+BCL_STATUS DeserializeIMUQueryPayload(
         BclPayloadPtr payload,
         const uint8_t* buffer,
         uint8_t length,
@@ -133,7 +151,7 @@ BCL_STATUS DeserializeByteDisplayPayload(
         BclPayloadPtr payload,
         const uint8_t* buffer,
         uint8_t length,
-        uint8_t* bytesRead
+        uint8_t* bytes_read
 );
 
 #ifdef __cplusplus

@@ -3,62 +3,62 @@
 
 
 BCL_STATUS InitializeQueryGPSPacket (
-    BclPacket * pkt
-    ) 
+        BclPacket * pkt
+)
 {
     return InitializeBclPacket (
-        pkt,
-	    QUERY_GPS,
-        NULL,
-        0,
-        NULL,
-        NULL
+            pkt,
+            QUERY_GPS,
+            NULL,
+            0,
+            NULL,
+            NULL
     );
 }
-	
+
 BCL_STATUS InitializeQuerySoilPacket (
-	BclPacket * pkt
-    ) 
-{
-	return InitializeBclPacket (
-		pkt,
-		QUERY_SOIL,
-		NULL,
-		0,
-		NULL,
-		NULL
-    );
-}
-	
-BCL_STATUS  InitializeReportGPSPacket (
-	BclPacket * pkt,
-    GpsPayload * payload
-    ) 
+        BclPacket * pkt
+)
 {
     return InitializeBclPacket (
-        pkt,
-        REPORT_GPS,
-        payload,
-        sizeof(GpsPayload),
-        &SerializeGPSPayload,
-        &DeserializeGPSPayload
+            pkt,
+            QUERY_SOIL,
+            NULL,
+            0,
+            NULL,
+            NULL
     );
 }
-	
-BCL_STATUS InitializeReportSoilPacket (
-	BclPacket * pkt,
-    SoilPayload * payload
-    )
+
+BCL_STATUS  InitializeReportGPSPacket (
+        BclPacket * pkt,
+        GpsPayload * payload
+)
 {
-	return InitializeBclPacket (
-	        pkt,
-	        REPORT_SOIL,
-	        payload,
-	        sizeof(SoilPayload),
-	        &SerializeSoilPayload,
-	        &DeserializeSoilPayload
-	    );
-	}
+    return InitializeBclPacket (
+            pkt,
+            REPORT_GPS,
+            payload,
+            sizeof(GpsPayload),
+            &SerializeGPSPayload,
+            &DeserializeGPSPayload
+    );
+}
+
+BCL_STATUS InitializeReportSoilPacket (
+        BclPacket * pkt,
+        SoilPayload * payload
+)
+{
+    return InitializeBclPacket (
+            pkt,
+            REPORT_SOIL,
+            payload,
+            sizeof(SoilPayload),
+            &SerializeSoilPayload,
+            &DeserializeSoilPayload
+    );
+}
 
 BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, float* payload)
 {
@@ -67,8 +67,19 @@ BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, float* payload)
             REPORT_IMU,
             payload,
             sizeof(float),
-            &SerializeIMUPayload,
-            &DeserializeIMUPayload);
+            &SerializeIMUReportPayload,
+            &DeserializeIMUReportPayload);
+}
+
+BCL_STATUS InitializeQueryIMUPacket(BclPacket* packet, uint8_t* payload)
+{
+    return InitializeBclPacket(
+            packet,
+            QUERY_IMU,
+            payload,
+            sizeof(uint8_t),
+            &SerializeIMUQueryPayload,
+            &DeserializeIMUQueryPayload);
 }
 
 BCL_STATUS InitializeByteDisplayPacket(BclPacket* packet, uint8_t* payload)
@@ -80,21 +91,21 @@ BCL_STATUS InitializeByteDisplayPacket(BclPacket* packet, uint8_t* payload)
             &SerializeByteDisplayPayload,
             &DeserializeByteDisplayPayload);
 }
-	
+
 //Serialization
 BCL_STATUS SerializeGPSPayload (
-    const BclPayloadPtr  payload,
-    uint8_t * 			 buffer,
-    uint8_t				 length,
-    uint8_t * 			 bytes_written
-    )
+        const BclPayloadPtr  payload,
+        uint8_t * 			 buffer,
+        uint8_t				 length,
+        uint8_t * 			 bytes_written
+)
 {
     const GpsPayload *ptr;
-    
+
     //inputs good?
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
-        
+
     // enough size?
     if (length <  6 * sizeof(int16_t))
         return BCL_BUFFER_TOO_SMALL;
@@ -120,22 +131,22 @@ BCL_STATUS SerializeGPSPayload (
 }
 
 BCL_STATUS SerializeSoilPayload (
-    const BclPayloadPtr     payload,
-    uint8_t *               buffer,
-    uint8_t                 length,
-    uint8_t *               bytes_written
-    )
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+)
 {
     const SoilPayload *ptr;
-    
+
     //inputs?
     if (!buffer || !payload)
-    	return BCL_INVALID_PARAMETER;
-    	
+        return BCL_INVALID_PARAMETER;
+
     //size?
     if (length < 2 * sizeof(int8_t))
-    	return BCL_BUFFER_TOO_SMALL;
-    	
+        return BCL_BUFFER_TOO_SMALL;
+
     ptr = (SoilPayload *)(payload);
     buffer[0] = ptr->temperature >> 8;
     buffer[1] = ptr->temperature & 0xFF;
@@ -148,7 +159,7 @@ BCL_STATUS SerializeSoilPayload (
     return BCL_OK;
 }
 
-BCL_STATUS SerializeIMUPayload(
+BCL_STATUS SerializeIMUReportPayload(
         const BclPayloadPtr payload,
         uint8_t * buffer,
         uint8_t length,
@@ -179,11 +190,38 @@ BCL_STATUS SerializeIMUPayload(
     return BCL_OK;
 }
 
+BCL_STATUS SerializeIMUQueryPayload(
+        const BclPayloadPtr payload,
+        uint8_t* buffer,
+        uint8_t length,
+        uint8_t* bytes_written)
+{
+    //inputs good?
+    if(!buffer || !payload)
+    {
+        return BCL_INVALID_PARAMETER;
+    }
+
+    //enough size?
+    if(length < sizeof(uint8_t))
+    {
+        return BCL_BUFFER_TOO_SMALL;
+    }
+
+    //Because the payload is just a byte, not much "serialization" is needed
+    (*buffer) = *(uint8_t*)payload;
+
+    if(bytes_written)
+        *bytes_written = sizeof(uint8_t);
+
+    return BCL_OK;
+}
+
 BCL_STATUS SerializeByteDisplayPayload(
         const BclPayloadPtr payload,
         uint8_t* buffer,
         uint8_t length,
-        uint8_t* bytesWritten)
+        uint8_t* bytes_written)
 {
     //Make sure there is only one byte of data
     if(length != 1)
@@ -195,7 +233,8 @@ BCL_STATUS SerializeByteDisplayPayload(
     //so, just copy the buffer to the payload
     *buffer = *(uint8_t*)payload;
 
-    *bytesWritten = 1;
+    if(bytes_written)
+        *bytes_written = sizeof(uint8_t);
 
     return BCL_OK;
 }
@@ -203,22 +242,22 @@ BCL_STATUS SerializeByteDisplayPayload(
 /* Deserialization functions */
 
 BCL_STATUS DeserializeGPSPayload (
-    BclPayloadPtr           payload,
-    const uint8_t *         buffer,
-    uint8_t                 length,
-    uint8_t *               bytes_read
-    ) 
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+)
 {
     GpsPayload *ptr;
 
-	//inputs?
+    //inputs?
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
-	//size?
+    //size?
     if (length < 6 * sizeof(int16_t))
         return BCL_BUFFER_TOO_SMALL;
-    
+
     ptr = (GpsPayload *) payload;
     ptr->lat_degrees =  (buffer[0] << 8) | (buffer[1]);
     ptr->lat_minutes = (buffer[2] << 8) | (buffer[3]);
@@ -234,22 +273,22 @@ BCL_STATUS DeserializeGPSPayload (
 }
 
 BCL_STATUS DeserializeSoilPayload (
-    BclPayloadPtr           payload,
-    const uint8_t *         buffer,
-    uint8_t                 length,
-    uint8_t *               bytes_read
-    )
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+)
 {
     SoilPayload *ptr;
 
-	//inputs?
+    //inputs?
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
-	//size?
+    //size?
     if (length < 2 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
-    
+
     ptr = (SoilPayload *) payload;
     ptr->temperature = (buffer[0] << 8) | (buffer[1]);
     ptr->humidity = (buffer[2] << 8) | (buffer[3]);
@@ -260,7 +299,7 @@ BCL_STATUS DeserializeSoilPayload (
     return BCL_OK;
 }
 
-BCL_STATUS DeserializeIMUPayload(
+BCL_STATUS DeserializeIMUReportPayload(
         BclPayloadPtr payload,
         const uint8_t* buffer,
         uint8_t length,
@@ -289,10 +328,36 @@ BCL_STATUS DeserializeIMUPayload(
     return BCL_OK;
 }
 
+BCL_STATUS DeserializeIMUQueryPayload(
+        BclPayloadPtr payload,
+        const uint8_t* buffer,
+        uint8_t length,
+        uint8_t* bytes_read)
+{
+    //inputs good?
+    if(!buffer || !payload)
+    {
+        return BCL_INVALID_PARAMETER;
+    }
+
+    //enough size?
+    if(length < sizeof(float))
+    {
+        return BCL_BUFFER_TOO_SMALL;
+    }
+
+    *(uint8_t*)payload = *buffer;
+
+    if(bytes_read)
+        *bytes_read = sizeof(uint8_t);
+
+    return BCL_OK;
+}
+
 BCL_STATUS DeserializeByteDisplayPayload(BclPayloadPtr payload,
         const uint8_t* buffer,
         uint8_t length,
-        uint8_t* bytesRead)
+        uint8_t* bytes_read)
 {
     //Make sure there is only one byte of data
     if(length != 1)
@@ -304,7 +369,8 @@ BCL_STATUS DeserializeByteDisplayPayload(BclPayloadPtr payload,
     //so, just copy the payload to the buffer
     *(uint8_t*)payload = *buffer;
 
-    *bytesRead = 1;
+    if(bytes_read)
+        *bytes_read = sizeof(uint8_t);
 
     return BCL_OK;
 }
