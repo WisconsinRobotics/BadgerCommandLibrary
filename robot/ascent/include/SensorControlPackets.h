@@ -27,16 +27,15 @@ typedef struct SoilPayload
     int16_t humidity;
 } SoilPayload;
 
-/* Payload Request Enums*/
-typedef enum
+typedef struct ImuPayload
 {
-    X_ACCEL  = 0x01, //00000001
-    Y_ACCEL  = 0x02, //00000010
-    Z_ACCEL  = 0x04, //00000100
-    X_ORIENT = 0x08, //00001000
-    Y_ORIENT = 0x10, //00010000
-    Z_ORIENT = 0x20  //00100000
-} IMU_Measurement;
+    int16_t x_accel;
+    int16_t y_accel;
+    int16_t z_accel;
+    int16_t x_orient;
+    int16_t y_orient;
+    int16_t z_orient;
+}ImuPayload;
 
 /* Initialization functions */
 
@@ -60,12 +59,7 @@ BCL_STATUS InitializeReportSoilPacket (
 
 BCL_STATUS InitializeReportIMUPacket(
     BclPacket* packet,
-    float* payload
-);
-
-BCL_STATUS InitializeQueryIMUPacker(
-        BclPacket* packet,
-        uint8_t* payload
+    ImuPayload* payload
 );
 
 BCL_STATUS InitializeByteDisplayPacket(
@@ -89,18 +83,11 @@ BCL_STATUS SerializeSoilPayload (
     uint8_t *               bytes_written
 );
 
-BCL_STATUS SerializeIMUReportPayload(
+BCL_STATUS SerializeIMUPayload(
         const BclPayloadPtr payload,
         uint8_t * buffer,
         uint8_t length,
         uint8_t * bytes_written
-);
-
-BCL_STATUS SerializeIMUQueryPayload(
-        const BclPayloadPtr payload,
-        uint8_t* buffer,
-        uint8_t length,
-        uint8_t* bytes_written
 );
 
 BCL_STATUS SerializeByteDisplayPayload(
@@ -126,14 +113,7 @@ BCL_STATUS DeserializeSoilPayload(
     uint8_t *               bytes_read
 );
 
-BCL_STATUS DeserializeIMUReportPayload(
-        BclPayloadPtr payload,
-        const uint8_t* buffer,
-        uint8_t length,
-        uint8_t* bytes_read
-);
-
-BCL_STATUS DeserializeIMUQueryPayload(
+BCL_STATUS DeserializeIMUPayload(
         BclPayloadPtr payload,
         const uint8_t* buffer,
         uint8_t length,

@@ -60,26 +60,15 @@ BCL_STATUS InitializeReportSoilPacket (
     );
 }
 
-BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, float* payload)
+BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, ImuPayload* payload)
 {
     return InitializeBclPacket(
             packet,
             REPORT_IMU,
             payload,
             sizeof(float),
-            &SerializeIMUReportPayload,
-            &DeserializeIMUReportPayload);
-}
-
-BCL_STATUS InitializeQueryIMUPacket(BclPacket* packet, uint8_t* payload)
-{
-    return InitializeBclPacket(
-            packet,
-            QUERY_IMU,
-            payload,
-            sizeof(uint8_t),
-            &SerializeIMUQueryPayload,
-            &DeserializeIMUQueryPayload);
+            &SerializeIMUPayload,
+            &DeserializeIMUPayload);
 }
 
 BCL_STATUS InitializeByteDisplayPacket(BclPacket* packet, uint8_t* payload)
@@ -159,12 +148,13 @@ BCL_STATUS SerializeSoilPayload (
     return BCL_OK;
 }
 
-BCL_STATUS SerializeIMUReportPayload(
+BCL_STATUS SerializeIMUPayload(
         const BclPayloadPtr payload,
         uint8_t * buffer,
         uint8_t length,
         uint8_t * bytes_written)
 {
+    const ImuPayload* ptr;
     //inputs good?
     if(!buffer || !payload)
     {
@@ -172,47 +162,30 @@ BCL_STATUS SerializeIMUReportPayload(
     }
 
     //enough size?
-    if(length < sizeof(float))
+    if(length < 6 * sizeof(int16_t))
     {
         return BCL_BUFFER_TOO_SMALL;
     }
 
-    //Break the value of the float into four bytes for serialization
-    uint32_t payloadAsInt = *(uint32_t*)payload;
-    buffer[0] = (payloadAsInt & 0xFF);//The least significant byte
-    buffer[1] = (payloadAsInt & 0xFF00) >> 8;//The second least significant byte
-    buffer[2] = (payloadAsInt & 0xFF0000) >> 16;//The third least significant byte
-    buffer[3] = (payloadAsInt & 0xFF000000) >> 24;//The most significant byte
+    ptr = (ImuPayload*)payload;
+    //The order of the data in the buffer is 1) x accel, 2) y accel, 3) z accell,
+    //4) x orient, 5)y orient , 6) z orient
+    //and the data is big endian
+    buffer[0] = ptr->x_accel >> 8;
+    buffer[1] = ptr->x_accel & 0xFF;
+    buffer[2] = ptr->y_accel >> 8;
+    buffer[3] = ptr->y_accel & 0xFF;
+    buffer[4] = ptr->z_accel >> 8;
+    buffer[5] = ptr->z_accel & 0xFF;
+    buffer[6] = ptr->x_orient >> 8;
+    buffer[7] = ptr->x_orient & 0xFF;
+    buffer[8] = ptr->y_orient >> 8;
+    buffer[9] = ptr->y_orient & 0xFF;
+    buffer[10] = ptr->z_orient >> 8;
+    buffer[11] = ptr->z_orient & 0xFF;
 
     if(bytes_written)
-        *bytes_written = sizeof(float);
-
-    return BCL_OK;
-}
-
-BCL_STATUS SerializeIMUQueryPayload(
-        const BclPayloadPtr payload,
-        uint8_t* buffer,
-        uint8_t length,
-        uint8_t* bytes_written)
-{
-    //inputs good?
-    if(!buffer || !payload)
-    {
-        return BCL_INVALID_PARAMETER;
-    }
-
-    //enough size?
-    if(length < sizeof(uint8_t))
-    {
-        return BCL_BUFFER_TOO_SMALL;
-    }
-
-    //Because the payload is just a byte, not much "serialization" is needed
-    (*buffer) = *(uint8_t*)payload;
-
-    if(bytes_written)
-        *bytes_written = sizeof(uint8_t);
+        *bytes_written = 6 * sizeof(int16_t);
 
     return BCL_OK;
 }
@@ -299,12 +272,14 @@ BCL_STATUS DeserializeSoilPayload (
     return BCL_OK;
 }
 
-BCL_STATUS DeserializeIMUReportPayload(
+BCL_STATUS DeserializeIMUPayload(
         BclPayloadPtr payload,
         const uint8_t* buffer,
         uint8_t length,
         uint8_t* bytes_read)
 {
+    ImuPayload* ptr;
+
     //inputs good?
     if(!buffer || !payload)
     {
@@ -312,44 +287,24 @@ BCL_STATUS DeserializeIMUReportPayload(
     }
 
     //enough size?
-    if(length < sizeof(float))
+    if(length < 6 * sizeof(int16_t))
     {
         return BCL_BUFFER_TOO_SMALL;
     }
 
-    //Recombine the payload into a float
-    uint32_t* payloadAsInt = (uint32_t*)payload;
-    //The lowest array value of the buffer is the least significant bit
-    (*payloadAsInt) = (buffer[3] << 24) | (buffer[2] << 16) | (buffer[1] << 8) | (buffer[0]);
+    ptr = (ImuPayload*)payload;
+    //The order of the data in the buffer is 1) x accel, 2) y accel, 3) z accell,
+    //4) x orient, 5)y orient , 6) z orient
+    //and the data is big endian
+    ptr->x_accel = (buffer[0] << 8) | buffer[1];
+    ptr->y_accel = (buffer[2] << 8) | buffer[3];
+    ptr->z_accel = (buffer[4] << 8) | buffer[5];
+    ptr->x_orient = (buffer[6] << 8) | buffer[7];
+    ptr->y_orient = (buffer[8] << 8) | buffer[9];
+    ptr->z_orient = (buffer[10] << 8) | buffer[11];
 
     if(bytes_read)
-        (*bytes_read) = sizeof(float);
-
-    return BCL_OK;
-}
-
-BCL_STATUS DeserializeIMUQueryPayload(
-        BclPayloadPtr payload,
-        const uint8_t* buffer,
-        uint8_t length,
-        uint8_t* bytes_read)
-{
-    //inputs good?
-    if(!buffer || !payload)
-    {
-        return BCL_INVALID_PARAMETER;
-    }
-
-    //enough size?
-    if(length < sizeof(float))
-    {
-        return BCL_BUFFER_TOO_SMALL;
-    }
-
-    *(uint8_t*)payload = *buffer;
-
-    if(bytes_read)
-        *bytes_read = sizeof(uint8_t);
+        (*bytes_read) = 6 * sizeof(int16_t);
 
     return BCL_OK;
 }
