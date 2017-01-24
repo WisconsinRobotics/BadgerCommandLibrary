@@ -57,6 +57,10 @@ BCL_STATUS InitializeReportSoilPacket (
     SoilPayload *           payload
 );
 
+BCL_STATUS InitializeQueryIMUPacket(
+    BclPacket *             pkt
+);
+
 BCL_STATUS InitializeReportIMUPacket(
     BclPacket* packet,
     ImuPayload* payload

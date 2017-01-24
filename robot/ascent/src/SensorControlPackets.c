@@ -60,6 +60,20 @@ BCL_STATUS InitializeReportSoilPacket (
     );
 }
 
+BCL_STATUS InitializeQueryIMUPacket(
+    BclPacket *             pkt
+    )
+{
+    return InitializeBclPacket(
+        pkt,
+        QUERY_IMU,
+        NULL,
+        0,
+        NULL,
+        NULL
+    );
+}
+
 BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, ImuPayload* payload)
 {
     return InitializeBclPacket(
