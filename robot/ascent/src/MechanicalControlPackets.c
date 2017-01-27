@@ -2,12 +2,12 @@
 #include "Packet.h"
 #include <string.h>
 
-BCL_STATUS InitializeSetTankDriveSpeedPacket (
+BCL_STATUS InitializeSetTankDriveSpeedPacket(
     BclPacket *pkt,
     TankDrivePayload *payload
-    )
+)
 {
-    return InitializeBclPacket (
+    return InitializeBclPacket(
         pkt,
         SET_TANK_DRIVE_SPEED,
         payload,
@@ -17,26 +17,26 @@ BCL_STATUS InitializeSetTankDriveSpeedPacket (
     );
 }
 
-BCL_STATUS InitializeSetAllWheelSpeedPacket (
+BCL_STATUS InitializeSetAllWheelSpeedPacket(
     BclPacket *pkt,
     AllWheelSpeedPayload *payload
-    )
+)
 {
-    return InitializeBclPacket (
+    return InitializeBclPacket(
         pkt,
         SET_ALL_WHEEL_SPEED,
         payload,
-        sizeof(uint8_t) + NUMBER_WHEELS * sizeof(int8_t),
+        sizeof(uint8_t) + 6 * sizeof(int8_t),
         &SerializeAllWheelSpeedPayload,
         &DeserializeAllWheelSpeedPayload
     );
 }
 
-BCL_STATUS InitializeQueryArmPositionPacket (
+BCL_STATUS InitializeQueryArmPositionPacket(
     BclPacket *pkt
-    )
+)
 {
-    return InitializeBclPacket (
+    return InitializeBclPacket(
         pkt,
         QUERY_ARM_POS,
         NULL,
@@ -46,41 +46,41 @@ BCL_STATUS InitializeQueryArmPositionPacket (
     );
 }
 
-BCL_STATUS InitializeReportArmPositionPacket (
+BCL_STATUS InitializeReportArmPositionPacket(
     BclPacket               *pkt,
     ArmPositionPayload      *payload
-    )
+)
 {
-    return InitializeBclPacket (
+    return InitializeBclPacket(
         pkt,
         REPORT_ARM_POS,
         payload,
-        sizeof(uint8_t) + NUMBER_ARM_MOTOR_POSITONS * sizeof(uint8_t),
+        sizeof(uint8_t) + 6 * sizeof(int8_t),
         &SerializeArmPositionPayload,
         &DeserializeArmPositionPayload
     );
 }
 
-BCL_STATUS InitializeSetArmPositionPacket (
+BCL_STATUS InitializeSetArmPositionPacket(
     BclPacket *pkt,
     ArmPositionPayload *payload
-    )
+)
 {
     return InitializeBclPacket(
         pkt,
         SET_ARM_POS,
         payload,
-        sizeof(uint8_t) + NUMBER_ARM_MOTOR_POSITONS * sizeof(uint8_t),
+        sizeof(uint8_t) + 6 * sizeof(int8_t),
         &SerializeArmPositionPayload,
         &DeserializeArmPositionPayload
     );
 }
 
-BCL_STATUS InitializeQueryTurretPositionPacket (
+BCL_STATUS InitializeQueryTurretPositionPacket(
     BclPacket *             pkt
-    )
+)
 {
-    return InitializeBclPacket (
+    return InitializeBclPacket(
         pkt,
         QUERY_TURRET_POS,
         NULL,
@@ -90,10 +90,10 @@ BCL_STATUS InitializeQueryTurretPositionPacket (
     );
 }
 
-BCL_STATUS InitializeReportTurretPositionPacket (
-	BclPacket *             pkt,
+BCL_STATUS InitializeReportTurretPositionPacket(
+    BclPacket *             pkt,
     TurretPositionPayload * payload
-    )
+)
 {
     return InitializeBclPacket(
         pkt,
@@ -105,10 +105,10 @@ BCL_STATUS InitializeReportTurretPositionPacket (
     );
 }
 
-BCL_STATUS InitializeSetTurretPositionPacket (
+BCL_STATUS InitializeSetTurretPositionPacket(
     BclPacket *pkt,
     TurretPositionPayload *payload
-    )
+)
 {
     return InitializeBclPacket(
         pkt,
@@ -120,7 +120,7 @@ BCL_STATUS InitializeSetTurretPositionPacket (
     );
 }
 
-BCL_STATUS SerializeTankDriveSpeedPayload (
+BCL_STATUS SerializeTankDriveSpeedPayload(
     const BclPayloadPtr     payload,
     uint8_t *               buffer,
     uint8_t                 length,
@@ -158,15 +158,19 @@ BCL_STATUS SerializeAllWheelSpeedPayload(
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
-    if (length < (sizeof(uint8_t) + NUMBER_WHEELS * sizeof(int8_t)))
+    if (length < (sizeof(uint8_t) + 6 * sizeof(int8_t)))
         return BCL_BUFFER_TOO_SMALL;
 
     awsp = (const AllWheelSpeedPayload *)payload;
-    buffer[0] = awsp->numWheels;
-    memcpy(buffer + 1, awsp->wheelSpeeds, NUMBER_WHEELS * sizeof(int8_t));
+    buffer[FRONT_LEFT_WHEEL] = awsp->front_left;
+    buffer[MIDDLE_LEFT_WHEEL] = awsp->middle_left;
+    buffer[BACK_LEFT_WHEEL] = awsp->back_left;
+    buffer[FRONT_RIGHT_WHEEL] = awsp->front_right;
+    buffer[MIDDLE_RIGHT_WHEEL] = awsp->middle_right;
+    buffer[BACK_RIGHT_WHEEL] = awsp->back_right;
 
     if (bytes_written)
-        *bytes_written = sizeof(uint8_t) + NUMBER_WHEELS * sizeof(int8_t);
+        *bytes_written = sizeof(uint8_t) + 6 * sizeof(int8_t);
 
     return BCL_OK;
 }
@@ -183,21 +187,25 @@ BCL_STATUS  SerializeArmPositionPayload(
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
-    if (length < (sizeof(uint8_t) + NUMBER_ARM_MOTOR_POSITONS * sizeof(uint8_t)))
+    if (length < (sizeof(uint8_t) + 6 * sizeof(int8_t)))
         return BCL_BUFFER_TOO_SMALL;
 
-    app = (const ArmPositionPayload *) payload;
+    app = (const ArmPositionPayload *)payload;
 
-    buffer[0] = app->numArmPositions;
-    memcpy(buffer + 1, app->armPositions, NUMBER_ARM_MOTOR_POSITONS * sizeof(uint8_t));
+    buffer[TURNTABLE_INDEX] = app->turntable;
+    buffer[HUMERUS_INDEX] = app->humerus;
+    buffer[FOREARM_INDEX] = app->forearm;
+    buffer[WRIST_UP_DOWN_INDEX] = app->wrist_up_down;
+    buffer[WRIST_ROT_INDEX] = app->wrist_rot;
+    buffer[CLAW_INDEX] = app->claw;
 
     if (bytes_written)
-        *bytes_written = sizeof(uint8_t) + NUMBER_ARM_MOTOR_POSITONS * sizeof(int8_t);
+        *bytes_written = sizeof(uint8_t) + 6 * sizeof(int8_t);
 
     return BCL_OK;
 }
 
-BCL_STATUS SerializeTurretPositionPayload (
+BCL_STATUS SerializeTurretPositionPayload(
     const BclPayloadPtr     payload,
     uint8_t *               buffer,
     uint8_t                 length,
@@ -212,7 +220,7 @@ BCL_STATUS SerializeTurretPositionPayload (
     if (length < 2 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
-    tpp = (const TurretPositionPayload *) payload;
+    tpp = (const TurretPositionPayload *)payload;
     buffer[0] = tpp->pan;
     buffer[1] = tpp->tilt;
 
@@ -236,8 +244,8 @@ BCL_STATUS DeserializeTankDriveSpeedPayload(
 
     if (length < 2 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
-    
-    tdp = (TankDrivePayload *) payload;
+
+    tdp = (TankDrivePayload *)payload;
     tdp->left = buffer[0];
     tdp->right = buffer[1];
 
@@ -259,21 +267,19 @@ BCL_STATUS DeserializeAllWheelSpeedPayload(
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
-    if (length < sizeof(uint8_t) + NUMBER_WHEELS * sizeof(int8_t))
+    if (length < sizeof(uint8_t) + 6 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
-    awsp = (AllWheelSpeedPayload *) payload;
-    if (!awsp->wheelSpeeds)
-        return BCL_INVALID_PARAMETER;
-
-    awsp->numWheels = buffer[0];
-    if (awsp->numWheels != NUMBER_WHEELS)
-        return BCL_BAD_PAYLOAD;
-
-    memcpy(awsp->wheelSpeeds, buffer + 1, NUMBER_WHEELS * sizeof(int8_t));
+    awsp = (AllWheelSpeedPayload *)payload;
+    awsp->front_left = buffer[FRONT_LEFT_WHEEL];
+    awsp->middle_left = buffer[MIDDLE_LEFT_WHEEL];
+    awsp->back_left = buffer[BACK_LEFT_WHEEL];
+    awsp->front_right = buffer[FRONT_RIGHT_WHEEL];
+    awsp->middle_right = buffer[MIDDLE_RIGHT_WHEEL];
+    awsp->back_right = buffer[BACK_RIGHT_WHEEL];
 
     if (bytes_read)
-        *bytes_read = sizeof(uint8_t) + NUMBER_WHEELS * sizeof(int8_t);
+        *bytes_read = sizeof(uint8_t) + 6 * sizeof(int8_t);
 
     return BCL_OK;
 }
@@ -290,21 +296,19 @@ BCL_STATUS DeserializeArmPositionPayload(
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
-    if (length < sizeof(uint8_t) + NUMBER_ARM_MOTOR_POSITONS * sizeof(int8_t))
+    if (length < sizeof(uint8_t) + 6 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
     app = (ArmPositionPayload *)payload;
-    if (!app->numArmPositions)
-        return BCL_INVALID_PARAMETER;
-
-    app->numArmPositions = buffer[0];
-    if (app->numArmPositions != NUMBER_ARM_MOTOR_POSITONS)
-        return BCL_BAD_PAYLOAD;
-
-    memcpy(app->armPositions, buffer + 1, NUMBER_ARM_MOTOR_POSITONS * sizeof(int8_t));
+    app->turntable = buffer[TURNTABLE_INDEX];
+    app->humerus = buffer[HUMERUS_INDEX];
+    app->forearm = buffer[FOREARM_INDEX];
+    app->wrist_up_down = buffer[WRIST_UP_DOWN_INDEX];
+    app->wrist_rot = buffer[WRIST_ROT_INDEX];
+    app->claw = buffer[CLAW_INDEX];
 
     if (bytes_read)
-        *bytes_read = sizeof(uint8_t) + NUMBER_ARM_MOTOR_POSITONS * sizeof(int8_t);
+        *bytes_read = sizeof(uint8_t) + 6 * sizeof(int8_t);
 
     return BCL_OK;
 }
@@ -324,7 +328,7 @@ BCL_STATUS DeserializeTurretPositionPayload(
     if (length < 2 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
-    tdp = (TurretPositionPayload *) payload;
+    tdp = (TurretPositionPayload *)payload;
     tdp->pan = buffer[0];
     tdp->tilt = buffer[1];
 

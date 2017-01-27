@@ -32,7 +32,18 @@
 
 
 /* Other Ascent definitions */
-#define NUMBER_WHEELS                   6
-#define NUMBER_ARM_MOTOR_POSITONS       5
+#define FRONT_LEFT_WHEEL                0
+#define MIDDLE_LEFT_WHEEL               1
+#define BACK_LEFT_WHEEL                 2
+#define FRONT_RIGHT_WHEEL               3
+#define MIDDLE_RIGHT_WHEEL              4
+#define BACK_RIGHT_WHEEL                5
+
+#define TURNTABLE_INDEX                 0
+#define HUMERUS_INDEX                   1
+#define FOREARM_INDEX                   2
+#define WRIST_UP_DOWN_INDEX             3
+#define WRIST_ROT_INDEX                 4
+#define CLAW_INDEX                      5
 
 #endif

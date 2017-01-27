@@ -19,14 +19,22 @@ typedef struct TankDrivePayload
 
 typedef struct AllWheelSpeedPayload
 {
-    uint8_t numWheels;
-    int8_t wheelSpeeds[NUMBER_WHEELS];
+    int8_t front_left;
+    int8_t middle_left;
+    int8_t back_left;
+    int8_t front_right;
+    int8_t middle_right;
+    int8_t back_right;
 } AllWheelSpeedPayload;
 
 typedef struct ArmPositionPayload
 {
-    uint8_t numArmPositions;
-    int8_t armPositions[NUMBER_ARM_MOTOR_POSITONS];
+    int8_t turntable;
+    int8_t humerus;
+    int8_t forearm;
+    int8_t wrist_up_down;
+    int8_t wrist_rot;
+    int8_t claw;
 } ArmPositionPayload;
 
 typedef struct TurretPositionPayload
