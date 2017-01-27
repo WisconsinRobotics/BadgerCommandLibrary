@@ -199,7 +199,7 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
         if (!s->IsActive())
             continue;
         
-        if (hdr.Destination.ServiceID != s->GetID())
+        if (hdr.Destination.ServiceID != s->GetID() && hdr.Destination.ServiceID != BCL_BROADCAST_SERVICE_ID)
             continue;
 
         if (!s->HandlePacket(buffer, length))
@@ -209,7 +209,8 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
             s->ExecuteOnTime();
 
         // packet issued to service - done!
-        return;
+        if (hdr.Destination.ServiceID != BCL_BROADCAST_SERVICE_ID)
+            break;
     }
 }
 
