@@ -80,7 +80,7 @@ BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, ImuPayload* payload)
             packet,
             REPORT_IMU,
             payload,
-            sizeof(float),
+            6 * sizeof(int16_t),
             &SerializeIMUPayload,
             &DeserializeIMUPayload);
 }
