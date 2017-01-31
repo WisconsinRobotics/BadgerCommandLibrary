@@ -179,6 +179,24 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
                     
             return;
 
+        case REPORT_SERVICE_STATUS_OPCODE:
+            for (size_t i = 0; i < this->services.size(); i++)
+            {
+                if (this->services[i]->GetID() == hdr.Destination.ServiceID)
+                {
+                    ReportServiceStatusPayload payload;
+
+                    InitializeReportServiceStatusPacket(&pkt, &payload);
+                    payload.Active = this->services[i] ? 1 : 0;
+                    pkt.Header.Destination = hdr.Source;
+                    pkt.Header.Source.RobotID = static_cast<uint8_t>(this->robotID);
+                    //this->SendPacketSerial(&pkt);
+                    this->SendPacketUdp(&pkt);
+                    return;
+                }
+            }
+            return;
+
         case QUERY_HEARTBEAT_OPCODE:
             InitializeReportHeartbeatPacket(&pkt);
             pkt.Header.Destination = hdr.Source;
@@ -186,7 +204,7 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
 
             // HACK
             // TODO: Don't just blindly send across both interfaces
-            this->SendPacketSerial(&pkt);
+            //this->SendPacketSerial(&pkt);
             this->SendPacketUdp(&pkt);
             return;
 
