@@ -179,7 +179,7 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
                     
             return;
 
-        case REPORT_SERVICE_STATUS_OPCODE:
+        case QUERY_SERVICE_STATUS_OPCODE:
             for (size_t i = 0; i < this->services.size(); i++)
             {
                 if (this->services[i]->GetID() == hdr.Destination.ServiceID)
