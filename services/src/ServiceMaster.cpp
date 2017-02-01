@@ -187,7 +187,7 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
                     ReportServiceStatusPayload payload;
 
                     InitializeReportServiceStatusPacket(&pkt, &payload);
-                    payload.Active = this->services[i] ? 1 : 0;
+                    payload.Active = this->services[i]->IsActive() ? 1 : 0;
                     pkt.Header.Destination = hdr.Source;
                     pkt.Header.Source.RobotID = static_cast<uint8_t>(this->robotID);
                     pkt.Header.Source.ServiceID = static_cast<uint8_t>(this->services[i]->GetID());
