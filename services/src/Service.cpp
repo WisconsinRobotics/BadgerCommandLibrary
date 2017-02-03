@@ -11,8 +11,11 @@ Service::Service(int id, int interval, bool active) :
     execute_timer(new Timer(Interval(0), nullptr, false))
 {
     this->serviceAddr.ServiceID = static_cast<uint8_t>(id);
-    this->sleepInterval = interval;
+    SetSleepInterval(interval);
     this->isActive = active;
+
+    execute_timer->SetCallback(std::bind(&Service::TimerExecute, this));
+    execute_timer->Start();
 }
 
 Service::~Service()
@@ -45,6 +48,20 @@ int Service::GetSleepInterval() const
 void Service::SetSleepInterval(int sleep_interval)
 {
     this->sleepInterval = sleep_interval;
+
+    // if we change the interval, we need to stop the timer
+    if (this->isActive)
+        execute_timer->Stop();
+
+    // if new sleep interval is event based, we're done
+    if (this->sleepInterval == Service::RUN_ON_PACKET_RECEIVE)
+        return;
+
+    // otherwise restart the timer
+    execute_timer->SetPeriod(std::chrono::milliseconds(this->sleepInterval));
+    execute_timer->SetPeriodic(true);
+    if (this->isActive)
+        execute_timer->Start();
 }
 
 bool Service::IsActive() const
@@ -65,15 +82,11 @@ int Service::GetID() const
 void Service::ExecuteOnTime()
 {
     if (this->sleepInterval == RUN_ON_PACKET_RECEIVE)
-    {
         this->Execute();
-        return;
-    }
-
-    execute_timer->SetCallback(std::bind(&Service::Execute, this));
-    execute_timer->SetPeriod(std::chrono::milliseconds(this->sleepInterval));
-    execute_timer->SetPeriodic(true);
-    execute_timer->Start();
 }
 
-
+void Service::TimerExecute()
+{
+    if (this->isActive)
+        this->Execute();
+}

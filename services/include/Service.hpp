@@ -36,5 +36,9 @@ namespace BCL
         BclAddress serviceAddr;
         int sleepInterval;
         bool isActive;
+
+    private:
+        void TimerExecute();
+
     };
 }

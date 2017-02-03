@@ -103,6 +103,9 @@ static void CALLBACK WinTimerCallback(PVOID lpParameter, BOOLEAN TimerOrWaitFire
 
 bool Timer::InitializeImpl()
 {
+    impl->timerQueue = INVALID_HANDLE_VALUE;
+    impl->timerQueueTimer = INVALID_HANDLE_VALUE;
+
     impl->timerQueue = CreateTimerQueue();
     return impl->timerQueue != INVALID_HANDLE_VALUE;
 }

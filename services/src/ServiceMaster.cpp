@@ -24,6 +24,23 @@ ServiceMaster::ServiceMaster(int robot_id)
     this->socket = nullptr;
 }
 
+ServiceMaster::~ServiceMaster()
+{
+    this->isRunning = false;
+
+    if (this->serialReadThread.joinable())
+    {
+        this->serialPort->Close();
+        this->serialReadThread.join();
+    }
+        
+    if (this->udpReadThread.joinable())
+    {
+        this->socket->Close();
+        this->udpReadThread.join();
+    }
+}
+
 void ServiceMaster::InitUdpPort(int port)
 {
     this->socket = make_unique<UdpSocket>(UdpSocket(port));
@@ -261,7 +278,7 @@ bool ServiceMaster::Run()
 
     // run the services
     for (auto& s : this->services)
-        if (s->GetSleepInterval() != Service::RUN_ON_PACKET_RECEIVE && s->IsActive())
+        if (s->GetSleepInterval() != Service::RUN_ON_PACKET_RECEIVE)
             s->ExecuteOnTime();
 
     return this->isRunning;

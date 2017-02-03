@@ -23,6 +23,7 @@ namespace BCL
     {
     public:
         ServiceMaster(int robot_id);
+        ~ServiceMaster();
         void InitUdpPort(int port = 0);
         void InitSerialPort(std::string portname, int baud);
         uint8_t GetRobotID() const;
