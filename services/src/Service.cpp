@@ -72,6 +72,10 @@ bool Service::IsActive() const
 void Service::SetActive(bool active)
 {
     this->isActive = active;
+    if (!active)
+        this->execute_timer->Stop();
+    else
+	this->execute_timer->Start();
 }
 
 int Service::GetID() const
