@@ -70,7 +70,7 @@ BCL_STATUS InitializeSetArmPositionPacket(
         pkt,
         SET_ARM_POS,
         payload,
-        sizeof(uint8_t) + 6 * sizeof(int8_t),
+        6 * sizeof(int8_t),
         &SerializeArmPositionPayload,
         &DeserializeArmPositionPayload
     );
@@ -187,7 +187,7 @@ BCL_STATUS  SerializeArmPositionPayload(
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
-    if (length < (sizeof(uint8_t) + 6 * sizeof(int8_t)))
+    if (length < (6 * sizeof(int8_t)))
         return BCL_BUFFER_TOO_SMALL;
 
     app = (const ArmPositionPayload *)payload;
@@ -200,7 +200,7 @@ BCL_STATUS  SerializeArmPositionPayload(
     buffer[CLAW_INDEX] = app->claw;
 
     if (bytes_written)
-        *bytes_written = sizeof(uint8_t) + 6 * sizeof(int8_t);
+        *bytes_written = 6 * sizeof(int8_t);
 
     return BCL_OK;
 }
@@ -296,7 +296,7 @@ BCL_STATUS DeserializeArmPositionPayload(
     if (!buffer || !payload)
         return BCL_INVALID_PARAMETER;
 
-    if (length < sizeof(uint8_t) + 6 * sizeof(int8_t))
+    if (length < 6 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
     app = (ArmPositionPayload *)payload;
@@ -308,7 +308,7 @@ BCL_STATUS DeserializeArmPositionPayload(
     app->claw = buffer[CLAW_INDEX];
 
     if (bytes_read)
-        *bytes_read = sizeof(uint8_t) + 6 * sizeof(int8_t);
+        *bytes_read = 6 * sizeof(int8_t);
 
     return BCL_OK;
 }
