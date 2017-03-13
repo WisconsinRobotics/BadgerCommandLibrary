@@ -15,10 +15,10 @@ typedef struct GpsPayload
 {
     int16_t lat_degrees;
     int16_t lat_minutes;
-    int16_t lat_seconds;
+    int16_t lat_seconds; // (tenths of a second)
     int16_t long_degrees;
     int16_t long_minutes;
-    int16_t long_seconds;
+    int16_t long_seconds; // (tenths of a second)
 } GpsPayload;
 
 typedef struct SoilPayload
@@ -35,7 +35,7 @@ typedef struct ImuPayload
     int16_t x_orient;
     int16_t y_orient;
     int16_t z_orient;
-}ImuPayload;
+} ImuPayload;
 
 /* Initialization functions */
 
@@ -43,13 +43,18 @@ BCL_STATUS InitializeQueryGPSPacket (
     BclPacket *             pkt
 );
 
-BCL_STATUS InitializeQuerySoilPacket (
-    BclPacket *             pkt
-);
-
 BCL_STATUS InitializeReportGPSPacket (
     BclPacket *             pkt,
     GpsPayload *            payload
+);
+
+BCL_STATUS InitializeSetGPSPacket (
+    BclPacket *             pkt,
+    GpsPayload *            payload
+);
+
+BCL_STATUS InitializeQuerySoilPacket (
+    BclPacket *             pkt
 );
 
 BCL_STATUS InitializeReportSoilPacket (

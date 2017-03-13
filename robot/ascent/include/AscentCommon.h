@@ -23,12 +23,13 @@
 /* Sensor packets (0x50 onwards)*/
 #define QUERY_GPS                       0x50
 #define REPORT_GPS                      0x51
+#define SET_GPS                         0x52
 
-#define QUERY_SOIL                      0x52
-#define REPORT_SOIL                     0x53
+#define QUERY_SOIL                      0x53
+#define REPORT_SOIL                     0x54
 
-#define QUERY_IMU                       0x54
-#define REPORT_IMU                      0x55
+#define QUERY_IMU                       0x55
+#define REPORT_IMU                      0x56
 
 
 /* Other Ascent definitions */

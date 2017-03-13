@@ -2,9 +2,7 @@
 #include <stddef.h>
 
 
-BCL_STATUS InitializeQueryGPSPacket (
-        BclPacket * pkt
-)
+BCL_STATUS InitializeQueryGPSPacket(BclPacket * pkt)
 {
     return InitializeBclPacket (
             pkt,
@@ -16,9 +14,7 @@ BCL_STATUS InitializeQueryGPSPacket (
     );
 }
 
-BCL_STATUS InitializeQuerySoilPacket (
-        BclPacket * pkt
-)
+BCL_STATUS InitializeQuerySoilPacket(BclPacket * pkt)
 {
     return InitializeBclPacket (
             pkt,
@@ -30,10 +26,7 @@ BCL_STATUS InitializeQuerySoilPacket (
     );
 }
 
-BCL_STATUS  InitializeReportGPSPacket (
-        BclPacket * pkt,
-        GpsPayload * payload
-)
+BCL_STATUS InitializeReportGPSPacket(BclPacket *pkt, GpsPayload *payload)
 {
     return InitializeBclPacket (
             pkt,
@@ -45,10 +38,18 @@ BCL_STATUS  InitializeReportGPSPacket (
     );
 }
 
-BCL_STATUS InitializeReportSoilPacket (
-        BclPacket * pkt,
-        SoilPayload * payload
-)
+BCL_STATUS InitializeSetGPSPacket(BclPacket *pkt, GpsPayload *payload)
+{
+    return InitializeBclPacket(
+        pkt,
+        SET_GPS,
+        payload,
+        sizeof(GpsPayload),
+        &SerializeGPSPayload,
+        &DeserializeGPSPayload
+    );
+}
+BCL_STATUS InitializeReportSoilPacket(BclPacket *pkt, SoilPayload *payload)
 {
     return InitializeBclPacket (
             pkt,
@@ -60,9 +61,7 @@ BCL_STATUS InitializeReportSoilPacket (
     );
 }
 
-BCL_STATUS InitializeQueryIMUPacket(
-    BclPacket *             pkt
-    )
+BCL_STATUS InitializeQueryIMUPacket(BclPacket *pkt)
 {
     return InitializeBclPacket(
         pkt,

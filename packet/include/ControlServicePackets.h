@@ -4,14 +4,15 @@
 #include "BclStatus.h"
 #include "Packet.h"
 
-#define ACTIVATE_SERVICE_OPCODE         0xAC
-#define DEACTIVATE_SERVICE_OPCODE       0xDC
-#define QUERY_SERVICE_LIST_OPCODE       0x70
-#define QUERY_SERVICE_STATUS_OPCODE     0x73
-#define QUERY_HEARTBEAT_OPCODE          0x90
-#define REPORT_SERVICE_LIST_OPCODE      0x71
-#define REPORT_SERVICE_STATUS_OPCODE    0x74
-#define REPORT_HEARTBEAT_OPCODE         0x91
+/* Reserved Packets are 0xF0 and above */
+#define ACTIVATE_SERVICE_OPCODE         0xF0
+#define DEACTIVATE_SERVICE_OPCODE       0xF1
+#define QUERY_SERVICE_LIST_OPCODE       0xF2
+#define QUERY_SERVICE_STATUS_OPCODE     0xF3
+#define QUERY_HEARTBEAT_OPCODE          0xF4
+#define REPORT_SERVICE_LIST_OPCODE      0xF5
+#define REPORT_SERVICE_STATUS_OPCODE    0xF6
+#define REPORT_HEARTBEAT_OPCODE         0xF7
 
 #define MAX_SERVICE_NAME_LENGTH         10
 
