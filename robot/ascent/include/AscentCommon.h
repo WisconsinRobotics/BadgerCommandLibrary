@@ -19,6 +19,8 @@
 #define SET_TANK_DRIVE_SPEED            0x2E
 #define SET_ALL_WHEEL_SPEED             0x2F
 
+#define START_CAR_HORN                  0x30
+
 
 /* Sensor packets (0x50 onwards)*/
 #define QUERY_GPS                       0x50

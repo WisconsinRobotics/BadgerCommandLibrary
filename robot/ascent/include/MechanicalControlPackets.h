@@ -83,6 +83,11 @@ BCL_STATUS InitializeSetTurretPositionPacket (
     TurretPositionPayload * payload
 );
 
+BCL_STATUS InitializeStartCarHornPacket(
+    BclPacket *             pkt,
+    uint16_t *              payload
+);
+
 /* Serialization function definitions */
 
 BCL_STATUS SerializeTankDriveSpeedPayload (
@@ -113,6 +118,13 @@ BCL_STATUS SerializeTurretPositionPayload (
     uint8_t *               bytes_written
 );
 
+BCL_STATUS SerializeCarHornPayload (
+    const BclPayloadPtr payload,
+    uint8_t *           buffer,
+    uint8_t             length,
+    uint8_t *           bytes_written
+);
+
 /* Deserialization function definitions */
 
 BCL_STATUS DeserializeTankDriveSpeedPayload (
@@ -141,6 +153,13 @@ BCL_STATUS DeserializeTurretPositionPayload(
     const uint8_t *         buffer,
     uint8_t                 length,
     uint8_t *               bytes_read
+);
+
+BCL_STATUS DeserializeCarHornPayload(
+   BclPayloadPtr            payload,
+   const uint8_t *          buffer,
+   uint8_t                  length,
+   uint8_t *                bytes_read
 );
 
 #ifdef __cplusplus
