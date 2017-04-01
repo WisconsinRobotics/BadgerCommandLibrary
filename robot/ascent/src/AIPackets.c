@@ -8,7 +8,7 @@ BCL_STATUS InitializeAISimpleInfoPacket (
 {
     return InitializeBclPacket (
             pkt,
-            AI_REPORT,
+        AI_SIMPLE_REPORT,
             payload,
             9 * sizeof(uint8_t),
             &SerializeAISimpleInfoPayload,
@@ -23,7 +23,7 @@ BCL_STATUS InitializeAIDebugInfoPacket (
 {
     return InitializeBclPacket (
         pkt,
-        AI_REPORT,
+        AI_DEBUG_REPORT,
         payload,
         1 * sizeof(uint8_t) + 150 * sizeof(char),
         &SerializeAIDebugInfoPayload,

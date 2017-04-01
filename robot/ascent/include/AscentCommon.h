@@ -35,7 +35,8 @@
 
 
 /* AI packets (0x70 - 0x7F) */
-#define AI_REPORT                       0x70
+#define AI_SIMPLE_REPORT                0x70
+#define AI_DEBUG_REPORT                 0x71
 
 
 /* Other Ascent definitions */
