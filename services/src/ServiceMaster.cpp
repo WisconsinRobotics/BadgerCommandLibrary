@@ -92,7 +92,7 @@ BCL_STATUS ServiceMaster::SendPacketSerial(BclPacket *pkt)
     return BCL_OK;
 }
 
-int BCL::ServiceMaster::SendBufferSerial(uint8_t * buffer, int length)
+int BCL::ServiceMaster::SendBufferSerial(const uint8_t * buffer, int length)
 {
     if (!buffer || !this->serialPort)
         return -1;
@@ -130,7 +130,7 @@ BCL_STATUS ServiceMaster::SendPacketUdp(BclPacket *pkt)
     return BCL_OK;
 }
 
-int BCL::ServiceMaster::SendBufferUdp(uint8_t * buffer, int length, int destID)
+int BCL::ServiceMaster::SendBufferUdp(const uint8_t * buffer, int length, int destID)
 {
     if (!this->socket || !buffer)
         return -1;
