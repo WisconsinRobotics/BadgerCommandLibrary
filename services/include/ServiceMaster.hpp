@@ -32,7 +32,9 @@ namespace BCL
         bool Run();
         void Stop();
         BCL_STATUS SendPacketSerial(BclPacket *pkt);
+        int SendBufferSerial(uint8_t *buffer, int length);
         BCL_STATUS SendPacketUdp(BclPacket *pkt);
+        int SendBufferUdp(uint8_t *buffer, int length, int destID);
 
     private:
         void SerialReader();

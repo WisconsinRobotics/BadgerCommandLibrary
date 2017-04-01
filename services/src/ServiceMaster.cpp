@@ -92,6 +92,14 @@ BCL_STATUS ServiceMaster::SendPacketSerial(BclPacket *pkt)
     return BCL_OK;
 }
 
+int BCL::ServiceMaster::SendBufferSerial(uint8_t * buffer, int length)
+{
+    if (!buffer || !this->serialPort)
+        return -1;
+
+    return this->serialPort->Write(buffer, length);
+}
+
 BCL_STATUS ServiceMaster::SendPacketUdp(BclPacket *pkt)
 {
     uint8_t buffer[255];
@@ -120,6 +128,20 @@ BCL_STATUS ServiceMaster::SendPacketUdp(BclPacket *pkt)
         return BCL_SOCKET_ERROR;
 
     return BCL_OK;
+}
+
+int BCL::ServiceMaster::SendBufferUdp(uint8_t * buffer, int length, int destID)
+{
+    if (!this->socket || !buffer)
+        return -1;
+
+    // TODO: handle broadcast UDP address
+
+    if (this->robotEndpointMap.find(destID) == this->robotEndpointMap.end())
+        return -1;
+
+    struct sockaddr_in dest_addr = this->robotEndpointMap[destID];
+    return this->socket->Write(buffer, length, (struct sockaddr *) &dest_addr);
 }
 
 void ServiceMaster::SerialReader()
