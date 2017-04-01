@@ -22,7 +22,7 @@
 #define START_CAR_HORN                  0x30
 
 
-/* Sensor packets (0x50 onwards)*/
+/* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
 #define REPORT_GPS                      0x51
 #define SET_GPS                         0x52
@@ -32,6 +32,10 @@
 
 #define QUERY_IMU                       0x55
 #define REPORT_IMU                      0x56
+
+
+/* AI packets (0x70 - 0x7F) */
+#define AI_REPORT                       0x70
 
 
 /* Other Ascent definitions */
