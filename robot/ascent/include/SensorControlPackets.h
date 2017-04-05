@@ -67,13 +67,17 @@ BCL_STATUS InitializeQueryIMUPacket(
 );
 
 BCL_STATUS InitializeReportIMUPacket(
-    BclPacket* packet,
-    ImuPayload* payload
+    BclPacket *             packet,
+    ImuPayload *            payload
 );
 
 BCL_STATUS InitializeByteDisplayPacket(
-        BclPacket* packet,
-        uint8_t* payload
+    BclPacket *             packet,
+    uint8_t *               payload
+);
+
+BCL_STATUS InitializeQueryMicroscopePacket(
+    BclPacket *             pkt
 );
 
 /* Serialization functions */

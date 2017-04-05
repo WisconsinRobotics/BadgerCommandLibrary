@@ -34,6 +34,8 @@
 #define REPORT_IMU                      0x56
 
 
+#define QUERY_MICROSCOPE                0x6F
+
 /* AI packets (0x70 - 0x7F) */
 #define AI_SIMPLE_REPORT                0x70
 #define AI_DEBUG_REPORT                 0x71

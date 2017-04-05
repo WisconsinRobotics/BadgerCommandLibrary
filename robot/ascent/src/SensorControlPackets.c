@@ -94,6 +94,20 @@ BCL_STATUS InitializeByteDisplayPacket(BclPacket* packet, uint8_t* payload)
             &DeserializeByteDisplayPayload);
 }
 
+BCL_STATUS InitializeQueryMicroscopePacket(
+    BclPacket *             pkt
+)
+{
+    return InitializeBclPacket(
+        pkt,
+        QUERY_MICROSCOPE,
+        NULL,
+        0,
+        NULL,
+        NULL
+    );
+}
+
 //Serialization
 BCL_STATUS SerializeGPSPayload (
         const BclPayloadPtr  payload,
