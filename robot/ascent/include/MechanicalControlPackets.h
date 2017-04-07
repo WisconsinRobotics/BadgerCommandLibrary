@@ -83,6 +83,11 @@ BCL_STATUS InitializeSetTurretPositionPacket (
     TurretPositionPayload * payload
 );
 
+BCL_STATUS InitializeFreezeTurretPacket(
+    BclPacket *             pkt,
+    uint8_t *               payload
+);
+
 BCL_STATUS InitializeStartCarHornPacket(
     BclPacket *             pkt,
     uint16_t *              payload
@@ -112,6 +117,13 @@ BCL_STATUS SerializeArmPositionPayload (
 );
 
 BCL_STATUS SerializeTurretPositionPayload (
+    const BclPayloadPtr     payload,
+    uint8_t *               buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_written
+);
+
+BCL_STATUS SerializeFreezeTurretPayload (
     const BclPayloadPtr     payload,
     uint8_t *               buffer,
     uint8_t                 length,
@@ -149,6 +161,13 @@ BCL_STATUS DeserializeArmPositionPayload(
 );
 
 BCL_STATUS DeserializeTurretPositionPayload(
+    BclPayloadPtr           payload,
+    const uint8_t *         buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_read
+);
+
+BCL_STATUS DeserializeFreezeTurretPayload(
     BclPayloadPtr           payload,
     const uint8_t *         buffer,
     uint8_t                 length,

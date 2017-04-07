@@ -15,6 +15,7 @@
 #define QUERY_TURRET_POS                0x23
 #define REPORT_TURRET_POS               0x24
 #define SET_TURRET_POS                  0x25
+#define FREEZE_TURRET                   0x26
 
 #define SET_TANK_DRIVE_SPEED            0x2E
 #define SET_ALL_WHEEL_SPEED             0x2F

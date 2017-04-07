@@ -120,6 +120,21 @@ BCL_STATUS InitializeSetTurretPositionPacket(
     );
 }
 
+BCL_STATUS InitializeFreezeTurretPacket(
+        BclPacket *             pkt,
+        uint8_t *               payload
+)
+{
+    return InitializeBclPacket(
+            pkt,
+            FREEZE_TURRET,
+            payload,
+            sizeof(uint8_t),
+            &SerializeFreezeTurretPayload,
+            &DeserializeFreezeTurretPayload
+    );
+}
+
 BCL_STATUS InitializeStartCarHornPacket(
         BclPacket *             pkt,
         uint16_t *              payload
@@ -241,6 +256,30 @@ BCL_STATUS SerializeTurretPositionPayload(
 
     if (bytes_written)
         *bytes_written = 2 * sizeof(int8_t);
+
+    return BCL_OK;
+}
+
+BCL_STATUS SerializeFreezeTurretPayload (
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+)
+{
+    const uint8_t * distance;
+
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if (length < sizeof(uint8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    distance = (uint8_t*)payload;
+    buffer[0] = distance;
+
+    if(bytes_written)
+        *bytes_written = sizeof(uint8_t);
 
     return BCL_OK;
 }
@@ -374,6 +413,30 @@ BCL_STATUS DeserializeTurretPositionPayload(
 
     if (bytes_read)
         *bytes_read = 2 * sizeof(int8_t);
+
+    return BCL_OK;
+}
+
+BCL_STATUS DeserializeFreezeTurretPayload(
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+)
+{
+    uint8_t * distance;
+
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if (length < sizeof(uint8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    distance = (uint8_t*)payload;
+    (*distance) = (*buffer);
+
+    if(bytes_read)
+        *bytes_read = sizeof(uint8_t);
 
     return BCL_OK;
 }
