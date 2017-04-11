@@ -276,7 +276,7 @@ BCL_STATUS SerializeFreezeTurretPayload (
         return BCL_BUFFER_TOO_SMALL;
 
     distance = (uint8_t*)payload;
-    buffer[0] = distance;
+    buffer[0] = *distance;
 
     if(bytes_written)
         *bytes_written = sizeof(uint8_t);

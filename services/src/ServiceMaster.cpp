@@ -152,7 +152,7 @@ void ServiceMaster::SerialReader()
     while (this->isRunning)
     {
         int bytes_read = this->serialPort->Read(read_buffer, READ_BUFFER_SIZE);
-        if (bytes_read < 0)
+        if (bytes_read <= 0)
             continue;
 
         this->PacketHandler(read_buffer, static_cast<uint8_t>(bytes_read));
@@ -171,7 +171,7 @@ void ServiceMaster::UdpSocketReader()
         BclPacketHeader pkt_hdr;
 
         int bytes_read = socket->Read(read_buffer, READ_BUFFER_SIZE, (struct sockaddr *) &src_addr);
-        if (bytes_read < 0)
+        if (bytes_read <= 0)
             continue;
 
         memset(&pkt_hdr, 0, sizeof(BclPacketHeader));
@@ -199,7 +199,7 @@ void ServiceMaster::PacketHandler(const uint8_t *buffer, uint8_t length)
         return;
 
     // reject packet if ID doesn't match and is not broadcast
-    if (hdr.Destination.RobotID != this->robotID && this->robotID != BCL_BROADCAST_ROBOT_ID)
+    if (hdr.Destination.RobotID != this->robotID && hdr.Destination.RobotID != BCL_BROADCAST_ROBOT_ID)
         return;
 
     BclPacket pkt;
