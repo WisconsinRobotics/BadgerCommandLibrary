@@ -14,7 +14,12 @@ UdpSocket::UdpSocket(int port)
 UdpSocket::~UdpSocket()
 {
     if (this->isOpen)
+    {
         this->Close();
+#ifdef _WIN32
+        WSACleanup();
+#endif
+    }
 }
 
 bool UdpSocket::Open()
