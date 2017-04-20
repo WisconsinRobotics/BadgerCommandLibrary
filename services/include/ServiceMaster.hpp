@@ -29,6 +29,7 @@ namespace BCL
         uint8_t GetRobotID() const;
         void AddService(Service *s);
         void AddEndpoint(int robot_id, struct sockaddr_in addr);
+        bool GetEndpoint(int robot_id, struct sockaddr_in *addr);
         bool Run();
         void Stop();
         BCL_STATUS SendPacketSerial(BclPacket *pkt);

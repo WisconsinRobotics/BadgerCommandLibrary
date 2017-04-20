@@ -23,7 +23,7 @@ namespace BCL
     class TcpClient
     {
     public:
-        TcpClient(int port);
+        TcpClient(int port = 0);
         ~TcpClient();
 
         /* Initializes the TcpClient instance */

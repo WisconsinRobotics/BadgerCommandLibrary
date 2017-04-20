@@ -72,6 +72,15 @@ void ServiceMaster::AddEndpoint(int robot_id, struct sockaddr_in addr)
     this->robotEndpointMap[static_cast<uint8_t>(robot_id)] = addr;
 }
 
+bool ServiceMaster::GetEndpoint(int robot_id, struct sockaddr_in *addr)
+{
+    if (this->robotEndpointMap.find(robot_id) == this->robotEndpointMap.end())
+        return false;
+    
+    *addr = this->robotEndpointMap[robot_id];
+    return true;
+}
+
 BCL_STATUS ServiceMaster::SendPacketSerial(BclPacket *pkt)
 {
     uint8_t buffer[255];
