@@ -13,8 +13,6 @@
     #include <termios.h>
     #include <sys/socket.h>
     #include <sys/types.h>
-    #include <libudev.h>
-    #include <assert.h>
     typedef int SerialPortHandle;
 #endif
 
@@ -30,7 +28,6 @@ namespace BCL
         ~SerialPort();
         bool Open();
         bool IsOpen() const;
-        bool IsRecovering() const;
         void Close();
 
         std::string GetPort() const;
@@ -43,18 +40,9 @@ namespace BCL
         int Read(void *data, int max_size_bytes);
 
     private:
-        bool AttemptRecovery();
-
         SerialPortHandle handle;
         bool opened;
-        bool recovering;
         std::string port;
         int baud;
-
-#ifdef __linux__
-        struct udev *udev;
-        struct udev_monitor *mon;
-        int mon_fd;
-#endif
     };
 }
