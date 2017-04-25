@@ -41,12 +41,12 @@ BCL_STATUS InitializeReportGPSPacket(BclPacket *pkt, GpsPayload *payload)
 BCL_STATUS InitializeSetGPSPacket(BclPacket *pkt, GpsPayload *payload)
 {
     return InitializeBclPacket(
-        pkt,
-        SET_GPS,
-        payload,
-        sizeof(GpsPayload),
-        &SerializeGPSPayload,
-        &DeserializeGPSPayload
+            pkt,
+            SET_GPS,
+            payload,
+            sizeof(GpsPayload),
+            &SerializeGPSPayload,
+            &DeserializeGPSPayload
     );
 }
 BCL_STATUS InitializeReportSoilPacket(BclPacket *pkt, SoilPayload *payload)
@@ -64,12 +64,12 @@ BCL_STATUS InitializeReportSoilPacket(BclPacket *pkt, SoilPayload *payload)
 BCL_STATUS InitializeQueryIMUPacket(BclPacket *pkt)
 {
     return InitializeBclPacket(
-        pkt,
-        QUERY_IMU,
-        NULL,
-        0,
-        NULL,
-        NULL
+            pkt,
+            QUERY_IMU,
+            NULL,
+            0,
+            NULL,
+            NULL
     );
 }
 
@@ -84,6 +84,17 @@ BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, ImuPayload* payload)
             &DeserializeIMUPayload);
 }
 
+BCL_STATUS InitializeCalibrateIMUPacket(BclPacket* packet, CalibrateImuPayload* payload)
+{
+    return InitializeBclPacket(
+            packet,
+            REPORT_IMU,
+            payload,
+            sizeof(CalibrateImuPayload),
+            &SerializeCalibrateIMUPayload,
+            &DeserializeCalibrateIMUPayload);
+}
+
 BCL_STATUS InitializeByteDisplayPacket(BclPacket* packet, uint8_t* payload)
 {
     return InitializeBclPacket(packet,
@@ -95,16 +106,16 @@ BCL_STATUS InitializeByteDisplayPacket(BclPacket* packet, uint8_t* payload)
 }
 
 BCL_STATUS InitializeQueryMicroscopePacket(
-    BclPacket *             pkt
+        BclPacket *             pkt
 )
 {
     return InitializeBclPacket(
-        pkt,
-        QUERY_MICROSCOPE,
-        NULL,
-        0,
-        NULL,
-        NULL
+            pkt,
+            QUERY_MICROSCOPE,
+            NULL,
+            0,
+            NULL,
+            NULL
     );
 }
 
@@ -213,6 +224,36 @@ BCL_STATUS SerializeIMUPayload(
 
     if(bytes_written)
         *bytes_written = 6 * sizeof(int16_t);
+
+    return BCL_OK;
+}
+
+BCL_STATUS SerializeCalibrateIMUPayload(
+        const BclPayloadPtr payload,
+        uint8_t * buffer,
+        uint8_t length,
+        uint8_t * bytes_written)
+{
+    const CalibrateImuPayload* ptr;
+
+    if(!buffer || !payload)
+    {
+        return BCL_INVALID_PARAMETER;
+    }
+
+    if(length < sizeof(CalibrateImuPayload))
+    {
+        return BCL_BUFFER_TOO_SMALL;
+    }
+
+    ptr = (CalibrateImuPayload*)payload;
+    buffer[0] = ptr->x_offset >> 8;
+    buffer[1] = ptr->x_offset & 0xFF;
+    buffer[2] = ptr->y_offset >> 8;
+    buffer[3] = ptr->y_offset & 0xFF;
+
+    if(bytes_written)
+        (*bytes_written) = sizeof(CalibrateImuPayload);
 
     return BCL_OK;
 }
@@ -332,6 +373,35 @@ BCL_STATUS DeserializeIMUPayload(
 
     if(bytes_read)
         (*bytes_read) = 6 * sizeof(int16_t);
+
+    return BCL_OK;
+}
+
+BCL_STATUS DeserializeCalibrateIMUPayload(
+        BclPayloadPtr payload,
+        const uint8_t* buffer,
+        uint8_t length,
+        uint8_t* bytes_read)
+{
+    CalibrateImuPayload* ptr;
+
+    if(!buffer || !payload)
+    {
+        return BCL_INVALID_PARAMETER;
+    }
+
+    //enough size?
+    if(length < sizeof(CalibrateImuPayload))
+    {
+        return BCL_BUFFER_TOO_SMALL;
+    }
+
+    ptr = (CalibrateImuPayload*) payload;
+    ptr->x_offset = ((buffer[0] << 8) || buffer[1]);
+    ptr->y_offset = ((buffer[2] << 8) || buffer[3]);
+
+    if(bytes_read)
+        (*bytes_read) = sizeof(CalibrateImuPayload);
 
     return BCL_OK;
 }

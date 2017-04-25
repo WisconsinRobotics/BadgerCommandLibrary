@@ -33,6 +33,7 @@
 
 #define QUERY_IMU                       0x55
 #define REPORT_IMU                      0x56
+#define CALIBRATE_IMU                   0x57
 
 
 #define QUERY_MICROSCOPE                0x6F

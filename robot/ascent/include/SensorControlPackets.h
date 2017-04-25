@@ -37,6 +37,12 @@ typedef struct ImuPayload
     int16_t z_orient;
 } ImuPayload;
 
+typedef struct CalibrateImuPayload
+{
+    int16_t x_offset;
+    int16_t y_offset;
+}CalibrateImuPayload;
+
 /* Initialization functions */
 
 BCL_STATUS InitializeQueryGPSPacket (
@@ -71,6 +77,11 @@ BCL_STATUS InitializeReportIMUPacket(
     ImuPayload *            payload
 );
 
+BCL_STATUS InitializeCalibrateIMUPacket(
+    BclPacket *             packet,
+    CalibrateImuPayload *   payload
+);
+
 BCL_STATUS InitializeByteDisplayPacket(
     BclPacket *             packet,
     uint8_t *               payload
@@ -103,6 +114,13 @@ BCL_STATUS SerializeIMUPayload(
         uint8_t * bytes_written
 );
 
+BCL_STATUS SerializeCalibrateIMUPayload(
+        const BclPayloadPtr payload,
+        uint8_t * buffer,
+        uint8_t length,
+        uint8_t * bytes_written
+);
+
 BCL_STATUS SerializeByteDisplayPayload(
         const BclPayloadPtr payload,
         uint8_t* buffer,
@@ -127,6 +145,13 @@ BCL_STATUS DeserializeSoilPayload(
 );
 
 BCL_STATUS DeserializeIMUPayload(
+        BclPayloadPtr payload,
+        const uint8_t* buffer,
+        uint8_t length,
+        uint8_t* bytes_read
+);
+
+BCL_STATUS DeserializeCalibrateIMUPayload(
         BclPayloadPtr payload,
         const uint8_t* buffer,
         uint8_t length,
