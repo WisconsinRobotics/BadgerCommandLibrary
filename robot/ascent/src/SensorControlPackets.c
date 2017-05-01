@@ -88,7 +88,7 @@ BCL_STATUS InitializeCalibrateIMUPacket(BclPacket* packet, CalibrateImuPayload* 
 {
     return InitializeBclPacket(
             packet,
-            REPORT_IMU,
+            CALIBRATE_IMU,
             payload,
             sizeof(CalibrateImuPayload),
             &SerializeCalibrateIMUPayload,
