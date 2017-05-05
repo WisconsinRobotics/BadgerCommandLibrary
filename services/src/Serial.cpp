@@ -91,6 +91,8 @@ bool SerialPort::Open()
     
     memset(&commTO, 0, sizeof(COMMTIMEOUTS));
     commTO.ReadIntervalTimeout = MAXDWORD;
+    commTO.WriteTotalTimeoutConstant = 5;
+    commTO.WriteTotalTimeoutMultiplier = 5;
     if (!SetCommTimeouts(handle, &commTO))
     {
         CloseHandle(handle);
