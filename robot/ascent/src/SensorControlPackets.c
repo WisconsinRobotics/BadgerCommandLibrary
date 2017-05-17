@@ -171,7 +171,7 @@ BCL_STATUS SerializeSoilPayload (
         return BCL_INVALID_PARAMETER;
 
     //size?
-    if (length < 2 * sizeof(int8_t))
+    if (length < 4 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
     ptr = (SoilPayload *)(payload);
@@ -181,7 +181,7 @@ BCL_STATUS SerializeSoilPayload (
     buffer[3] = ptr->humidity & 0xFF;
 
     if (bytes_written)
-        *bytes_written = 2 * sizeof(int8_t);
+        *bytes_written = 4 * sizeof(int8_t);
 
     return BCL_OK;
 }
@@ -327,7 +327,7 @@ BCL_STATUS DeserializeSoilPayload (
         return BCL_INVALID_PARAMETER;
 
     //size?
-    if (length < 2 * sizeof(int8_t))
+    if (length < 4 * sizeof(int8_t))
         return BCL_BUFFER_TOO_SMALL;
 
     ptr = (SoilPayload *) payload;
@@ -335,7 +335,7 @@ BCL_STATUS DeserializeSoilPayload (
     ptr->humidity = (buffer[2] << 8) | (buffer[3]);
 
     if (bytes_read)
-        *bytes_read = 12 * sizeof(int8_t);
+        *bytes_read = 4 * sizeof(int8_t);
 
     return BCL_OK;
 }
