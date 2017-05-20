@@ -14,7 +14,8 @@ typedef enum AI_STATUS
 {
     /* 0-50: General Updates */
     AIS_FOUND_GATE = 0,
-    AIS_LOG = 1,
+    AIS_ACK = 1,
+    AIS_LOG = 2,
 
     /* 51-100: State change/status update */
     AIS_SWITCH_VISION = 51,
