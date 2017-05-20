@@ -22,6 +22,8 @@ typedef enum AI_STATUS
     AIS_SWITCH_GPS = 52,
     AIS_OBS_DETECT = 53,
     AIS_OBS_AVOID = 54,
+	AIS_IN_WATCHDOG = 55,
+	AIS_OUT_WATCHDOG = 56,
 
     /* 101-150: GPS codes */
     AIS_DIST_FROM_GOAL = 101,
