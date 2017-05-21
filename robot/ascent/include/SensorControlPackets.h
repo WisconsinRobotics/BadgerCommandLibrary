@@ -27,22 +27,6 @@ typedef struct SoilPayload
     int16_t humidity;
 } SoilPayload;
 
-typedef struct ImuPayload
-{
-    int16_t x_accel;
-    int16_t y_accel;
-    int16_t z_accel;
-    int16_t x_orient;
-    int16_t y_orient;
-    int16_t z_orient;
-} ImuPayload;
-
-typedef struct CalibrateImuPayload
-{
-    int16_t x_offset;
-    int16_t y_offset;
-}CalibrateImuPayload;
-
 /* Initialization functions */
 
 BCL_STATUS InitializeQueryGPSPacket (
@@ -74,12 +58,12 @@ BCL_STATUS InitializeQueryIMUPacket(
 
 BCL_STATUS InitializeReportIMUPacket(
     BclPacket *             packet,
-    ImuPayload *            payload
+    uint16_t *            payload
 );
 
 BCL_STATUS InitializeCalibrateIMUPacket(
     BclPacket *             packet,
-    CalibrateImuPayload *   payload
+    uint16_t *   payload
 );
 
 BCL_STATUS InitializeByteDisplayPacket(
