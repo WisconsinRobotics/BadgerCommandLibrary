@@ -21,6 +21,16 @@ typedef struct GpsPayload
     int16_t long_seconds; // (tenths of a second)
 } GpsPayload;
 
+typedef struct ImuPayload
+{
+    int16_t x_accel;
+    int16_t y_accel;
+    int16_t z_accel;
+    int16_t x_orient;
+    int16_t y_orient;
+    int16_t z_orient;
+} ImuPayload;
+
 typedef struct SoilPayload
 {
     int16_t temperature;
@@ -30,65 +40,65 @@ typedef struct SoilPayload
 /* Initialization functions */
 
 BCL_STATUS InitializeQueryGPSPacket (
-    BclPacket *             pkt
+        BclPacket *             pkt
 );
 
 BCL_STATUS InitializeReportGPSPacket (
-    BclPacket *             pkt,
-    GpsPayload *            payload
+        BclPacket *             pkt,
+        GpsPayload *            payload
 );
 
 BCL_STATUS InitializeSetGPSPacket (
-    BclPacket *             pkt,
-    GpsPayload *            payload
+        BclPacket *             pkt,
+        GpsPayload *            payload
 );
 
 BCL_STATUS InitializeQuerySoilPacket (
-    BclPacket *             pkt
+        BclPacket *             pkt
 );
 
 BCL_STATUS InitializeReportSoilPacket (
-    BclPacket *             pkt,
-    SoilPayload *           payload
+        BclPacket *             pkt,
+        SoilPayload *           payload
 );
 
 BCL_STATUS InitializeQueryIMUPacket(
-    BclPacket *             pkt
+        BclPacket *             pkt
 );
 
 BCL_STATUS InitializeReportIMUPacket(
-    BclPacket *             packet,
-    uint16_t *            payload
+        BclPacket *             packet,
+        ImuPayload *            payload
 );
 
 BCL_STATUS InitializeCalibrateIMUPacket(
-    BclPacket *             packet,
-    uint16_t *   payload
+        BclPacket *             packet,
+        uint16_t *   payload
 );
 
 BCL_STATUS InitializeByteDisplayPacket(
-    BclPacket *             packet,
-    uint8_t *               payload
+        BclPacket *             packet,
+        uint8_t *               payload
 );
 
 BCL_STATUS InitializeQueryMicroscopePacket(
-    BclPacket *             pkt
+        BclPacket *             pkt
 );
 
 /* Serialization functions */
 
 BCL_STATUS SerializeGPSPayload (
-    const BclPayloadPtr     payload,
-    uint8_t *               buffer,
-    uint8_t                 length,
-    uint8_t *               bytes_written
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
 );
 
 BCL_STATUS SerializeSoilPayload (
-    const BclPayloadPtr     payload,
-    uint8_t *               buffer,
-    uint8_t                 length,
-    uint8_t *               bytes_written
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
 );
 
 BCL_STATUS SerializeIMUPayload(
@@ -115,17 +125,17 @@ BCL_STATUS SerializeByteDisplayPayload(
 /* Deserialization functions */
 
 BCL_STATUS DeserializeGPSPayload (
-    BclPayloadPtr           payload,
-    const uint8_t *         buffer,
-    uint8_t                 length,
-    uint8_t *               bytes_read
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
 );
 
 BCL_STATUS DeserializeSoilPayload(
-    BclPayloadPtr           payload,
-    const uint8_t *         buffer,
-    uint8_t                 length,
-    uint8_t *               bytes_read
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
 );
 
 BCL_STATUS DeserializeIMUPayload(

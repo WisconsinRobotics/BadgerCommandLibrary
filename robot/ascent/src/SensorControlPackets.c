@@ -73,13 +73,13 @@ BCL_STATUS InitializeQueryIMUPacket(BclPacket *pkt)
     );
 }
 
-BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, uint16_t* payload)
+BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, ImuPayload* payload)
 {
     return InitializeBclPacket(
             packet,
             REPORT_IMU,
             payload,
-            sizeof(uint16_t),
+            6 * sizeof(int16_t),
             &SerializeIMUPayload,
             &DeserializeIMUPayload);
 }
@@ -192,7 +192,7 @@ BCL_STATUS SerializeIMUPayload(
         uint8_t length,
         uint8_t * bytes_written)
 {
-    const uint16_t* ptr;
+    const ImuPayload* ptr;
     //inputs good?
     if(!buffer || !payload)
     {
@@ -200,20 +200,36 @@ BCL_STATUS SerializeIMUPayload(
     }
 
     //enough size?
-    if(length < sizeof(uint16_t))
+    if(length < 6 * sizeof(int16_t))
     {
         return BCL_BUFFER_TOO_SMALL;
     }
 
-    ptr = (uint16_t*)payload;
+    ptr = (ImuPayload*)payload;
     //The order of the data in the buffer is 1) x accel, 2) y accel, 3) z accell,
     //4) x orient, 5)y orient , 6) z orient
     //and the data is big endian
-    buffer[0] = (*ptr) >> 8;
-    buffer[1] = *ptr;
+    //x accel
+    buffer[0] = 0;
+    buffer[1] = 0;
+    //y accel
+    buffer[2] = 0;
+    buffer[3] = 0;
+    //z accel
+    buffer[4] = 0;
+    buffer[5] = 0;
+    //x orient
+    buffer[6] = 0;
+    buffer[7] = 0;
+    //y orient
+    buffer[8] = 0;
+    buffer[9] = 0;
+    //z orient
+    buffer[10] = (ptr->z_orient) >> 8;
+    buffer[11] = ptr->z_orient;
 
     if(bytes_written)
-        *bytes_written = sizeof(uint16_t);
+        *bytes_written = 6 * sizeof(int16_t);
 
     return BCL_OK;
 }
@@ -334,7 +350,7 @@ BCL_STATUS DeserializeIMUPayload(
         uint8_t length,
         uint8_t* bytes_read)
 {
-    uint16_t* ptr;
+    ImuPayload* ptr;
 
     //inputs good?
     if(!buffer || !payload)
@@ -348,14 +364,19 @@ BCL_STATUS DeserializeIMUPayload(
         return BCL_BUFFER_TOO_SMALL;
     }
 
-    ptr = (uint16_t*)payload;
+    ptr = (ImuPayload*)payload;
     //The order of the data in the buffer is 1) x accel, 2) y accel, 3) z accell,
     //4) x orient, 5)y orient , 6) z orient
     //and the data is big endian
-    (*ptr) = (buffer[0] << 8) | buffer[1];
+    ptr->x_accel = (buffer[0] << 8) | buffer[1];
+    ptr->y_accel = (buffer[2] << 8) | buffer[3];
+    ptr->z_accel = (buffer[4] << 8) | buffer[5];
+    ptr->x_orient = (buffer[6] << 8) | buffer[7];
+    ptr->y_orient = (buffer[8] << 8) | buffer[9];
+    ptr->z_orient = (buffer[10] << 8) | buffer[11];
 
     if(bytes_read)
-        (*bytes_read) = sizeof(uint16_t);
+        (*bytes_read) = 6 * sizeof(int16_t);
 
     return BCL_OK;
 }
