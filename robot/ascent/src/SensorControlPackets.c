@@ -84,13 +84,13 @@ BCL_STATUS InitializeReportIMUPacket(BclPacket* packet, ImuPayload* payload)
             &DeserializeIMUPayload);
 }
 
-BCL_STATUS InitializeCalibrateIMUPacket(BclPacket* packet, uint16_t* payload)
+BCL_STATUS InitializeCalibrateIMUPacket(BclPacket* packet, CalibrateImuPayload* payload)
 {
     return InitializeBclPacket(
             packet,
             CALIBRATE_IMU,
             payload,
-            sizeof(uint16_t),
+            2 * sizeof(int16_t),
             &SerializeCalibrateIMUPayload,
             &DeserializeCalibrateIMUPayload);
 }
@@ -240,24 +240,26 @@ BCL_STATUS SerializeCalibrateIMUPayload(
         uint8_t length,
         uint8_t * bytes_written)
 {
-    const uint16_t* ptr;
+    const CalibrateImuPayload* ptr;
 
     if(!buffer || !payload)
     {
         return BCL_INVALID_PARAMETER;
     }
 
-    if(length < sizeof(uint16_t))
+    if(length < 2 * sizeof(int16_t))
     {
         return BCL_BUFFER_TOO_SMALL;
     }
 
     ptr = (uint16_t*)payload;
-    buffer[0] = (*ptr) >> 8;
-    buffer[1] = (*ptr) & 0xFF;
+    buffer[0] = ptr->x_offset >> 8;
+    buffer[1] = ptr->x_offset & 0xFF;
+    buffer[2] = ptr->y_offset >> 8;
+    buffer[3] = ptr->y_offset & 0xFF;
 
     if(bytes_written)
-        (*bytes_written) = sizeof(uint16_t);
+        (*bytes_written) = 2 * sizeof(int16_t);
 
     return BCL_OK;
 }
@@ -387,7 +389,7 @@ BCL_STATUS DeserializeCalibrateIMUPayload(
         uint8_t length,
         uint8_t* bytes_read)
 {
-    uint16_t* ptr;
+    CalibrateImuPayload* ptr;
 
     if(!buffer || !payload)
     {
@@ -395,16 +397,17 @@ BCL_STATUS DeserializeCalibrateIMUPayload(
     }
 
     //enough size?
-    if(length < sizeof(uint16_t))
+    if(length < 2 * sizeof(int16_t))
     {
         return BCL_BUFFER_TOO_SMALL;
     }
 
-    ptr = (uint16_t*) payload;
-    (*ptr) = ((buffer[0] << 8) | buffer[1]);
+    ptr = (CalibrateImuPayload*) payload;
+    ptr->x_offset = ((buffer[0] << 8) | buffer[1]);
+    ptr->y_offset = ((buffer[2] << 8) | buffer[3]);
 
     if(bytes_read)
-        (*bytes_read) = sizeof(uint16_t);
+        (*bytes_read) = 2 * sizeof(int16_t);
 
     return BCL_OK;
 }

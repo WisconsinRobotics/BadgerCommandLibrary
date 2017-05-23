@@ -31,6 +31,12 @@ typedef struct ImuPayload
     int16_t z_orient;
 } ImuPayload;
 
+typedef struct CalibrateImuPayload
+{
+    int16_t x_offset;
+    int16_t y_offset;
+}CalibrateImuPayload;
+
 typedef struct SoilPayload
 {
     int16_t temperature;
@@ -73,7 +79,7 @@ BCL_STATUS InitializeReportIMUPacket(
 
 BCL_STATUS InitializeCalibrateIMUPacket(
         BclPacket *             packet,
-        uint16_t *   payload
+        CalibrateImuPayload *   payload
 );
 
 BCL_STATUS InitializeByteDisplayPacket(
