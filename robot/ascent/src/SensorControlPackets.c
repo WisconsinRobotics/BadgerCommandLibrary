@@ -222,8 +222,8 @@ BCL_STATUS SerializeIMUPayload(
     buffer[6] = 0;
     buffer[7] = 0;
     //y orient
-    buffer[8] = 0;
-    buffer[9] = 0;
+    buffer[8] = (ptr->y_orient) >> 8;
+    buffer[9] = ptr->y_orient;
     //z orient
     buffer[10] = (ptr->z_orient) >> 8;
     buffer[11] = ptr->z_orient;
@@ -252,7 +252,8 @@ BCL_STATUS SerializeCalibrateIMUPayload(
         return BCL_BUFFER_TOO_SMALL;
     }
 
-    ptr = (uint16_t*)payload;
+    ptr = (CalibrateImuPayload*)payload;
+
     buffer[0] = ptr->x_offset >> 8;
     buffer[1] = ptr->x_offset & 0xFF;
     buffer[2] = ptr->y_offset >> 8;
