@@ -33,10 +33,10 @@ typedef enum AI_STATUS
     AIS_DIST_DETECT_BALL = 152,
     AIS_BEGAN_SCAN = 153,
 
-    /* 251-255: Error codes */
-    AIS_FATAL_ERROR = 251,
-    AIS_CONN_LOST = 252,
-    AIS_CAM_ERR = 253
+    /* 201-255: Error codes */
+    AIS_FATAL_ERROR = 201,
+    AIS_CONN_LOST = 202,
+    AIS_CAM_ERR = 203
 } AI_STATUS;
 
 /* Payload definitions */
