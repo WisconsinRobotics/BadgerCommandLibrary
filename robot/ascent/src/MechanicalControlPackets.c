@@ -150,6 +150,21 @@ BCL_STATUS InitializeStartCarHornPacket(
     );
 }
 
+BCL_STATUS InitializeSoilDoorPayloadPacket(
+    BclPacket *             pkt,
+    SoilDoorPayload *       payload
+)
+{
+    return InitializeBclPacket(
+            pkt,
+            SET_SOIL_DOOR_SPEED,
+            payload,
+            sizeof(int8_t),
+            &SerializeSoilDoorPayload,
+            &DeserializeSoilDoorPayload
+    );
+}
+
 BCL_STATUS SerializeTankDriveSpeedPayload(
         const BclPayloadPtr     payload,
         uint8_t *               buffer,
@@ -305,6 +320,31 @@ BCL_STATUS SerializeCarHornPayload (
 
     if(bytes_written)
         *bytes_written = sizeof(uint16_t);
+
+    return BCL_OK;
+}
+
+
+BCL_STATUS SerializeSoilDoorPayload (
+    const BclPayloadPtr payload,
+    uint8_t *           buffer,
+    uint8_t             length,
+    uint8_t *           bytes_written
+)
+{
+    const int8_t * position;
+
+    if(!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if(length < sizeof(int8_t))
+        return BCL_BUFFER_TOO_SMALL;
+    
+    position = (const int8_t *)payload;
+    buffer[0] = *position;
+
+    if(bytes_written)
+        *bytes_written = sizeof(int8_t);
 
     return BCL_OK;
 }
@@ -465,3 +505,27 @@ BCL_STATUS DeserializeCarHornPayload(
     return BCL_OK;
 
 }
+
+BCL_STATUS DeserializeSoilDoorPayload (
+    BclPayloadPtr       payload,
+    const uint8_t *     buffer,
+    uint8_t             length,
+    uint8_t *           bytes_read
+){
+    int8_t * position;
+    
+    if(!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if(length < sizeof(int8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    position = (int8_t *)payload;
+    *position = buffer[0];
+
+    if(bytes_read)
+        *bytes_read = sizeof(int8_t);
+
+    return BCL_OK;
+}
+

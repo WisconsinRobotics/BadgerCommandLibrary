@@ -22,6 +22,8 @@
 
 #define START_CAR_HORN                  0x30
 
+#define SET_SOIL_DOOR_SPEED             0x31
+
 
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50

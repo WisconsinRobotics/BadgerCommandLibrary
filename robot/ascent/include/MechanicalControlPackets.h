@@ -43,6 +43,11 @@ typedef struct TurretPositionPayload
     int8_t tilt;
 } TurretPositionPayload;
 
+typedef struct SoilDoorPayload
+{
+    int8_t position;
+} SoilDoorPayload;
+
 /* Initialization function definitions */
 
 BCL_STATUS InitializeSetTankDriveSpeedPacket(
@@ -93,6 +98,11 @@ BCL_STATUS InitializeStartCarHornPacket(
     uint16_t *              payload
 );
 
+BCL_STATUS InitializeSoilDoorPayloadPacket(
+    BclPacket *             pkt,
+    SoilDoorPayload *       payload
+);
+
 /* Serialization function definitions */
 
 BCL_STATUS SerializeTankDriveSpeedPayload (
@@ -131,6 +141,13 @@ BCL_STATUS SerializeFreezeTurretPayload (
 );
 
 BCL_STATUS SerializeCarHornPayload (
+    const BclPayloadPtr payload,
+    uint8_t *           buffer,
+    uint8_t             length,
+    uint8_t *           bytes_written
+);
+
+BCL_STATUS SerializeSoilDoorPayload (
     const BclPayloadPtr payload,
     uint8_t *           buffer,
     uint8_t             length,
@@ -179,6 +196,13 @@ BCL_STATUS DeserializeCarHornPayload(
    const uint8_t *          buffer,
    uint8_t                  length,
    uint8_t *                bytes_read
+);
+
+BCL_STATUS DeserializeSoilDoorPayload (
+    BclPayloadPtr           payload,
+    const uint8_t *         buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_read
 );
 
 #ifdef __cplusplus
