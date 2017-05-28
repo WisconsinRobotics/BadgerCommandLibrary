@@ -157,7 +157,7 @@ BCL_STATUS InitializeSoilDoorPayloadPacket(
 {
     return InitializeBclPacket(
             pkt,
-            SET_SOIL_DOOR_SPEED,
+            SET_SOIL_DOOR_POSITION,
             payload,
             sizeof(int8_t),
             &SerializeSoilDoorPayload,

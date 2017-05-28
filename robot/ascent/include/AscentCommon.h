@@ -22,7 +22,7 @@
 
 #define START_CAR_HORN                  0x30
 
-#define SET_SOIL_DOOR_SPEED             0x31
+#define SET_SOIL_DOOR_POSITION          0x31
 
 
 /* Sensor packets (0x50 - 0x6F) */
