@@ -5,7 +5,6 @@ using namespace BCL;
 
 SerialPort::SerialPort()
 {
-    this->port = nullptr;
     this->baud = 0;
     this->opened = false;
     this->handle = INVALID_SERIAL_PORT_HANDLE;
@@ -16,7 +15,7 @@ SerialPort::SerialPort(std::string port, int baud)
     this->port = port;
     this->baud = baud;
     this->opened = false;
-	this->handle = INVALID_SERIAL_PORT_HANDLE;
+    this->handle = INVALID_SERIAL_PORT_HANDLE;
 }
 
 SerialPort::~SerialPort()
