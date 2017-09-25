@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
 
 set(ROBOT "NONE" CACHE STRING "Build BCL with the specified robot packets. By default, only core BCL messages will be built.")
-set(ROBOT_CONFIG Ascent Insomnia)
+set(ROBOT_CONFIG Ascent Insomnia URC2018)
 set(CMAKE_BUILD_TYPE Debug)
 
 if (${ROBOT} STREQUAL "NONE")
@@ -34,6 +34,11 @@ if (${ROBOT} STREQUAL "Ascent")
     include_directories(${ASCENT_BASE_DIR}/include)
     file(GLOB ASCENT_SRC ${ASCENT_BASE_DIR}/**/*)
     add_library(${PROJECT_NAME} STATIC ${ASCENT_SRC} ${BCL_PACKET_SRC} ${BCL_SERVICES_SRC})
+elseif (${ROBOT} STREQUAL "URC2018")
+    set(URC2018_BASE_DIR ${BCL_BASE_DIR}/robot/urc2018)
+    include_directories(${URC2018_BASE_DIR}/include)
+    file(GLOB URC2018_SRC ${URC2018_BASE_DIR}/**/*)
+    add_library(${PROJECT_NAME} STATIC ${URC2018_SRC} ${BCL_PACKET_SRC} ${BCL_SERVICES_SRC})
 else () 
     # default - just BCL only
     add_library(${PROJECT_NAME} STATIC ${BCL_PACKET_SRC} ${BCL_SERVICES_SRC})
