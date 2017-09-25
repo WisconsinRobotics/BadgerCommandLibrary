@@ -138,7 +138,7 @@ Cmake 3.3 or greater is required to build for Windows and Linux. You can configu
 specifying it on the command line. Note: if the robot flag is omitted, only the core library will be built. 
 ```
 cd build/
-cmake [-DROBOT=Ascent|NONE] ..
+cmake [-DROBOT=Ascent|NONE] .
 cmake --build .
 ```
 
