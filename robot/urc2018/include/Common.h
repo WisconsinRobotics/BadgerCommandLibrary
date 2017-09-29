@@ -1,5 +1,5 @@
-#ifndef _ASCENT_COMMON_H
-#define _ASCENT_COMMON_H
+#ifndef _COMMON_H
+#define _COMMON_H
 
 /* Opcode definitions */
 
