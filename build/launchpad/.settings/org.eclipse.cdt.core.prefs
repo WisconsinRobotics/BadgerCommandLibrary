@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Debug.1787769712.481514589/append=true
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Debug.1787769712.481514589/appendContributed=true
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Debug.1787769712/append=true
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Debug.1787769712/appendContributed=true
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.690572724/SRC_ROOT/delimiter=;
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.690572724/SRC_ROOT/operation=append
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.690572724/SRC_ROOT/value=${PWD}../..
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.690572724/append=true
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.690572724/appendContributed=true
