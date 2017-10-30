@@ -27,7 +27,7 @@ BCL_STATUS InitializeSetAllWheelSpeedPacket(
             pkt,
             SET_ALL_WHEEL_SPEED,
             payload,
-            sizeof(uint8_t) + 6 * sizeof(int8_t),
+            sizeof(int8_t) + 4 * sizeof(int8_t),
             &SerializeAllWheelSpeedPayload,
             &DeserializeAllWheelSpeedPayload
     );
