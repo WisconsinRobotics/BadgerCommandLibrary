@@ -1,3 +1,4 @@
+#if ROBOT == Amelio
 #include "MechanicalControlPackets.h"
 #include "Packet.h"
 #include <string.h>
@@ -131,3 +132,4 @@ BCL_STATUS DeserializeTankDriveSpeedPayload(
 
 	return BCL_OK;
 }
+#endif

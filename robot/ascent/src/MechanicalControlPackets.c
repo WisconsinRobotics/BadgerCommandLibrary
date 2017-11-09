@@ -1,3 +1,4 @@
+#if ROBOT == Ascent
 #include "MechanicalControlPackets.h"
 #include "Packet.h"
 #include <string.h>
@@ -528,4 +529,4 @@ BCL_STATUS DeserializeSoilDoorPayload (
 
     return BCL_OK;
 }
-
+#endif

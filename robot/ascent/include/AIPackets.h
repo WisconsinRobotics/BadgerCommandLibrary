@@ -1,3 +1,4 @@
+#if ROBOT == Ascent
 #ifndef _AI_PACKETS_H
 #define _AI_PACKETS_H
 
@@ -108,5 +109,6 @@ BCL_STATUS DeserializeAIDebugInfoPayload (
 
 #ifdef __cplusplus
 }
+#endif
 #endif
 #endif

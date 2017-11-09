@@ -1,3 +1,4 @@
+#if ROBOT == Ascent
 #ifndef _ASCENT_COMMON_H
 #define _ASCENT_COMMON_H
 
@@ -60,4 +61,5 @@
 #define WRIST_ROT_INDEX                 4
 #define CLAW_INDEX                      5
 
+#endif
 #endif

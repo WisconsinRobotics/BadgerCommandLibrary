@@ -1,3 +1,4 @@
+#if ROBOT == Amelio
 #ifndef _SENSOR_CONTROL_PACKETS_H
 #define _SENSOR_CONTROL_PACKETS_H
 
@@ -117,4 +118,5 @@ BCL_STATUS DeserializeCalibrateIMUPayload(
 }
 #endif
 
+#endif
 #endif

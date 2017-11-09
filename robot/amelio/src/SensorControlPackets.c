@@ -1,3 +1,4 @@
+#if ROBOT == Amelio
 #include "SensorControlPackets.h"
 #include <stddef.h>
 
@@ -290,3 +291,4 @@ BCL_STATUS DeserializeCalibrateIMUPayload(
 
     return BCL_OK;
 }
+#endif

@@ -1,3 +1,4 @@
+#if ROBOT == Atlas
 #include "MechanicalControlPackets.h"
 #include "Packet.h"
 #include <string.h>
@@ -139,4 +140,4 @@ BCL_STATUS DeserializeAllWheelSpeedPayload(
 
     return BCL_OK;
 }
-
+#endif

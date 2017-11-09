@@ -1,3 +1,4 @@
+#if ROBOT == Atlas
 #ifndef _ATLAS_COMMON_H
 #define _ATLAS_COMMON_H
 
@@ -7,7 +8,7 @@
 
 /* Mechanical packets (0x20 - 0x4F) */
 #define SET_TANK_DRIVE_SPEED		0x20
-#define SET_ALL_WHEEL_SPEED		0x21
+#define SET_ALL_WHEEL_SPEED			0x21
 
 /* Other Atlas definitions */
 #define FRONT_LEFT_WHEEL                0
@@ -17,4 +18,5 @@
 
 #define NUMBER_OF_WHEELS				4
 
+#endif
 #endif
