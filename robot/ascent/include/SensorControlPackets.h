@@ -1,3 +1,4 @@
+#if ROBOT == Ascent
 #ifndef _SENSOR_CONTROL_PACKETS_H
 #define _SENSOR_CONTROL_PACKETS_H
 
@@ -169,4 +170,5 @@ BCL_STATUS DeserializeByteDisplayPayload(
 }
 #endif
 
+#endif
 #endif

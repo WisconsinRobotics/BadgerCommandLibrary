@@ -1,3 +1,4 @@
+#if ROBOT == Amelio
 #ifndef _COMMON_H
 #define _COMMON_H
 
@@ -48,4 +49,5 @@
 
 #define NUMBER_OF_WHEELS				6
 
+#endif
 #endif

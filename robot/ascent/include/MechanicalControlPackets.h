@@ -1,3 +1,4 @@
+#if ROBOT == Ascent
 #ifndef _MECHANICAL_CONTROL_PACKETS_H
 #define _MECHANICAL_CONTROL_PACKETS_H
 
@@ -209,4 +210,5 @@ BCL_STATUS DeserializeSoilDoorPayload (
 }
 #endif
 
+#endif
 #endif

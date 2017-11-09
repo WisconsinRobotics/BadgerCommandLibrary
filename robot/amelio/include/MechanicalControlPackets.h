@@ -1,3 +1,4 @@
+#if ROBOT == Amelio
 #ifndef _MECHANICAL_CONTROL_PACKETS_H
 #define _MECHANICAL_CONTROL_PACKETS_H
 
@@ -66,4 +67,5 @@ extern "C" {
 }
 #endif
 
+#endif
 #endif

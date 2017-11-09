@@ -1,3 +1,4 @@
+#if ROBOT == Ascent
 #include "SensorControlPackets.h"
 #include <stddef.h>
 
@@ -433,4 +434,4 @@ BCL_STATUS DeserializeByteDisplayPayload(BclPayloadPtr payload,
 
     return BCL_OK;
 }
-
+#endif

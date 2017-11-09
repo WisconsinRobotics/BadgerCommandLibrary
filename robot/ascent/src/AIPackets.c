@@ -1,3 +1,4 @@
+#if ROBOT == Ascent
 #include "AIPackets.h"
 #include <string.h>
 
@@ -132,3 +133,4 @@ BCL_STATUS DeserializeAIDebugInfoPayload (
 
     return BCL_OK;
 }
+#endif
