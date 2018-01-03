@@ -10,6 +10,10 @@
 #define SET_TANK_DRIVE_SPEED		0x20
 #define SET_ALL_WHEEL_SPEED			0x21
 
+/* Sensor packets (0x50 - 0x6F) */
+#define QUERY_BAT						0x50
+#define REPORT_BAT						0x51
+
 /* Other Atlas definitions */
 #define FRONT_LEFT_WHEEL                0
 #define BACK_LEFT_WHEEL                 1
