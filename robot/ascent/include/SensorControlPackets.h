@@ -44,6 +44,11 @@ typedef struct SoilPayload
     int16_t humidity;
 } SoilPayload;
 
+typedef struct BatPayload
+{
+	int32_t current;
+} BatPayload;
+
 /* Initialization functions */
 
 BCL_STATUS InitializeQueryGPSPacket (
@@ -92,6 +97,15 @@ BCL_STATUS InitializeQueryMicroscopePacket(
         BclPacket *             pkt
 );
 
+BCL_STATUS InitializeQueryBatPacket(
+		BclPacket *				pkt
+);
+
+BCL_STATUS InitializeReportBatPacket(
+		BclPacket *				pkt,
+		BatPayload *		payload
+);
+
 /* Serialization functions */
 
 BCL_STATUS SerializeGPSPayload (
@@ -129,6 +143,13 @@ BCL_STATUS SerializeByteDisplayPayload(
         uint8_t* bytes_written
 );
 
+BCL_STATUS SerializeBatPayload(
+	const BclPayloadPtr payload,
+	uint8_t* buffer,
+	uint8_t length,
+	uint8_t* bytes_written
+);
+
 /* Deserialization functions */
 
 BCL_STATUS DeserializeGPSPayload (
@@ -164,6 +185,13 @@ BCL_STATUS DeserializeByteDisplayPayload(
         const uint8_t* buffer,
         uint8_t length,
         uint8_t* bytes_read
+);
+
+BCL_STATUS DeserializeBatPayload(
+	BclPayloadPtr payload,
+	const uint8_t* buffer,
+	uint8_t length,
+	uint8_t* bytes_read
 );
 
 #ifdef __cplusplus
