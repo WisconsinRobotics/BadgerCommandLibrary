@@ -25,6 +25,9 @@
 #define REPORT_IMU                      0x56
 #define CALIBRATE_IMU                   0x57
 
+#define QUERY_BAT						0x60
+#define REPORT_BAT						0x61
+
 #define QUERY_MICROSCOPE                0x6F
 
 /* AI packets (0x70 - 0x7F) */

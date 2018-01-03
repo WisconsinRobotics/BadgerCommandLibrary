@@ -38,6 +38,11 @@ typedef struct CalibrateImuPayload
     int16_t y_offset;
 }CalibrateImuPayload;
 
+typedef struct BatPayload
+{
+	int32_t current;
+} BatPayload;
+
 /* Initialization functions */
 
 BCL_STATUS InitializeQueryGPSPacket (
@@ -68,6 +73,15 @@ BCL_STATUS InitializeCalibrateIMUPacket(
         CalibrateImuPayload *   payload
 );
 
+BCL_STATUS InitializeQueryBatPacket(
+	BclPacket *				pkt
+);
+
+BCL_STATUS InitializeReportBatPacket(
+	BclPacket *				pkt,
+	BatPayload *		payload
+);
+
 /* Serialization functions */
 
 BCL_STATUS SerializeGPSPayload (
@@ -91,6 +105,13 @@ BCL_STATUS SerializeCalibrateIMUPayload(
         uint8_t * bytes_written
 );
 
+BCL_STATUS SerializeBatPayload(
+	const BclPayloadPtr payload,
+	uint8_t* buffer,
+	uint8_t length,
+	uint8_t* bytes_written
+);
+
 /* Deserialization functions */
 
 BCL_STATUS DeserializeGPSPayload (
@@ -112,6 +133,13 @@ BCL_STATUS DeserializeCalibrateIMUPayload(
         const uint8_t* buffer,
         uint8_t length,
         uint8_t* bytes_read
+);
+
+BCL_STATUS DeserializeBatPayload(
+	BclPayloadPtr payload,
+	const uint8_t* buffer,
+	uint8_t length,
+	uint8_t* bytes_read
 );
 
 #ifdef __cplusplus
