@@ -40,6 +40,31 @@ BCL_STATUS InitializeSetGPSPacket(BclPacket *pkt, GpsPayload *payload)
     );
 }
 
+BCL_STATUS InitializeQuerySoilPacket(BclPacket * pkt)
+{
+    return InitializeBclPacket (
+            pkt,
+            QUERY_SOIL,
+            NULL,
+            0,
+            NULL,
+            NULL
+    );
+}
+
+BCL_STATUS InitializeReportSoilPacket(BclPacket *pkt, SoilPayload *payload)
+{
+    return InitializeBclPacket (
+            pkt,
+            REPORT_SOIL,
+            payload,
+            sizeof(SoilPayload),
+            &SerializeSoilPayload,
+            &DeserializeSoilPayload
+    );
+}
+
+
 //Initializing IMU Packet
 BCL_STATUS InitializeQueryIMUPacket(BclPacket *pkt)
 {
@@ -134,6 +159,35 @@ BCL_STATUS SerializeGPSPayload (
 
     if (bytes_written)
         *bytes_written = 6 * sizeof(int16_t);
+
+    return BCL_OK;
+}
+
+BCL_STATUS SerializeSoilPayload (
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+)
+{
+    const SoilPayload *ptr;
+
+    //inputs?
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    //size?
+    if (length < 4 * sizeof(int8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    ptr = (SoilPayload *)(payload);
+    buffer[0] = ptr->temperature >> 8;
+    buffer[1] = ptr->temperature & 0xFF;
+    buffer[2] = ptr->humidity >> 8;
+    buffer[3] = ptr->humidity & 0xFF;
+
+    if (bytes_written)
+        *bytes_written = 4 * sizeof(int8_t);
 
     return BCL_OK;
 }
@@ -276,6 +330,33 @@ BCL_STATUS DeserializeGPSPayload (
 
     if (bytes_read)
         *bytes_read = 6 * sizeof(int16_t);
+
+    return BCL_OK;
+}
+
+BCL_STATUS DeserializeSoilPayload (
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+)
+{
+    SoilPayload *ptr;
+
+    //inputs?
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    //size?
+    if (length < 4 * sizeof(int8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    ptr = (SoilPayload *) payload;
+    ptr->temperature = (buffer[0] << 8) | (buffer[1]);
+    ptr->humidity = (buffer[2] << 8) | (buffer[3]);
+
+    if (bytes_read)
+        *bytes_read = 4 * sizeof(int8_t);
 
     return BCL_OK;
 }

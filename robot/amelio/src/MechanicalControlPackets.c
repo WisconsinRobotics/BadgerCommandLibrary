@@ -77,8 +77,8 @@ BCL_STATUS SerializeTankDriveSpeedPayload(
 
 
 BCL_STATUS DeserializeAllWheelSpeedPayload(
-	const BclPayloadPtr     payload,
-	uint8_t *				buffer,
+	BclPayloadPtr     		payload,
+	const uint8_t *			buffer,
 	uint8_t                 bufferLength,
 	uint8_t *               bytes_read
 )
@@ -110,8 +110,8 @@ BCL_STATUS DeserializeAllWheelSpeedPayload(
 
 
 BCL_STATUS DeserializeTankDriveSpeedPayload(
-	const BclPayloadPtr           payload,
-	uint8_t *				  buffer,
+	BclPayloadPtr           payload,
+	const uint8_t *			buffer,
 	uint8_t                 bufferLength,
 	uint8_t *               bytes_read
 	)
