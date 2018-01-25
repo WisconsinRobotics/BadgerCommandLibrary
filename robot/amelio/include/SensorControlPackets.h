@@ -38,6 +38,12 @@ typedef struct CalibrateImuPayload
     int16_t y_offset;
 }CalibrateImuPayload;
 
+typedef struct SoilPayload
+{
+    int16_t temperature;
+    int16_t humidity;
+} SoilPayload;
+
 typedef struct BatPayload
 {
 	int32_t current;
@@ -73,6 +79,15 @@ BCL_STATUS InitializeCalibrateIMUPacket(
         CalibrateImuPayload *   payload
 );
 
+BCL_STATUS InitializeQuerySoilPacket (
+        BclPacket *             pkt
+);
+
+BCL_STATUS InitializeReportSoilPacket (
+        BclPacket *             pkt,
+        SoilPayload *           payload
+);
+
 BCL_STATUS InitializeQueryBatPacket(
 	BclPacket *				pkt
 );
@@ -85,6 +100,13 @@ BCL_STATUS InitializeReportBatPacket(
 /* Serialization functions */
 
 BCL_STATUS SerializeGPSPayload (
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+);
+
+BCL_STATUS SerializeSoilPayload (
         const BclPayloadPtr     payload,
         uint8_t *               buffer,
         uint8_t                 length,
@@ -115,6 +137,13 @@ BCL_STATUS SerializeBatPayload(
 /* Deserialization functions */
 
 BCL_STATUS DeserializeGPSPayload (
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+);
+
+BCL_STATUS DeserializeSoilPayload(
         BclPayloadPtr           payload,
         const uint8_t *         buffer,
         uint8_t                 length,
