@@ -28,12 +28,31 @@ extern "C" {
 		int8_t back_right;
 	} AllWheelSpeedPayload;
 
+    typedef struct ArmPositionPayload
+    {
+        int8_t turntable;
+        int8_t humerus;
+        int8_t forearm;
+        int8_t wrist_up_down;
+        int8_t wrist_rot;
+        int8_t claw;
+    } ArmPositionPayload;
+
 /* Initialization function definitions */
 	BCL_STATUS InitializeSetTankDriveSpeedPacket(
 		BclPacket *pkt, TankDrivePayload *payload);
 	BCL_STATUS InitializeAllWheelSpeedPacket(
 		BclPacket *pkt, AllWheelSpeedPayload *payload);
 
+    BCL_STATUS InitializeQueryArmPositionPacket (
+        BclPacket * pkt);
+
+    BCL_STATUS InitializeReportArmPositionPacket (
+        BclPacket * pkt, ArmPositionPayload * payload);
+
+    BCL_STATUS InitializeSetArmPositionPacket(
+        BclPacket * pkt, ArmPositionPayload * payload);
+    
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
 		const BclPayloadPtr     payload,
@@ -49,6 +68,13 @@ extern "C" {
 		uint8_t *               bytes_written
 	);
 
+    BCL_STATUS SerializeArmPositionPayload (
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+    );
+
 /* Deserialization function definitions */
 	BCL_STATUS DeserializeAllWheelSpeedPayload(
 		BclPayloadPtr   		payload,
@@ -63,6 +89,13 @@ extern "C" {
 		uint8_t                 bufferlength,
 		uint8_t *               bytes_read
 	);
+
+    BCL_STATUS DeserializeArmPositionPayload(
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+    );
 #ifdef __cplusplus
 }
 #endif

@@ -12,6 +12,9 @@
 #define SET_TANK_DRIVE_SPEED            0x20
 #define SET_ALL_WHEEL_SPEED             0x21
 
+#define QUERY_ARM_POS                   0x22
+#define REPORT_ARM_POS                  0x23
+#define SET_ARM_POS                     0x24
 
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
@@ -25,8 +28,8 @@
 #define REPORT_IMU                      0x56
 #define CALIBRATE_IMU                   0x57
 
-#define QUERY_BAT						0x60
-#define REPORT_BAT						0x61
+#define QUERY_BAT                       0x60
+#define REPORT_BAT                      0x61
 
 #define QUERY_MICROSCOPE                0x6F
 
