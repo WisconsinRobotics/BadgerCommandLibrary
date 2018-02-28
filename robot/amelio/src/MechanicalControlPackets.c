@@ -73,6 +73,35 @@ BCL_STATUS InitializeSetArmPositionPacket(
 	);
 }
 
+BCL_STATUS InitializeSetRideHeightSpeedPacket(
+	BclPacket *pkt, 
+    RideHeightPayload *payload
+) {
+
+	return InitializeBclPacket(
+		pkt,
+		SET_RIDE_HEIGHT_SPEED,
+		payload,
+		sizeof(RideHeightPayload),
+		&SerializeRideHeightSpeedPayload,
+		&DeserializeRideHeightSpeedPayload
+	);
+}
+
+BCL_STATUS InitializeAllRideHeightSpeedPacket(
+	BclPacket *pkt, 
+    AllRideHeightSpeedPayload *payload
+) {
+	return InitializeBclPacket(
+		pkt,
+		SET_ALL_RIDE_HEIGHT_SPEED,
+		payload,
+		sizeof(AllRideHeightSpeedPayload),
+		&SerializeAllRideHeightSpeedPayload,
+		&DeserializeAllRideHeightSpeedPayload
+	);
+}
+
 BCL_STATUS SerializeAllWheelSpeedPayload(
 	const BclPayloadPtr     payload,
 	uint8_t *               buffer,
@@ -150,6 +179,50 @@ BCL_STATUS  SerializeArmPositionPayload(
     return BCL_OK;
 }
 
+BCL_STATUS SerializeRideHeightSpeedPayload(
+	const BclPayloadPtr     payload,
+	uint8_t *               buffer,
+	uint8_t                 bufferLength,
+	uint8_t *               bytes_written
+)
+{
+	const RideHeightPayload *rhp;
+	if (!payload || !buffer)
+		return BCL_INVALID_PARAMETER;
+	if (bufferLength < 2*sizeof(int8_t))
+		return BCL_BUFFER_TOO_SMALL;
+
+	rhp = (const RideHeightPayload*)payload;
+	buffer[0] = rhp->left;
+	buffer[1] = rhp->right;
+
+	if (bytes_written)
+		*bytes_written = sizeof(*rhp);
+	return BCL_OK;
+}
+
+BCL_STATUS SerializeAllRideHeightSpeedPayload(
+	const BclPayloadPtr     payload,
+	uint8_t *               buffer,
+	uint8_t                 bufferLength,
+	uint8_t *               bytes_written
+) {
+	const AllRideHeightSpeedPayload *arhsp;
+	if (!payload || !buffer)
+		return BCL_INVALID_PARAMETER;
+	if (bufferLength < sizeof(uint8_t) + 4*sizeof(int8_t))
+		return BCL_BUFFER_TOO_SMALL;
+
+	arhsp = (const AllRideHeightSpeedPayload*)payload;
+	buffer[FRONT_LEFT_ACTUATOR] = arhsp->front_left;
+	buffer[BACK_LEFT_ACTUATOR] = arhsp->back_left;
+	buffer[FRONT_RIGHT_ACTUATOR] = arhsp->front_right;
+	buffer[BACK_RIGHT_ACTUATOR] = arhsp->back_right;
+
+	if (bytes_written)
+		*bytes_written = sizeof(uint8_t) + sizeof(*arhsp);
+    return BCL_OK;
+}
 
 BCL_STATUS DeserializeAllWheelSpeedPayload(
 	BclPayloadPtr     		payload,
@@ -232,4 +305,56 @@ BCL_STATUS DeserializeArmPositionPayload(
     
     return BCL_OK;
 }
+
+BCL_STATUS DeserializeRideHeightSpeedPayload(
+	BclPayloadPtr           payload,
+	const uint8_t *			buffer,
+	uint8_t                 bufferLength,
+	uint8_t *               bytes_read
+	)
+{
+	if (!payload || !buffer)
+		return BCL_INVALID_PARAMETER;
+	if (bufferLength < 2*sizeof(int8_t))
+		return BCL_BUFFER_TOO_SMALL;
+
+	RideHeightPayload *rhp;
+
+	rhp = (RideHeightPayload*)(payload);
+	rhp->left = buffer[0];
+	rhp->right = buffer[1];
+
+	if (bytes_read)
+		*bytes_read = 2*sizeof(int8_t);
+
+	return BCL_OK;
+}
+
+BCL_STATUS DeserializeAllRideHeightSpeedPayload(
+	BclPayloadPtr     		payload,
+	const uint8_t *			buffer,
+	uint8_t                 bufferLength,
+	uint8_t *               bytes_read
+)
+{
+	if (!payload || !buffer)
+		return BCL_INVALID_PARAMETER;
+	if (bufferLength < sizeof(uint8_t) + 4*sizeof(int8_t))
+		return BCL_BUFFER_TOO_SMALL;
+
+	AllRideHeightSpeedPayload *arhsp;
+
+	arhsp = (AllWheelSpeedPayload*)(payload);
+	arhsp->front_left = buffer[FRONT_LEFT_ACTUATOR];
+	arhsp->back_left = buffer[BACK_LEFT_ACTUATOR];
+	arhsp->front_right = buffer[FRONT_RIGHT_ACTUATOR];
+	arhsp->back_right = buffer[BACK_RIGHT_ACTUATOR];
+
+
+	if (bytes_read)
+		*bytes_read = sizeof(uint8_t) + sizeof(*arhsp);
+
+	return BCL_OK;
+}
+
 #endif

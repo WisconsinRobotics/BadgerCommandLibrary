@@ -16,6 +16,9 @@
 #define REPORT_ARM_POS                  0x23
 #define SET_ARM_POS                     0x24
 
+#define SET_RIDE_HEIGHT_SPEED           0x25
+#define SET_ALL_RIDE_HEIGHT_SPEED       0x26
+
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
 #define REPORT_GPS                      0x51
@@ -46,6 +49,8 @@
 #define MIDDLE_RIGHT_WHEEL              4
 #define BACK_RIGHT_WHEEL                5
 
+#define NUMBER_OF_WHEELS                6
+
 #define TURNTABLE_INDEX                 0
 #define HUMERUS_INDEX                   1
 #define FOREARM_INDEX                   2
@@ -53,7 +58,10 @@
 #define WRIST_ROT_INDEX                 4
 #define CLAW_INDEX                      5
 
-#define NUMBER_OF_WHEELS				6
+#define FRONT_LEFT_ACTUATOR             0
+#define BACK_LEFT_ACTUATOR              1
+#define FRONT_RIGHT_ACTUATOR            2
+#define BACK_RIGHT_ACTUATOR             3
 
 #endif
 #endif

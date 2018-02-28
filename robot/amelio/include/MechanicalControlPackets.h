@@ -38,9 +38,24 @@ extern "C" {
         int8_t claw;
     } ArmPositionPayload;
 
+	typedef struct RideHeightPayload
+	{
+		int8_t left;
+		int8_t right;
+    } RideHeightPayload;
+
+	typedef struct AllRideHeightSpeedPayload
+	{
+		int8_t front_left;
+		int8_t back_left;
+		int8_t front_right;
+		int8_t back_right;
+	} AllRideHeightSpeedPayload;
+
 /* Initialization function definitions */
 	BCL_STATUS InitializeSetTankDriveSpeedPacket(
 		BclPacket *pkt, TankDrivePayload *payload);
+
 	BCL_STATUS InitializeAllWheelSpeedPacket(
 		BclPacket *pkt, AllWheelSpeedPayload *payload);
 
@@ -53,6 +68,12 @@ extern "C" {
     BCL_STATUS InitializeSetArmPositionPacket(
         BclPacket * pkt, ArmPositionPayload * payload);
     
+	BCL_STATUS InitializeSetRideHeightSpeedPacket(
+		BclPacket *pkt, RideHeightPayload *payload);
+
+	BCL_STATUS InitializeAllRideHeightSpeedSpeedPacket(
+		BclPacket *pkt, AllRightHeightSpeedPayload *payload);
+
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
 		const BclPayloadPtr     payload,
@@ -75,6 +96,20 @@ extern "C" {
         uint8_t *               bytes_written
     );
 
+	BCL_STATUS SerializeRideHeightSpeedPayload(
+		const BclPayloadPtr     payload,
+		uint8_t *               buffer,
+		uint8_t                 bufferLength,
+		uint8_t *               bytes_written
+	);
+
+	BCL_STATUS SerializeAllRideHeightSpeedPayload(
+		const BclPayloadPtr     payload,
+		uint8_t *               buffer,
+		uint8_t                 bufferLength,
+		uint8_t *               bytes_written
+	);
+
 /* Deserialization function definitions */
 	BCL_STATUS DeserializeAllWheelSpeedPayload(
 		BclPayloadPtr   		payload,
@@ -96,6 +131,21 @@ extern "C" {
         uint8_t                 length,
         uint8_t *               bytes_read
     );
+
+	BCL_STATUS DeserializeRideHeightSpeedPayload(
+		BclPayloadPtr           payload,
+		const uint8_t *		  	buffer,
+		uint8_t                 bufferlength,
+		uint8_t *               bytes_read
+	);
+
+	BCL_STATUS DeserializeAllRideHeightSpeedPayload(
+		BclPayloadPtr   		payload,
+		const uint8_t *			buffer,
+		uint8_t                 bufferlength,
+		uint8_t *               bytes_read
+	);
+
 #ifdef __cplusplus
 }
 #endif
