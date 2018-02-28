@@ -72,7 +72,7 @@ extern "C" {
 		BclPacket *pkt, RideHeightPayload *payload);
 
 	BCL_STATUS InitializeAllRideHeightSpeedSpeedPacket(
-		BclPacket *pkt, AllRightHeightSpeedPayload *payload);
+		BclPacket *pkt, AllRideHeightSpeedPayload *payload);
 
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(

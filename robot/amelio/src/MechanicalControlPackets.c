@@ -344,7 +344,7 @@ BCL_STATUS DeserializeAllRideHeightSpeedPayload(
 
 	AllRideHeightSpeedPayload *arhsp;
 
-	arhsp = (AllWheelSpeedPayload*)(payload);
+	arhsp = (AllRideHeightSpeedPayload*)(payload);
 	arhsp->front_left = buffer[FRONT_LEFT_ACTUATOR];
 	arhsp->back_left = buffer[BACK_LEFT_ACTUATOR];
 	arhsp->front_right = buffer[FRONT_RIGHT_ACTUATOR];
