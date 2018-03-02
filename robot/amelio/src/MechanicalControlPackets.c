@@ -111,7 +111,7 @@ BCL_STATUS SerializeAllWheelSpeedPayload(
 	const AllWheelSpeedPayload *awsp;
 	if (!payload || !buffer)
 		return BCL_INVALID_PARAMETER;
-	if (bufferLength < sizeof(uint8_t) + 6*sizeof(int8_t))
+	if (bufferLength < 6*sizeof(int8_t))
 		return BCL_BUFFER_TOO_SMALL;
 
 	awsp = (const AllWheelSpeedPayload*)payload;
@@ -123,7 +123,7 @@ BCL_STATUS SerializeAllWheelSpeedPayload(
 	buffer[BACK_RIGHT_WHEEL] = awsp->back_right;
 
 	if (bytes_written)
-		*bytes_written = sizeof(uint8_t) + sizeof(*awsp);
+		*bytes_written = sizeof(*awsp);
 	return BCL_OK;
 }
 
@@ -210,7 +210,7 @@ BCL_STATUS SerializeAllRideHeightSpeedPayload(
 	const AllRideHeightSpeedPayload *arhsp;
 	if (!payload || !buffer)
 		return BCL_INVALID_PARAMETER;
-	if (bufferLength < sizeof(uint8_t) + 4*sizeof(int8_t))
+	if (bufferLength < 4*sizeof(int8_t))
 		return BCL_BUFFER_TOO_SMALL;
 
 	arhsp = (const AllRideHeightSpeedPayload*)payload;
@@ -220,7 +220,7 @@ BCL_STATUS SerializeAllRideHeightSpeedPayload(
 	buffer[BACK_RIGHT_ACTUATOR] = arhsp->back_right;
 
 	if (bytes_written)
-		*bytes_written = sizeof(uint8_t) + sizeof(*arhsp);
+		*bytes_written = sizeof(*arhsp);
     return BCL_OK;
 }
 
