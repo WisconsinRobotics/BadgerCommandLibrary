@@ -19,6 +19,8 @@
 #define SET_RIDE_HEIGHT_SPEED           0x25
 #define SET_ALL_RIDE_HEIGHT_SPEED       0x26
 
+#define SET_MAST_POS                    0x27
+
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
 #define REPORT_GPS                      0x51

@@ -102,6 +102,21 @@ BCL_STATUS InitializeAllRideHeightSpeedPacket(
 	);
 }
 
+BCL_STATUS InitializeSetCameraMastPacket(
+        BclPacket *pkt,
+        CameraMastPayload *payload
+)
+{
+    return InitializeBclPacket(
+            pkt,
+            SET_MAST_POS,
+            payload,
+            2 * sizeof(int8_t),
+            &SerializeCameraMastPayload,
+            &DeserializeCameraMastPayload
+    );
+}
+
 BCL_STATUS SerializeAllWheelSpeedPayload(
 	const BclPayloadPtr     payload,
 	uint8_t *               buffer,
@@ -221,6 +236,31 @@ BCL_STATUS SerializeAllRideHeightSpeedPayload(
 
 	if (bytes_written)
 		*bytes_written = sizeof(*arhsp);
+    return BCL_OK;
+}
+
+BCL_STATUS SerializeCameraMastPayload(
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+)
+{
+    const CameraMastPayload *cmp;
+
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if (length < 2 * sizeof(int8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    cmp = (const CameraMastPayload *)payload;
+    buffer[0] = cmp->pan;
+    buffer[1] = cmp->tilt;
+
+    if (bytes_written)
+        *bytes_written = 2 * sizeof(int8_t);
+
     return BCL_OK;
 }
 
@@ -355,6 +395,31 @@ BCL_STATUS DeserializeAllRideHeightSpeedPayload(
 		*bytes_read = sizeof(uint8_t) + sizeof(*arhsp);
 
 	return BCL_OK;
+}
+
+BCL_STATUS DeserializeCameraMastPayload(
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+)
+{
+    CameraMastPayload *cmp;
+
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if (length < 2 * sizeof(int8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    cmp = (CameraMastPayload *)payload;
+    cmp->pan = buffer[0];
+    cmp->tilt = buffer[1];
+
+    if (bytes_read)
+        *bytes_read = 2 * sizeof(int8_t);
+
+    return BCL_OK;
 }
 
 #endif

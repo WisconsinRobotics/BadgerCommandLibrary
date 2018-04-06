@@ -52,6 +52,12 @@ extern "C" {
 		int8_t back_right;
 	} AllRideHeightSpeedPayload;
 
+	typedef struct CameraMastPayload
+	{
+	    int8_t pan;
+	    int8_t tilt;
+	} CameraMastPayload;
+
 /* Initialization function definitions */
 	BCL_STATUS InitializeSetTankDriveSpeedPacket(
 		BclPacket *pkt, TankDrivePayload *payload);
@@ -73,6 +79,9 @@ extern "C" {
 
 	BCL_STATUS InitializeAllRideHeightSpeedPacket(
 		BclPacket *pkt, AllRideHeightSpeedPayload *payload);
+
+	BCL_STATUS InitializeSetCameraMastPacket (
+	    BclPacket *pkt, CameraMastPayload * payload);
 
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
@@ -110,6 +119,13 @@ extern "C" {
 		uint8_t *               bytes_written
 	);
 
+	BCL_STATUS SerializeCameraMastPayload (
+	    const BclPayloadPtr     payload,
+	    uint8_t *               buffer,
+	    uint8_t                 length,
+	    uint8_t *               bytes_written
+	);
+
 /* Deserialization function definitions */
 	BCL_STATUS DeserializeAllWheelSpeedPayload(
 		BclPayloadPtr   		payload,
@@ -144,6 +160,13 @@ extern "C" {
 		const uint8_t *			buffer,
 		uint8_t                 bufferlength,
 		uint8_t *               bytes_read
+	);
+
+	BCL_STATUS DeserializeCameraMastPayload(
+	    BclPayloadPtr           payload,
+	    const uint8_t *         buffer,
+	    uint8_t                 length,
+	    uint8_t *               bytes_read
 	);
 
 #ifdef __cplusplus
