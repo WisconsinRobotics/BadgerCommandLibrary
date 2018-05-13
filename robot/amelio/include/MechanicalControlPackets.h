@@ -40,8 +40,8 @@ extern "C" {
 
 	typedef struct RideHeightPayload
 	{
-		int8_t left;
-		int8_t right;
+		int8_t front;
+		int8_t back;
     } RideHeightPayload;
 
 	typedef struct AllRideHeightSpeedPayload

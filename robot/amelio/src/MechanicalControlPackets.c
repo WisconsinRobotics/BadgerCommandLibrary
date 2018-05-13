@@ -208,8 +208,8 @@ BCL_STATUS SerializeRideHeightSpeedPayload(
 		return BCL_BUFFER_TOO_SMALL;
 
 	rhp = (const RideHeightPayload*)payload;
-	buffer[0] = rhp->left;
-	buffer[1] = rhp->right;
+	buffer[0] = rhp->front;
+	buffer[1] = rhp->back;
 
 	if (bytes_written)
 		*bytes_written = sizeof(*rhp);
@@ -361,8 +361,8 @@ BCL_STATUS DeserializeRideHeightSpeedPayload(
 	RideHeightPayload *rhp;
 
 	rhp = (RideHeightPayload*)(payload);
-	rhp->left = buffer[0];
-	rhp->right = buffer[1];
+	rhp->front = buffer[0];
+	rhp->back = buffer[1];
 
 	if (bytes_read)
 		*bytes_read = 2*sizeof(int8_t);
