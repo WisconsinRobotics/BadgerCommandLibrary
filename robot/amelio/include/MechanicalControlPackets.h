@@ -36,7 +36,19 @@ extern "C" {
         int8_t wrist_up_down;
         int8_t wrist_rot;
         int8_t claw;
+        int8_t sliding;
     } ArmPositionPayload;
+
+    typedef struct ArmSpeedPayload
+    {
+        int8_t turntable;
+        int8_t humerus;
+        int8_t forearm;
+        int8_t wrist_up_down;
+        int8_t wrist_rot;
+        int8_t claw;
+        int8_t sliding;
+    } ArmSpeedPayload;
 
 	typedef struct RideHeightPayload
 	{
@@ -74,6 +86,15 @@ extern "C" {
     BCL_STATUS InitializeSetArmPositionPacket(
         BclPacket * pkt, ArmPositionPayload * payload);
     
+    BCL_STATUS InitializeQueryArmSpeedPacket (
+        BclPacket * pkt);
+
+    BCL_STATUS InitializeReportArmSpeedPacket (
+        BclPacket * pkt, ArmPositionPayload * payload);
+
+    BCL_STATUS InitializeSetArmSpeedPacket(
+        BclPacket * pkt, ArmPositionPayload * payload);
+
 	BCL_STATUS InitializeSetRideHeightSpeedPacket(
 		BclPacket *pkt, RideHeightPayload *payload);
 
@@ -99,6 +120,13 @@ extern "C" {
 	);
 
     BCL_STATUS SerializeArmPositionPayload (
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+    );
+
+    BCL_STATUS SerializeArmSpeedPayload (
         const BclPayloadPtr     payload,
         uint8_t *               buffer,
         uint8_t                 length,
@@ -142,6 +170,13 @@ extern "C" {
 	);
 
     BCL_STATUS DeserializeArmPositionPayload(
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+    );
+
+    BCL_STATUS DeserializeArmSpeedPayload(
         BclPayloadPtr           payload,
         const uint8_t *         buffer,
         uint8_t                 length,

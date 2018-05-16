@@ -21,6 +21,10 @@
 
 #define SET_MAST_POS                    0x27
 
+#define QUERY_ARM_SPEED                 0x28
+#define REPORT_ARM_SPEED                0x29
+#define SET_ARM_SPEED                   0x2A
+
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
 #define REPORT_GPS                      0x51
@@ -59,6 +63,7 @@
 #define WRIST_UP_DOWN_INDEX             3
 #define WRIST_ROT_INDEX                 4
 #define CLAW_INDEX                      5
+#define SLIDING_INDEX                   6
 
 #define FRONT_LEFT_ACTUATOR             0
 #define BACK_LEFT_ACTUATOR              1

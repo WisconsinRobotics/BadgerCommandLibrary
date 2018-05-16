@@ -73,6 +73,47 @@ BCL_STATUS InitializeSetArmPositionPacket(
 	);
 }
 
+BCL_STATUS InitializeQueryArmSpeedPacket(
+	BclPacket *pkt
+) {
+	return InitializeBclPacket(
+		pkt,
+		QUERY_ARM_SPEED,
+		NULL,
+		0,
+		NULL,
+		NULL
+	);
+}
+
+BCL_STATUS InitializeReportArmSpeedPacket(
+	BclPacket *pkt, 
+    ArmSpeedPayload *payload
+) {
+	return InitializeBclPacket(
+		pkt,
+		REPORT_ARM_SPEED,
+		payload,
+		sizeof(ArmSpeedPayload),
+		&SerializeArmSpeedPayload,
+		&DeserializeArmSpeedPayload
+	);
+}
+
+BCL_STATUS InitializeSetArmSpeedPacket(
+	BclPacket *pkt, 
+    ArmSpeedPayload *payload
+) {
+	return InitializeBclPacket(
+		pkt,
+		SET_ARM_SPEED,
+		payload,
+		sizeof(ArmSpeedPayload),
+		&SerializeArmSpeedPayload,
+		&DeserializeArmSpeedPayload
+	);
+}
+
 BCL_STATUS InitializeSetRideHeightSpeedPacket(
 	BclPacket *pkt, 
     RideHeightPayload *payload
@@ -187,9 +228,41 @@ BCL_STATUS  SerializeArmPositionPayload(
     buffer[WRIST_UP_DOWN_INDEX] = app->wrist_up_down;
     buffer[WRIST_ROT_INDEX] = app->wrist_rot;
     buffer[CLAW_INDEX] = app->claw;
+    buffer[SLIDING_INDEX] = app->sliding;
     
     if (bytes_written)
-        *bytes_written = 6 * sizeof(int8_t);
+        *bytes_written = 7 * sizeof(int8_t);
+    
+    return BCL_OK;
+}
+
+BCL_STATUS  SerializeArmSpeedPayload(
+    const BclPayloadPtr     payload,
+    uint8_t *               buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_written
+)
+{
+    const ArmSpeedPayload *asp;
+    
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+    
+    if (length < sizeof(ArmSpeedPayload))
+        return BCL_BUFFER_TOO_SMALL;
+    
+    app = (const ArmSpeedPayload *)payload;
+    
+    buffer[TURNTABLE_INDEX] = asp->turntable;
+    buffer[HUMERUS_INDEX] = asp->humerus;
+    buffer[FOREARM_INDEX] = asp->forearm;
+    buffer[WRIST_UP_DOWN_INDEX] = asp->wrist_up_down;
+    buffer[WRIST_ROT_INDEX] = asp->wrist_rot;
+    buffer[CLAW_INDEX] = asp->claw;
+    buffer[SLIDING_INDEX] = asp->sliding;
+    
+    if (bytes_written)
+        *bytes_written = 7 * sizeof(int8_t);
     
     return BCL_OK;
 }
@@ -339,9 +412,40 @@ BCL_STATUS DeserializeArmPositionPayload(
     app->wrist_up_down = buffer[WRIST_UP_DOWN_INDEX];
     app->wrist_rot = buffer[WRIST_ROT_INDEX];
     app->claw = buffer[CLAW_INDEX];
+    app->sliding = buffer[SLIDING_INDEX];
     
     if (bytes_read)
-        *bytes_read = 6 * sizeof(int8_t);
+        *bytes_read = 7 * sizeof(int8_t);
+    
+    return BCL_OK;
+}
+
+BCL_STATUS DeserializeArmSpeedPayload(
+    BclPayloadPtr           payload,
+    const uint8_t *         buffer,
+    uint8_t                 length,
+    uint8_t *               bytes_read
+)
+{
+    ArmSpeedPayload *asp;
+    
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+    
+    if (length < sizeof(ArmSpeedPayload))
+        return BCL_BUFFER_TOO_SMALL;
+    
+    asp = (ArmPositionPayload *)payload;
+    asp->turntable = buffer[TURNTABLE_INDEX];
+    asp->humerus = buffer[HUMERUS_INDEX];
+    asp->forearm = buffer[FOREARM_INDEX];
+    asp->wrist_up_down = buffer[WRIST_UP_DOWN_INDEX];
+    asp->wrist_rot = buffer[WRIST_ROT_INDEX];
+    asp->claw = buffer[CLAW_INDEX];
+    asp->sliding = buffer[SLIDING_INDEX];
+    
+    if (bytes_read)
+        *bytes_read = 7 * sizeof(int8_t);
     
     return BCL_OK;
 }
