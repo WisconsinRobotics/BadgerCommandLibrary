@@ -28,17 +28,6 @@ extern "C" {
 		int8_t back_right;
 	} AllWheelSpeedPayload;
 
-    typedef struct ArmPositionPayload
-    {
-        int8_t turntable;
-        int8_t humerus;
-        int8_t forearm;
-        int8_t wrist_up_down;
-        int8_t wrist_rot;
-        int8_t claw;
-        int8_t sliding;
-    } ArmPositionPayload;
-
     typedef struct ArmSpeedPayload
     {
         int8_t turntable;
@@ -48,7 +37,7 @@ extern "C" {
         int8_t wrist_rot;
         int8_t claw;
         int8_t sliding;
-    } ArmSpeedPayload;
+    } ArmPayload;
 
 	typedef struct RideHeightPayload
 	{
@@ -81,19 +70,19 @@ extern "C" {
         BclPacket * pkt);
 
     BCL_STATUS InitializeReportArmPositionPacket (
-        BclPacket * pkt, ArmPositionPayload * payload);
+        BclPacket * pkt, ArmPayload * payload);
 
     BCL_STATUS InitializeSetArmPositionPacket(
-        BclPacket * pkt, ArmPositionPayload * payload);
+        BclPacket * pkt, ArmPayload * payload);
     
     BCL_STATUS InitializeQueryArmSpeedPacket (
         BclPacket * pkt);
 
     BCL_STATUS InitializeReportArmSpeedPacket (
-        BclPacket * pkt, ArmPositionPayload * payload);
+        BclPacket * pkt, ArmPayload * payload);
 
     BCL_STATUS InitializeSetArmSpeedPacket(
-        BclPacket * pkt, ArmPositionPayload * payload);
+        BclPacket * pkt, ArmPayload * payload);
 
 	BCL_STATUS InitializeSetRideHeightSpeedPacket(
 		BclPacket *pkt, RideHeightPayload *payload);
@@ -119,14 +108,7 @@ extern "C" {
 		uint8_t *               bytes_written
 	);
 
-    BCL_STATUS SerializeArmPositionPayload (
-        const BclPayloadPtr     payload,
-        uint8_t *               buffer,
-        uint8_t                 length,
-        uint8_t *               bytes_written
-    );
-
-    BCL_STATUS SerializeArmSpeedPayload (
+    BCL_STATUS SerializeArmPayload (
         const BclPayloadPtr     payload,
         uint8_t *               buffer,
         uint8_t                 length,
@@ -169,14 +151,7 @@ extern "C" {
 		uint8_t *               bytes_read
 	);
 
-    BCL_STATUS DeserializeArmPositionPayload(
-        BclPayloadPtr           payload,
-        const uint8_t *         buffer,
-        uint8_t                 length,
-        uint8_t *               bytes_read
-    );
-
-    BCL_STATUS DeserializeArmSpeedPayload(
+    BCL_STATUS DeserializeArmPayload(
         BclPayloadPtr           payload,
         const uint8_t *         buffer,
         uint8_t                 length,
