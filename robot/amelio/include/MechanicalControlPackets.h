@@ -93,6 +93,9 @@ extern "C" {
 	BCL_STATUS InitializeSetCameraMastPacket (
 	    BclPacket *pkt, CameraMastPayload * payload);
 
+	BCL_STATUS InitializeActivateSolenoidPacket(
+	        BclPacket * pkt);
+
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
 		const BclPayloadPtr     payload,

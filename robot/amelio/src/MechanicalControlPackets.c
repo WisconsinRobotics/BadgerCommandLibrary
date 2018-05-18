@@ -158,6 +158,20 @@ BCL_STATUS InitializeSetCameraMastPacket(
     );
 }
 
+BCL_STATUS InitializeActivateSolenoidPacket(
+        BclPacket *pkt
+)
+{
+    return InitializeBclPacket(
+            pkt,
+            ACTIVATE_SOLENOID,
+            NULL,
+            0,
+            NULL,
+            NULL
+    );
+}
+
 BCL_STATUS SerializeAllWheelSpeedPayload(
 	const BclPayloadPtr     payload,
 	uint8_t *               buffer,

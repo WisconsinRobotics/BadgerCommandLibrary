@@ -25,6 +25,8 @@
 #define REPORT_ARM_SPEED                0x29
 #define SET_ARM_SPEED                   0x2A
 
+#define ACTIVATE_SOLENOID               0x2B
+
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
 #define REPORT_GPS                      0x51
