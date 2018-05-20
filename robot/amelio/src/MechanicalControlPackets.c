@@ -159,16 +159,17 @@ BCL_STATUS InitializeSetCameraMastPacket(
 }
 
 BCL_STATUS InitializeActivateSolenoidPacket(
-        BclPacket *pkt
+        BclPacket *pkt,
+        SolenoidPayload *payload
 )
 {
     return InitializeBclPacket(
             pkt,
             ACTIVATE_SOLENOID,
-            NULL,
-            0,
-            NULL,
-            NULL
+            payload,
+            sizeof(SolenoidPayload),
+            &SerializeSolenoidPayload,
+            &DeserializeSolenoidPayload
     );
 }
 
@@ -320,6 +321,31 @@ BCL_STATUS SerializeCameraMastPayload(
     return BCL_OK;
 }
 
+BCL_STATUS SerializeSolenoidPayload(
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+)
+{
+    const SolenoidPayload *sp;
+
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if (length < sizeof(uint16_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    sp = (const SolenoidPayload *)payload;
+    buffer[0] = sp->duration >> 8;
+    buffer[1] = sp->duration;
+
+    if (bytes_written)
+        *bytes_written = sizeof(uint16_t);
+
+    return BCL_OK;
+}
+
 BCL_STATUS DeserializeAllWheelSpeedPayload(
 	BclPayloadPtr     		payload,
 	const uint8_t *			buffer,
@@ -329,7 +355,7 @@ BCL_STATUS DeserializeAllWheelSpeedPayload(
 {
 	if (!payload || !buffer)
 		return BCL_INVALID_PARAMETER;
-	if (bufferLength < sizeof(uint8_t) + 6*sizeof(int8_t))//why???????? WILLLLLLL!
+	if (bufferLength < sizeof(uint8_t) + 6*sizeof(int8_t))
 		return BCL_BUFFER_TOO_SMALL;
 
 	AllWheelSpeedPayload *awsp;
@@ -475,6 +501,30 @@ BCL_STATUS DeserializeCameraMastPayload(
 
     if (bytes_read)
         *bytes_read = 2 * sizeof(int8_t);
+
+    return BCL_OK;
+}
+
+BCL_STATUS DeserializeSolenoidPayload(
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+)
+{
+    SolenoidPayload *sp;
+
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if (length < sizeof(uint16_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    sp = (SolenoidPayload *)payload;
+    sp->duration = (buffer[0] << 8) | buffer[1];
+
+    if (bytes_read)
+        *bytes_read = sizeof(uint16_t);
 
     return BCL_OK;
 }

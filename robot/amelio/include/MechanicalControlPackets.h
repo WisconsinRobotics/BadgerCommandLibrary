@@ -59,12 +59,17 @@ extern "C" {
 	    int8_t tilt;
 	} CameraMastPayload;
 
-/* Initialization function definitions */
-	BCL_STATUS InitializeSetTankDriveSpeedPacket(
-		BclPacket *pkt, TankDrivePayload *payload);
+    typedef struct SolenoidPayload
+    {
+        uint16_t duration;
+    } SolenoidPayload;
 
-	BCL_STATUS InitializeAllWheelSpeedPacket(
-		BclPacket *pkt, AllWheelSpeedPayload *payload);
+/* Initialization function definitions */
+    BCL_STATUS InitializeSetTankDriveSpeedPacket(
+        BclPacket *pkt, TankDrivePayload *payload);
+
+    BCL_STATUS InitializeAllWheelSpeedPacket(
+        BclPacket *pkt, AllWheelSpeedPayload *payload);
 
     BCL_STATUS InitializeQueryArmPositionPacket (
         BclPacket * pkt);
@@ -94,7 +99,7 @@ extern "C" {
 	    BclPacket *pkt, CameraMastPayload * payload);
 
 	BCL_STATUS InitializeActivateSolenoidPacket(
-	        BclPacket * pkt);
+	    BclPacket * pkt, SolenoidPayload * payload);
 
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
@@ -139,6 +144,13 @@ extern "C" {
 	    uint8_t *               bytes_written
 	);
 
+	BCL_STATUS SerializeSolenoidPayload (
+	    const BclPayloadPtr     payload,
+	    uint8_t *               buffer,
+	    uint8_t                 length,
+	    uint8_t *               bytes_written
+	);
+
 /* Deserialization function definitions */
 	BCL_STATUS DeserializeAllWheelSpeedPayload(
 		BclPayloadPtr   		payload,
@@ -176,6 +188,13 @@ extern "C" {
 	);
 
 	BCL_STATUS DeserializeCameraMastPayload(
+	    BclPayloadPtr           payload,
+	    const uint8_t *         buffer,
+	    uint8_t                 length,
+	    uint8_t *               bytes_read
+	);
+
+	BCL_STATUS DeserializeSolenoidPayload(
 	    BclPayloadPtr           payload,
 	    const uint8_t *         buffer,
 	    uint8_t                 length,
