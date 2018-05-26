@@ -27,6 +27,10 @@
 
 #define ACTIVATE_SOLENOID               0x2B
 
+#define QUERY_SOIL_DOOR_POS             0x2C
+#define REPORT_SOIL_DOOR_POS            0x2D
+#define SET_SOIL_DOOR_POS               0x2E
+
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
 #define REPORT_GPS                      0x51

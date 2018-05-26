@@ -53,6 +53,16 @@ extern "C" {
 		int8_t back_right;
 	} AllRideHeightSpeedPayload;
 
+    typedef struct DynamixelPositionPayload
+    {
+        int8_t position;
+    } DynamixelPositionPayload;
+    
+    typedef struct DynamixelSpeedPayload
+    {
+        int8_t speed;
+    } DynamixelSpeedPayload;
+
 	typedef struct CameraMastPayload
 	{
 	    int8_t pan;
@@ -100,6 +110,15 @@ extern "C" {
 
 	BCL_STATUS InitializeActivateSolenoidPacket(
 	    BclPacket * pkt, SolenoidPayload * payload);
+
+    BCL_STATUS InitializeQuerySoilDoorPacket (
+        BclPacket * pkt);
+
+    BCL_STATUS InitializeReportSoilDoorPacket (
+        BclPacket * pkt, DynamixelPositionPayload * payload);
+
+    BCL_STATUS InitializeSetSoilDoorPacket(
+        BclPacket * pkt, DynamixelPositionPayload * payload);
 
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
@@ -151,6 +170,13 @@ extern "C" {
 	    uint8_t *               bytes_written
 	);
 
+	BCL_STATUS SerializeDynamixelPositionPayload (
+	    const BclPayloadPtr     payload,
+	    uint8_t *               buffer,
+	    uint8_t                 length,
+	    uint8_t *               bytes_written
+	);
+
 /* Deserialization function definitions */
 	BCL_STATUS DeserializeAllWheelSpeedPayload(
 		BclPayloadPtr   		payload,
@@ -195,6 +221,13 @@ extern "C" {
 	);
 
 	BCL_STATUS DeserializeSolenoidPayload(
+	    BclPayloadPtr           payload,
+	    const uint8_t *         buffer,
+	    uint8_t                 length,
+	    uint8_t *               bytes_read
+	);
+
+	BCL_STATUS DeserializeDynamixelPositionPayload(
 	    BclPayloadPtr           payload,
 	    const uint8_t *         buffer,
 	    uint8_t                 length,
