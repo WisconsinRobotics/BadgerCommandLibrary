@@ -59,6 +59,11 @@ extern "C" {
 	    int8_t tilt;
 	} CameraMastPayload;
 
+    typedef struct SolenoidPayload
+    {
+        uint16_t duration;
+    } SolenoidPayload;
+
 /* Initialization function definitions */
 	BCL_STATUS InitializeSetTankDriveSpeedPacket(
 		BclPacket *pkt, TankDrivePayload *payload);
@@ -93,8 +98,8 @@ extern "C" {
 	BCL_STATUS InitializeSetCameraMastPacket (
 	    BclPacket *pkt, CameraMastPayload * payload);
 
-	BCL_STATUS InitializeActivateSolenoidPacket(
-	        BclPacket * pkt);
+    BCL_STATUS InitializeActivateSolenoidPacket(
+        BclPacket * pkt, SolenoidPayload * payload);
 
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
