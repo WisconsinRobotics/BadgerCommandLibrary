@@ -159,14 +159,15 @@ BCL_STATUS InitializeSetCameraMastPacket(
 }
 
 BCL_STATUS InitializeActivateSolenoidPacket(
-        BclPacket *pkt
+        BclPacket *pkt,
+        SolenoidPayload *payload
 )
 {
     return InitializeBclPacket(
             pkt,
             ACTIVATE_SOLENOID,
-            NULL,
-            0,
+            payload,
+            sizeof(SolenoidPayload),
             NULL,
             NULL
     );
