@@ -237,16 +237,23 @@ BCL_STATUS  SerializeArmPayload(
     
     ap = (const ArmPayload *)payload;
     
-    buffer[TURNTABLE_INDEX] = ap->turntable;
-    buffer[SHOULDER_INDEX] = ap->shoulder;
-    buffer[ELBOW_INDEX] = ap->elbow;
-    buffer[FOREARM_INDEX] = ap->forearm;
-    buffer[WRIST_UP_DOWN_INDEX] = ap->wrist_up_down;
-    buffer[WRIST_ROT_INDEX] = ap->wrist_rot;
-    buffer[CLAW_INDEX] = ap->claw;
+    buffer[TURNTABLE_INDEX] = (uint8_t) 0xFF & ap->turntable;
+    buffer[TURNTABLE_INDEX + 1] = (uint8_t) (ap->turntable >> 8);
+    buffer[SHOULDER_INDEX] = (uint8_t) 0xFF & ap->shoulder;
+    buffer[SHOULDER_INDEX + 1] = (uint8_t) (ap->shoulder >> 8);
+    buffer[ELBOW_INDEX] = (uint8_t) 0xFF & ap->elbow;
+    buffer[ELBOW_INDEX + 1] = (uint8_t) (ap->elbow >> 8);
+    buffer[FOREARM_INDEX] = (uint8_t) 0xFF & ap->forearm;
+    buffer[FOREARM_INDEX + 1] = (uint8_t) (ap->forearm >> 8);
+    buffer[WRIST_LEFT_INDEX] = (uint8_t) 0xFF & ap->wrist_left;
+    buffer[WRIST_LEFT_INDEX + 1] = (uint8_t) (ap->wrist_left >> 8);
+    buffer[WRIST_RIGHT_INDEX] = (uint8_t) 0xFF & ap->wrist_right;
+    buffer[WRIST_RIGHT_INDEX + 1] = (uint8_t) (ap->wrist_right >> 8);
+    buffer[CLAW_INDEX] = (uint8_t) 0xFF & ap->claw;
+    buffer[CLAW_INDEX + 1] = (uint8_t) (ap->claw >> 8);
     
     if (bytes_written)
-        *bytes_written = 7 * sizeof(int8_t);
+        *bytes_written = 7 * sizeof(int16_t);
     
     return BCL_OK;
 }
@@ -390,16 +397,16 @@ BCL_STATUS DeserializeArmPayload(
         return BCL_BUFFER_TOO_SMALL;
     
     asp = (ArmPayload *)payload;
-    asp->turntable = buffer[TURNTABLE_INDEX];
-    asp->shoulder = buffer[SHOULDER_INDEX];
-    asp->elbow = buffer[ELBOW_INDEX];
-    asp->forearm = buffer[FOREARM_INDEX];
-    asp->wrist_up_down = buffer[WRIST_UP_DOWN_INDEX];
-    asp->wrist_rot = buffer[WRIST_ROT_INDEX];
-    asp->claw = buffer[CLAW_INDEX];
+    asp->turntable = buffer[TURNTABLE_INDEX] | (buffer[TURNTABLE_INDEX + 1] << 8);
+    asp->shoulder = buffer[SHOULDER_INDEX]  | (buffer[SHOULDER_INDEX + 1] << 8);
+    asp->elbow = buffer[ELBOW_INDEX] | (buffer[ELBOW_INDEX + 1] << 8);
+    asp->forearm = buffer[FOREARM_INDEX] | (buffer[FOREARM_INDEX + 1] << 8);
+    asp->wrist_left = buffer[WRIST_LEFT_INDEX] | (buffer[WRIST_LEFT_INDEX + 1] << 8);
+    asp->wrist_right = buffer[WRIST_RIGHT_INDEX] | (buffer[WRIST_RIGHT_INDEX + 1] << 8);
+    asp->claw = buffer[CLAW_INDEX] | (buffer[CLAW_INDEX + 1] << 8);
     
     if (bytes_read)
-        *bytes_read = 7 * sizeof(int8_t);
+        *bytes_read = 7 * sizeof(int16_t);
     
     return BCL_OK;
 }

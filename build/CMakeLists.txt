@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
 
 set(ROBOT "NONE" CACHE STRING "Build BCL with the specified robot packets. By default, only core BCL messages will be built.")
-set(ROBOT_CONFIG Ascent Insomnia Amelio Atlas)
+set(ROBOT_CONFIG Ascent Insomnia Amelio Atlas Wrover19)
 set(CMAKE_BUILD_TYPE Debug)
 
 if (${ROBOT} STREQUAL "NONE")
@@ -44,6 +44,11 @@ elseif (${ROBOT} STREQUAL "Atlas")
     include_directories(${ATLAS_BASE_DIR}/include)
     file(GLOB ATLAS_SRC ${ATLAS_BASE_DIR}/**/*)
     add_library(${PROJECT_NAME} STATIC ${ATLAS_SRC} ${BCL_PACKET_SRC} ${BCL_SERVICES_SRC})
+elseif (${ROBOT} STREQUAL "Wrover19")
+    set(WROVER19_BASE_DIR ${BCL_BASE_DIR}/robot/wrover19)
+    include_directories(${WROVER19_BASE_DIR}/include)
+    file(GLOB WROVER19_SRC ${WROVER19_BASE_DIR}/**/*)
+    add_library(${PROJECT_NAME} STATIC ${WROVER19_SRC} ${BCL_PACKET_SRC} ${BCL_SERVICES_SRC})
 else () 
     # default - just BCL only
     add_library(${PROJECT_NAME} STATIC ${BCL_PACKET_SRC} ${BCL_SERVICES_SRC})

@@ -30,13 +30,13 @@ extern "C" {
 
     typedef struct ArmPayload
     {
-        int8_t turntable;
-        int8_t shoulder;
-        int8_t elbow;
-        int8_t forearm;
-        int8_t wrist_up_down;
-        int8_t wrist_rot;
-        int8_t claw;
+        int16_t turntable;
+        int16_t shoulder;
+        int16_t elbow;
+        int16_t forearm;
+        int16_t wrist_left;
+        int16_t wrist_right;
+        int16_t claw;
     } ArmPayload;
 
 	typedef struct RideHeightPayload

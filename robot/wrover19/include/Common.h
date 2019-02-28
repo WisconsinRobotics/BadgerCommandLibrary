@@ -55,12 +55,12 @@
 #define NUMBER_OF_WHEELS                6
 
 #define TURNTABLE_INDEX                 0
-#define SHOULDER_INDEX                  1
-#define ELBOW_INDEX                     2
-#define FOREARM_INDEX                   3
-#define WRIST_UP_DOWN_INDEX             4
-#define WRIST_ROT_INDEX                 5
-#define CLAW_INDEX                      6
+#define SHOULDER_INDEX                  2
+#define ELBOW_INDEX                     4
+#define FOREARM_INDEX                   6
+#define WRIST_LEFT_INDEX                8
+#define WRIST_RIGHT_INDEX               10
+#define CLAW_INDEX                      12
 
 #define FRONT_LEFT_ACTUATOR             0
 #define BACK_LEFT_ACTUATOR              1
