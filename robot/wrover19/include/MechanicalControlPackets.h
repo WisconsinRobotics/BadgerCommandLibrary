@@ -64,6 +64,15 @@ extern "C" {
         uint16_t duration;
     } SolenoidPayload;
 
+    typedef struct __attribute__((__packed__)) PidPayload
+    {
+        uint32_t p;
+        uint32_t i;
+        uint32_t d;
+        uint8_t addr;
+        uint8_t vel;
+    } PidPayload;
+
 /* Initialization function definitions */
 	BCL_STATUS InitializeSetTankDriveSpeedPacket(
 		BclPacket *pkt, TankDrivePayload *payload);
@@ -100,6 +109,15 @@ extern "C" {
 
     BCL_STATUS InitializeActivateSolenoidPacket(
         BclPacket * pkt, SolenoidPayload * payload);
+
+    BCL_STATUS InitializeQueryPidPacket(
+        BclPacket *pkt);
+
+    BCL_STATUS InitializeReportPidPacket(
+        BclPacket *pkt, PidPayload *payload);
+
+    BCL_STATUS InitializeSetPidPacket(
+        BclPacket *pkt, PidPayload *payload);
 
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
@@ -144,6 +162,13 @@ extern "C" {
 	    uint8_t *               bytes_written
 	);
 
+	BCL_STATUS SerializePidPayload(
+	    const BclPayloadPtr     payload,
+	    uint8_t *               buffer,
+	    uint8_t                 bufferLength,
+	    uint8_t *               bytes_written
+	);
+
 /* Deserialization function definitions */
 	BCL_STATUS DeserializeAllWheelSpeedPayload(
 		BclPayloadPtr   		payload,
@@ -185,6 +210,13 @@ extern "C" {
 	    const uint8_t *         buffer,
 	    uint8_t                 length,
 	    uint8_t *               bytes_read
+	);
+
+	BCL_STATUS DeserializePidPayload(
+	    BclPayloadPtr     payload,
+	    const uint8_t *               buffer,
+	    uint8_t                 bufferLength,
+	    uint8_t *               bytes_written
 	);
 
 #ifdef __cplusplus
