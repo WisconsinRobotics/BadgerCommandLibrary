@@ -173,6 +173,48 @@ BCL_STATUS InitializeActivateSolenoidPacket(
     );
 }
 
+BCL_STATUS InitializeQueryPidPacket(
+    BclPacket *pkt
+) {
+    return InitializeBclPacket(
+        pkt,
+        QUERY_PID,
+        NULL,
+        0,
+        NULL,
+        NULL
+    );
+}
+
+BCL_STATUS InitializeReportPidPacket(
+    BclPacket *pkt,
+    PidPayload *payload
+) {
+    return InitializeBclPacket(
+        pkt,
+        REPORT_PID,
+        payload,
+        sizeof(PidPayload),
+        &SerializePidPayload,
+        &DeserializePidPayload
+    );
+}
+
+BCL_STATUS InitializeSetPidPacket(
+    BclPacket *pkt,
+    PidPayload *payload
+) {
+
+    return InitializeBclPacket(
+        pkt,
+        SET_PID,
+        payload,
+        sizeof(PidPayload),
+        &SerializePidPayload,
+        &DeserializePidPayload
+    );
+}
+
 BCL_STATUS SerializeAllWheelSpeedPayload(
 	const BclPayloadPtr     payload,
 	uint8_t *               buffer,
@@ -325,6 +367,49 @@ BCL_STATUS SerializeCameraMastPayload(
     if (bytes_written)
         *bytes_written = 2 * sizeof(int8_t);
 
+    return BCL_OK;
+}
+
+BCL_STATUS SerializePidPayload(
+    const BclPayloadPtr     payload,
+    uint8_t *               buffer,
+    uint8_t                 bufferLength,
+    uint8_t *               bytes_written
+) {
+    const PidPayload *pyld;
+    if (!payload || !buffer)
+        return BCL_INVALID_PARAMETER;
+    if (bufferLength < sizeof(PidPayload))
+        return BCL_BUFFER_TOO_SMALL;
+
+    pyld = (const PidPayload*)payload;
+
+    //P
+    buffer[0] = (pyld->p >> 24) & 0xFF;
+    buffer[1] = (pyld->p >> 16) & 0xFF;
+    buffer[2] = (pyld->p >> 8) & 0xFF;
+    buffer[3] = (pyld->p) & 0xFF;
+
+    //I
+    buffer[4] = (pyld->i >> 24) & 0xFF;
+    buffer[5] = (pyld->i >> 16) & 0xFF;
+    buffer[6] = (pyld->i >> 8) & 0xFF;
+    buffer[7] = (pyld->i) & 0xFF;
+
+    //D
+    buffer[8] = (pyld->d >> 24) & 0xFF;
+    buffer[9] = (pyld->d >> 16) & 0xFF;
+    buffer[10] = (pyld->d >> 8) & 0xFF;
+    buffer[11] = (pyld->d) & 0xFF;
+
+    //Addr
+    buffer[12] = pyld->addr;
+
+    //vel
+    buffer[13] = pyld->vel;
+
+    if (bytes_written)
+        *bytes_written = sizeof(*pyld);
     return BCL_OK;
 }
 
@@ -483,6 +568,34 @@ BCL_STATUS DeserializeCameraMastPayload(
 
     if (bytes_read)
         *bytes_read = 2 * sizeof(int8_t);
+
+    return BCL_OK;
+}
+
+BCL_STATUS DeserializePidPayload(
+    BclPayloadPtr           payload,
+    const uint8_t *         buffer,
+    uint8_t                 bufferLength,
+    uint8_t *               bytes_read
+)
+{
+    if (!payload || !buffer)
+        return BCL_INVALID_PARAMETER;
+    if (bufferLength < sizeof(PidPayload))
+        return BCL_BUFFER_TOO_SMALL;
+
+    PidPayload *pyld;
+
+    pyld = (PidPayload*)(payload);
+
+    pyld->p = (buffer[0] << 24) | (buffer[1] << 16) | (buffer[2] << 8) | buffer[3];
+    pyld->i = (buffer[4] << 24) | (buffer[5] << 16) | (buffer[6] << 8) | buffer[7];
+    pyld->d = (buffer[8] << 24) | (buffer[9] << 16) | (buffer[10] << 8) | buffer[11];
+    pyld->addr = buffer[12];
+    pyld->vel = buffer[13];
+
+    if (bytes_read)
+        *bytes_read = sizeof(PidPayload);
 
     return BCL_OK;
 }
