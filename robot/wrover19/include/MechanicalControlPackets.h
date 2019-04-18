@@ -182,6 +182,7 @@ extern "C" {
 	    const BclPayloadPtr     payload,
 	    uint8_t *               buffer,
 	    uint8_t                 bufferLength,
+	    uint8_t *               bytes_written
         );
 
 	BCL_STATUS SerializeDynamixelPositionPayload (
