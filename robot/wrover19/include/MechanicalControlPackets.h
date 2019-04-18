@@ -73,6 +73,16 @@ extern "C" {
         uint8_t vel;
     } PidPayload;
 
+    typedef struct DynamixelPositionPayload
+    {
+        int8_t position;
+    } DynamixelPositionPayload;
+    
+    typedef struct DynamixelSpeedPayload
+    {
+        int8_t speed;
+    } DynamixelSpeedPayload;
+
 /* Initialization function definitions */
 	BCL_STATUS InitializeSetTankDriveSpeedPacket(
 		BclPacket *pkt, TankDrivePayload *payload);
@@ -118,6 +128,12 @@ extern "C" {
 
     BCL_STATUS InitializeSetPidPacket(
         BclPacket *pkt, PidPayload *payload);
+
+    BCL_STATUS InitializeReportSoilDoorPacket (
+        BclPacket * pkt, DynamixelPositionPayload * payload);
+
+    BCL_STATUS InitializeSetSoilDoorPacket(
+        BclPacket * pkt, DynamixelPositionPayload * payload);
 
 /* Serialization function definitions */
 	BCL_STATUS SerializeAllWheelSpeedPayload(
@@ -166,6 +182,12 @@ extern "C" {
 	    const BclPayloadPtr     payload,
 	    uint8_t *               buffer,
 	    uint8_t                 bufferLength,
+        );
+
+	BCL_STATUS SerializeDynamixelPositionPayload (
+	    const BclPayloadPtr     payload,
+	    uint8_t *               buffer,
+	    uint8_t                 length,
 	    uint8_t *               bytes_written
 	);
 
@@ -217,6 +239,13 @@ extern "C" {
 	    const uint8_t *               buffer,
 	    uint8_t                 bufferLength,
 	    uint8_t *               bytes_written
+        );
+
+	BCL_STATUS DeserializeDynamixelPositionPayload(
+	    BclPayloadPtr           payload,
+	    const uint8_t *         buffer,
+	    uint8_t                 length,
+	    uint8_t *               bytes_read
 	);
 
 #ifdef __cplusplus

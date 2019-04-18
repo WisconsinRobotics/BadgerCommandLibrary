@@ -31,6 +31,9 @@
 #define REPORT_PID                      0x2D
 #define SET_PID                         0x2E
 
+#define REPORT_SOIL_DOOR_POS            0x30
+#define SET_SOIL_DOOR_POS               0x31
+
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
 #define REPORT_GPS                      0x51

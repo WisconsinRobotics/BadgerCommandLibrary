@@ -215,6 +215,34 @@ BCL_STATUS InitializeSetPidPacket(
     );
 }
 
+BCL_STATUS InitializeReportSoilDoorPacket(
+	BclPacket *pkt, 
+    DynamixelPositionPayload *payload
+) {
+	return InitializeBclPacket(
+		pkt,
+		REPORT_SOIL_DOOR_POS,
+		payload,
+		sizeof(DynamixelPositionPayload),
+		&SerializeDynamixelPositionPayload,
+		&DeserializeDynamixelPositionPayload
+	);
+}
+
+BCL_STATUS InitializeSetSoilDoorPacket(
+	BclPacket *pkt, 
+    DynamixelPositionPayload *payload
+) {
+	return InitializeBclPacket(
+		pkt,
+		SET_SOIL_DOOR_POS,
+		payload,
+		sizeof(DynamixelPositionPayload),
+		&SerializeDynamixelPositionPayload,
+		&DeserializeDynamixelPositionPayload
+	);
+}
+
 BCL_STATUS SerializeAllWheelSpeedPayload(
 	const BclPayloadPtr     payload,
 	uint8_t *               buffer,
@@ -410,6 +438,29 @@ BCL_STATUS SerializePidPayload(
 
     if (bytes_written)
         *bytes_written = sizeof(*pyld);
+}
+
+BCL_STATUS SerializeDynamixelPositionPayload(
+        const BclPayloadPtr     payload,
+        uint8_t *               buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_written
+)
+{
+    const DynamixelPositionPayload *dpp;
+
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if (length < sizeof(int8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    dpp = (const DynamixelPositionPayload *)payload;
+    buffer[0] = dpp->position;
+
+    if (bytes_written)
+        *bytes_written = sizeof(int8_t);
+
     return BCL_OK;
 }
 
@@ -596,6 +647,28 @@ BCL_STATUS DeserializePidPayload(
 
     if (bytes_read)
         *bytes_read = sizeof(PidPayload);
+}
+
+BCL_STATUS DeserializeDynamixelPositionPayload(
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
+        uint8_t                 length,
+        uint8_t *               bytes_read
+)
+{
+    DynamixelPositionPayload *dpp;
+
+    if (!buffer || !payload)
+        return BCL_INVALID_PARAMETER;
+
+    if (length < sizeof(int8_t))
+        return BCL_BUFFER_TOO_SMALL;
+
+    dpp = (DynamixelPositionPayload *)payload;
+    dpp->position = buffer[0];
+
+    if (bytes_read)
+        *bytes_read = sizeof(int8_t);
 
     return BCL_OK;
 }
