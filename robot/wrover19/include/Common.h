@@ -7,7 +7,6 @@
 /* Debug packets (0x00 - 0x1F) */
 #define BYTE_DISPLAY_OPCODE             0x11
 
-
 /* Mechanical packets (0x20 - 0x4F) */
 #define SET_TANK_DRIVE_SPEED            0x20
 #define SET_ALL_WHEEL_SPEED             0x21
@@ -31,8 +30,21 @@
 #define REPORT_PID                      0x2D
 #define SET_PID                         0x2E
 
-#define REPORT_SOIL_DOOR_POS            0x30
-#define SET_SOIL_DOOR_POS               0x31
+#define QUERY_SOIL_DOOR_POS             0x30
+#define REPORT_SOIL_DOOR_POS            0x31
+#define SET_SOIL_DOOR_POS               0x32
+
+#define ACTIVATE_AUGUR_ROT              0x33
+
+#define ACTIVATE_AUGUR_LIN              0x34
+
+#define QUERY_TEST_TUBE_POS             0x35
+#define REPORT_TEST_TUBE_POS            0x36
+#define SET_TEST_TUBE_POS               0x37
+
+#define QUERY_SOIL_CAM_POS              0x38
+#define REPORT_SOIL_CAM_POS             0x39
+#define SET_SOIL_CAM_POS                0x3A
 
 /* Sensor packets (0x50 - 0x6F) */
 #define QUERY_GPS                       0x50
