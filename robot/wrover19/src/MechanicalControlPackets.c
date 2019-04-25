@@ -646,7 +646,7 @@ BCL_STATUS SerializeTestTubePayload(
     return BCL_OK;
 }
 
-BCL_STATUS SerializeSoilCamActuatorPacket (
+BCL_STATUS SerializeSoilCamActuatorPayload (
         const BclPayloadPtr     payload,
         uint8_t *               buffer,
         uint8_t                 length,
@@ -880,8 +880,8 @@ BCL_STATUS DeserializeDynamixelPositionPayload(
 }
 
 BCL_STATUS DeserializeAugurRotationPayload(
-        const BclPayloadPtr     payload,
-        uint8_t *               buffer,
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
         uint8_t                 length,
         uint8_t *               bytes_read
 )
@@ -904,8 +904,8 @@ BCL_STATUS DeserializeAugurRotationPayload(
 }
 
 BCL_STATUS DeserializeAugurLinearPayload(
-        const BclPayloadPtr     payload,
-        uint8_t *               buffer,
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
         uint8_t                 length,
         uint8_t *               bytes_read
 )
@@ -928,8 +928,8 @@ BCL_STATUS DeserializeAugurLinearPayload(
 }
 
 BCL_STATUS DeserializeTestTubePayload(
-        const BclPayloadPtr     payload,
-        uint8_t *               buffer,
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
         uint8_t                 length,
         uint8_t *               bytes_read
 )
@@ -951,9 +951,9 @@ BCL_STATUS DeserializeTestTubePayload(
     return BCL_OK;
 }
 
-BCL_STATUS DeserializeSoilCamActuatorPacket (
-        const BclPayloadPtr     payload,
-        uint8_t *               buffer,
+BCL_STATUS DeserializeSoilCamActuatorPayload (
+        BclPayloadPtr           payload,
+        const uint8_t *         buffer,
         uint8_t                 length,
         uint8_t *               bytes_read
 )
