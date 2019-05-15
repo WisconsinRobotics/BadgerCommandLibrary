@@ -590,7 +590,7 @@ BCL_STATUS SerializeAugurRotationPayload(
         return BCL_BUFFER_TOO_SMALL;
 
     arp = (const AugurRotationPayload *)payload;
-    buffer[0] = arp->on;
+    ((float*)buffer)[0] = arp->velocity;
 
     if (bytes_written)
         *bytes_written = sizeof(AugurRotationPayload);
@@ -614,7 +614,7 @@ BCL_STATUS SerializeAugurLinearPayload(
         return BCL_BUFFER_TOO_SMALL;
 
     alp = (const AugurLinearPayload *)payload;
-    buffer[0] = alp->out;
+    ((float*)buffer)[0] = alp->velocity;
 
     if (bytes_written)
         *bytes_written = sizeof(AugurLinearPayload);
@@ -638,7 +638,7 @@ BCL_STATUS SerializeTestTubePayload(
         return BCL_BUFFER_TOO_SMALL;
 
     ttp = (const TestTubePayload *)payload;
-    buffer[0] = ttp->position;
+    ((float*)buffer)[0] = ttp->velocity;
 
     if (bytes_written)
         *bytes_written = sizeof(TestTubePayload);
@@ -662,7 +662,7 @@ BCL_STATUS SerializeSoilCamActuatorPayload (
         return BCL_BUFFER_TOO_SMALL;
 
     scap = (const SoilCamActuatorPayload *)payload;
-    buffer[0] = scap->position;
+    ((float*)buffer)[0] = scap->velocity;
 
     if (bytes_written)
         *bytes_written = sizeof(SoilCamActuatorPayload);
@@ -895,7 +895,7 @@ BCL_STATUS DeserializeAugurRotationPayload(
         return BCL_BUFFER_TOO_SMALL;
 
     arp = (AugurRotationPayload *)payload;
-    arp->on = buffer[0];
+    arp->velocity = ((float*)buffer)[0];
 
     if (bytes_read)
         *bytes_read = sizeof(AugurRotationPayload);
@@ -919,7 +919,7 @@ BCL_STATUS DeserializeAugurLinearPayload(
         return BCL_BUFFER_TOO_SMALL;
 
     alp = (AugurLinearPayload *)payload;
-    alp->out = buffer[0];
+    alp->velocity = ((float*)buffer)[0];
 
     if (bytes_read)
         *bytes_read = sizeof(AugurLinearPayload);
@@ -943,7 +943,7 @@ BCL_STATUS DeserializeTestTubePayload(
         return BCL_BUFFER_TOO_SMALL;
 
     ttp = (TestTubePayload *)payload;
-    ttp->position = buffer[0];
+    ttp->velocity = ((float*)buffer)[0];
 
     if (bytes_read)
         *bytes_read = sizeof(TestTubePayload);
@@ -967,7 +967,7 @@ BCL_STATUS DeserializeSoilCamActuatorPayload (
         return BCL_BUFFER_TOO_SMALL;
 
     scap = (SoilCamActuatorPayload *)payload;
-    scap->position = buffer[0];
+    scap->velocity = ((float*)buffer)[0];
 
     if (bytes_read)
         *bytes_read = sizeof(SoilCamActuatorPayload);
