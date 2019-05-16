@@ -93,18 +93,18 @@ extern "C" {
     // augur rotational and linear velocities
     typedef struct AugurRotationPayload
     {
-        float velocity;
+        int8_t velocity;
     } AugurRotationPayload;
 
     typedef struct AugurLinearPayload
     {
-        float velocity;
+        int8_t velocity;
     } AugurLinearPayload;
 
     // test tube carriage velocity
     typedef struct TestTubePayload
     {
-        float velocity;
+        int8_t velocity;
     } TestTubePayload;
 
     // soil camera actuator velocity
