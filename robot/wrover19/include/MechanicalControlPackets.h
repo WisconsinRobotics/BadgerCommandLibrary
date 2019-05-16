@@ -90,27 +90,27 @@ extern "C" {
         int8_t speed;
     } DynamixelSpeedPayload;
 
-    // augur rotation and linear position
+    // augur rotational and linear velocities
     typedef struct AugurRotationPayload
     {
-        uint8_t on;
+        int8_t velocity;
     } AugurRotationPayload;
 
     typedef struct AugurLinearPayload
     {
-        uint8_t out;
+        int8_t velocity;
     } AugurLinearPayload;
 
-    // test tube carriage position
+    // test tube carriage velocity
     typedef struct TestTubePayload
     {
-        int8_t position;
+        int8_t velocity;
     } TestTubePayload;
 
-    // soil camera actuator position
+    // soil camera actuator velocity
     typedef struct SoilCamActuatorPayload
     {
-        int8_t position;
+        int8_t velocity;
     } SoilCamActuatorPayload;
 
 /* Initialization function definitions */
