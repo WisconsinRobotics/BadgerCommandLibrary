@@ -174,15 +174,16 @@ BCL_STATUS InitializeActivateSolenoidPacket(
 }
 
 BCL_STATUS InitializeQueryPidPacket(
-    BclPacket *pkt
+    BclPacket *pkt,
+    PidPayload *payload
 ) {
     return InitializeBclPacket(
         pkt,
         QUERY_PID,
-        NULL,
-        0,
-        NULL,
-        NULL
+        payload,
+        sizeof(PidPayload),
+        &SerializePidPayload,
+        &DeserializePidPayload
     );
 }
 
@@ -543,11 +544,16 @@ BCL_STATUS SerializePidPayload(
     //Addr
     buffer[12] = pyld->addr;
 
+    //m1
+    buffer[13] = pyld->m1;
+
     //vel
-    buffer[13] = pyld->vel;
+    buffer[14] = pyld->vel;
 
     if (bytes_written)
         *bytes_written = sizeof(*pyld);
+
+    return BCL_OK;
 }
 
 BCL_STATUS SerializeDynamixelPositionPayload(
@@ -849,10 +855,13 @@ BCL_STATUS DeserializePidPayload(
     pyld->i = (buffer[4] << 24) | (buffer[5] << 16) | (buffer[6] << 8) | buffer[7];
     pyld->d = (buffer[8] << 24) | (buffer[9] << 16) | (buffer[10] << 8) | buffer[11];
     pyld->addr = buffer[12];
-    pyld->vel = buffer[13];
+    pyld->m1 = buffer[13];
+    pyld->vel = buffer[14];
 
     if (bytes_read)
         *bytes_read = sizeof(PidPayload);
+
+    return BCL_OK;
 }
 
 BCL_STATUS DeserializeDynamixelPositionPayload(
