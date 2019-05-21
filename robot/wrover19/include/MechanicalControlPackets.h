@@ -76,6 +76,7 @@ extern "C" {
         uint32_t i;
         uint32_t d;
         uint8_t addr;
+        uint8_t m1;
         uint8_t vel;
     } PidPayload;
 
@@ -151,7 +152,7 @@ extern "C" {
         BclPacket * pkt, SolenoidPayload * payload);
 
     BCL_STATUS InitializeQueryPidPacket(
-        BclPacket *pkt);
+        BclPacket *pkt, PidPayload *payload);
 
     BCL_STATUS InitializeReportPidPacket(
         BclPacket *pkt, PidPayload *payload);
