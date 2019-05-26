@@ -63,12 +63,6 @@ extern "C" {
         int8_t tilt;
     } CameraMastPayload;
 
-    // solenoid position control --- NOT USED
-    typedef struct SolenoidPayload
-    {
-        uint16_t duration;
-    } SolenoidPayload; 
-
     // drive motor PID control
     typedef struct __attribute__((__packed__)) PidPayload
     {
@@ -149,7 +143,7 @@ extern "C" {
         BclPacket *pkt, CameraMastPayload * payload);
 
     BCL_STATUS InitializeActivateSolenoidPacket(
-        BclPacket * pkt, SolenoidPayload * payload);
+        BclPacket * pktd);
 
     BCL_STATUS InitializeQueryPidPacket(
         BclPacket *pkt, PidPayload *payload);
